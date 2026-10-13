@@ -144,6 +144,9 @@ label.brutal-label {
   display: none;
 }
 @media print {
+  body {
+    margin: 0 !important;
+  }
   .app-shell {
     display: none !important;
   }

@@ -82,7 +82,8 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
     const node = sheetRef?.current;
     const meta = TEMPLATES.find((x) => x.id === settings.template);
     const w = PAPER_WIDTH[meta?.paper || "A4"];
-    if (node && node.offsetHeight > 0) setPrintPageSize(w, node.offsetHeight);
+    const h = node ? node.getBoundingClientRect().height : 0;
+    if (h > 0) setPrintPageSize(w, h);
     window.print();
   };
 
@@ -251,7 +252,8 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
     const node = sheetRef.current;
     const meta2 = TEMPLATES.find((x) => x.id === settings.template);
     const w2 = PAPER_WIDTH[meta2?.paper || "A4"];
-    if (node && node.offsetHeight > 0) setPrintPageSize(w2, node.offsetHeight);
+    const h2 = node ? node.getBoundingClientRect().height : 0;
+    if (h2 > 0) setPrintPageSize(w2, h2);
     window.print();
   };
 

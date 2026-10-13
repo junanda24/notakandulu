@@ -78,7 +78,8 @@ export async function nativeSharePng(node, inv) {
 // (CSS "size: 210mm auto" itu invalid — Chrome mengabaikannya sehingga halaman
 // jadi full A4 dan nota pendek menyisakan ruang putih di bawah.)
 export function setPrintPageSize(widthCss, heightPx) {
-  const hMm = Math.max(10, Math.ceil((heightPx * 25.4) / 96) + 2);
+  // +0.5mm saja: cukup cegah kepotong, sisa putih hampir tak terlihat
+  const hMm = Math.max(10, (heightPx * 25.4) / 96 + 0.5).toFixed(2);
   let el = document.getElementById("nd-page-size");
   if (!el) {
     el = document.createElement("style");
