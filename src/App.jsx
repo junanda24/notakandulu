@@ -198,7 +198,7 @@ export default function App() {
 
       <footer className="border-t border-line mt-8">
         <p className="mx-auto max-w-7xl px-4 py-4 text-[11px] text-neutral-500 dark:text-neutral-400 text-center">
-          Tagihkan · tanpa login · tanpa iklan · data di perangkatmu
+          Tagihkan — buat invoice gratis, tanpa iklan dan login itu nyata 🔥
         </p>
       </footer>
 
