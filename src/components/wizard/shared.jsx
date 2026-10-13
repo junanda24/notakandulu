@@ -9,16 +9,16 @@ export const TERMS = ["Net 7", "Net 14", "Net 30", "Dibayar saat terima"];
 
 export const STEP_IDS = ["data", "item", "gaya", "kirim"];
 const STEP_TITLES = {
-  data: "Data Toko & Pelanggan",
-  item: "Item & Hitungan",
-  gaya: "Gaya Nota",
-  kirim: "Bayar & Kirim",
+  data: "Isi Data",
+  item: "Atur Item",
+  gaya: "Pilih Gaya",
+  kirim: "Kirim Nota",
 };
 const STEP_SHORT = {
-  data: "Data",
-  item: "Item",
-  gaya: "Gaya",
-  kirim: "Kirim",
+  data: "Isi Data",
+  item: "Atur Item",
+  gaya: "Pilih Gaya",
+  kirim: "Kirim Nota",
 };
 
 // Toko & Pelanggan digabung dalam satu step "Data" (dipisah section) — 4 step lebih lega.

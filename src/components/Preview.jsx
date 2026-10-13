@@ -7,6 +7,7 @@ import { calcTotals, paymentStatus, STATUS_META } from "../lib/calc.js";
 import {
   invoiceText, waShareUrl, mailtoUrl, canNativeShareFile, canCopyPng,
   invoiceToPng, nativeSharePng, downloadPng, copyPngToClipboard, setPrintPageSize,
+  waitForPrintReady,
 } from "../lib/share.js";
 import Struk58 from "./invoices/Struk58.jsx";
 import Struk80 from "./invoices/Struk80.jsx";
@@ -78,8 +79,8 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
 
   // Kunci @page size = tinggi konten aktual biar tidak ada ruang putih sisa.
   const doPrint = async () => {
-    try { await document.fonts?.ready; } catch { /* abaikan */ }
     const node = sheetRef?.current;
+    await waitForPrintReady(node);
     const meta = TEMPLATES.find((x) => x.id === settings.template);
     const w = PAPER_WIDTH[meta?.paper || "A4"];
     const h = node ? node.getBoundingClientRect().height : 0;
@@ -248,8 +249,8 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
   const stepOut = () => setZoom((p) => Math.max(0.25, +( ((p ?? fitZoom) - 0.25).toFixed(2) )));
 
   const doPrintModal = async () => {
-    try { await document.fonts?.ready; } catch { /* abaikan */ }
     const node = sheetRef.current;
+    await waitForPrintReady(node);
     const meta2 = TEMPLATES.find((x) => x.id === settings.template);
     const w2 = PAPER_WIDTH[meta2?.paper || "A4"];
     const h2 = node ? node.getBoundingClientRect().height : 0;

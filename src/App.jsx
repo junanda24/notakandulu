@@ -239,9 +239,15 @@ export default function App() {
             <button
               onClick={() => setDrawer(true)}
               title="Menu"
-              className="brutal-btn h-9 w-9 rounded-lg text-lg leading-none"
+              className="brutal-btn h-9 w-9 rounded-lg text-lg leading-none lg:hidden"
             >
               ☰
+            </button>
+            <button
+              onClick={() => setDrawer(true)}
+              className="brutal-btn hidden lg:inline-flex h-9 items-center px-4 rounded-lg text-sm font-bold"
+            >
+              Menu
             </button>
           </div>
         </div>
@@ -330,9 +336,10 @@ export default function App() {
             </button>
           </div>
           <nav className="p-2.5 space-y-1">
+            <DrawerItem icon="📝" label="Buat nota" active={tab === "buat"} onClick={() => goTab("buat")} />
+            <DrawerItem icon="＋" label="Nota baru" onClick={() => { handleNew(); setDrawer(false); }} />
             <DrawerItem icon="📋" label="Riwayat nota" active={tab === "riwayat"} onClick={() => goTab("riwayat")} />
             <DrawerItem icon="💡" label="Kritik & saran" active={tab === "saran"} onClick={() => goTab("saran")} />
-            <DrawerItem icon="＋" label="Buat nota baru" onClick={() => { handleNew(); setDrawer(false); }} />
           </nav>
           <div className="mt-auto p-2.5 border-t border-line">
             <DrawerItem

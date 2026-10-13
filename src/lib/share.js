@@ -78,8 +78,8 @@ export async function nativeSharePng(node, inv) {
 // (CSS "size: 210mm auto" itu invalid — Chrome mengabaikannya sehingga halaman
 // jadi full A4 dan nota pendek menyisakan ruang putih di bawah.)
 export function setPrintPageSize(widthCss, heightPx) {
-  // +0.5mm saja: cukup cegah kepotong, sisa putih hampir tak terlihat
-  const hMm = Math.max(10, (heightPx * 25.4) / 96 + 0.5).toFixed(2);
+  // ceil ke 0.01mm: garansi tak kepotong, sisa putih tak terlihat (~0.004px)
+  const hMm = Math.max(10, Math.ceil(((heightPx * 25.4) / 96) * 100) / 100);
   let el = document.getElementById("nd-page-size");
   if (!el) {
     el = document.createElement("style");
@@ -87,6 +87,16 @@ export function setPrintPageSize(widthCss, heightPx) {
     document.head.appendChild(el);
   }
   el.textContent = `@media print { @page { size: ${widthCss} ${hMm}mm; margin: 0; } }`;
+}
+
+// Tunggu font + gambar selesai dimuat sebelum ukur tinggi & print,
+// biar pengukuran presisi dan tidak ada konten telat yang kepotong.
+export async function waitForPrintReady(node) {
+  try { await document.fonts?.ready; } catch { /* abaikan */ }
+  const imgs = node ? [...node.querySelectorAll("img")] : [];
+  await Promise.all(
+    imgs.map((img) => (img.complete ? null : new Promise((res) => { img.onload = img.onerror = res; })))
+  );
 }
 
 export function downloadPng(dataUrl, filename) {
