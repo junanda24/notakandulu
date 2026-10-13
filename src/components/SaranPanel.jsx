@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { Card } from "./ui.jsx";
 
-const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe5svN3Phkm9psM7a3MkoyV9Nlrn8m25RmuUW5wITlhQlMgeg/viewform?embedded=true";
 const FORM_OPEN = "https://forms.gle/4kzKHM1BRZ5dNZA79";
 const GOPAY_NUMBER = "0857-6362-2979";
 
@@ -25,28 +24,18 @@ export default function SaranPanel() {
   return (
     <div className="space-y-4">
       <Card title="💬 Kritik & Saran" sticker="bantu kami">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
-          Ada yang kurang, ada ide fitur, atau nemu bug? Isi form di bawah, pasti dibaca developer.
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+          Ada yang kurang, ada ide fitur, atau nemu bug? Klik tombol di bawah, isi formnya, pasti dibaca developer.
         </p>
-        <div className="rounded-xl overflow-hidden border border-line bg-white" style={{ height: 560 }}>
-          <iframe
-            src={FORM_URL}
-            title="Form Kritik dan Saran TagihkanDulu"
-            className="w-full h-full"
-            frameBorder="0"
-            loading="lazy"
-          >
-            Memuat form…
-          </iframe>
-        </div>
         <a
           href={FORM_OPEN}
           target="_blank"
           rel="noreferrer"
-          className="inline-block mt-3 text-sm font-semibold text-teal-600 dark:text-teal-400 hover:underline"
+          className="block w-full rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-center font-bold py-3.5 text-[15px] transition"
         >
-          Buka form di tab baru →
+          📝 Isi Form Kritik & Saran
         </a>
+        <p className="text-[11px] text-neutral-400 mt-3 text-center">Dibuka di tab baru · Google Form</p>
       </Card>
 
       <Card title="☕ Dukung TagihkanDulu" sticker="sukarela">
