@@ -79,7 +79,7 @@ function StepperHead({ steps, idx, onJump }) {
 
 export default function Wizard({
   inv, setInv, profile, persistProfile, settings, persistSettings,
-  stepId, setStepId, onSave, onGotoToko,
+  stepId, setStepId, onSave, onNew, onGotoToko, onGotoRiwayat,
 }) {
   const topRef = useRef(null);
   const steps = getSteps(profile);
@@ -98,8 +98,18 @@ export default function Wizard({
   const back = () => idx > 0 && go(steps[idx - 1].id);
   const isLast = idx === steps.length - 1;
 
+  // Enter di input teks = Lanjut (biar alur ngebut). Textarea/select/button dikecualikan.
+  const onKeyDown = (e) => {
+    if (e.key !== "Enter") return;
+    const t = e.target;
+    if (!t || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.tagName === "BUTTON") return;
+    if (t.tagName === "INPUT" && ["checkbox", "color", "file"].includes(t.type)) return;
+    e.preventDefault();
+    next();
+  };
+
   return (
-    <div ref={topRef} className="scroll-mt-32">
+    <div ref={topRef} className="scroll-mt-32" onKeyDown={onKeyDown}>
       <StepperHead steps={steps} idx={idx} onJump={go} />
 
       {cur.id === "toko" && <ShopPanel profile={profile} setProfile={persistProfile} />}
@@ -107,7 +117,7 @@ export default function Wizard({
       {cur.id === "item" && <StepItem inv={inv} setInv={setInv} />}
       {cur.id === "gaya" && <CustomizePanel settings={settings} setSettings={persistSettings} />}
       {cur.id === "kirim" && (
-        <StepKirim inv={inv} setInv={setInv} profile={profile} onSave={onSave} onGotoToko={onGotoToko} />
+        <StepKirim inv={inv} setInv={setInv} profile={profile} onSave={onSave} onNew={onNew} onGotoToko={onGotoToko} onGotoRiwayat={onGotoRiwayat} />
       )}
 
       <div className="mt-5 flex items-center justify-between gap-3">

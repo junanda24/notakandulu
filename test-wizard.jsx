@@ -14,9 +14,9 @@ const settings = { template: "saas", font: "jakarta", accent: "#0d9488", showSig
 let pass = 0, fail = 0;
 const check = (name, cond) => { cond ? pass++ : (fail++, console.log("FAIL:", name)); };
 
-// 1. getSteps: profil kosong -> 5 step (termasuk toko); profil isi -> 4 step
-check("empty profile -> 5 steps", getSteps(profileEmpty).length === 5 && getSteps(profileEmpty)[0].id === "toko");
-check("full profile -> 4 steps", getSteps(profileFull).length === 4 && getSteps(profileFull)[0].id === "pelanggan");
+// 1. getSteps: selalu 5 step, diawali toko
+check("getSteps -> 5 steps mulai dari toko", getSteps(profileEmpty).length === 5 && getSteps(profileEmpty)[0].id === "toko");
+check("getSteps profil isi -> tetap 5 steps", getSteps(profileFull).length === 5 && getSteps(profileFull)[0].id === "toko");
 
 // 2. tiap step render tanpa crash (profil penuh)
 for (const s of getSteps(profileFull)) {

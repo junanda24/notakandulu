@@ -1,10 +1,15 @@
 // Wizard step 4 (terakhir): ringkasan nota, pilih pembayaran, simpan & kirim.
+import { useEffect, useState } from "react";
 import { Card, Btn } from "../ui.jsx";
 import { calcTotals } from "../../lib/calc.js";
 import { fmtMoney, fmtDate } from "../../lib/format.js";
 
-export default function StepKirim({ inv, setInv, profile, onSave, onGotoToko }) {
+export default function StepKirim({ inv, setInv, profile, onSave, onNew, onGotoToko, onGotoRiwayat }) {
   const t = calcTotals(inv);
+  const [saved, setSaved] = useState(false);
+  // Nota baru (id beda) -> reset status tersimpan
+  useEffect(() => { setSaved(false); }, [inv.id]);
+  const doSave = () => { onSave(); setSaved(true); };
   const hasPayments = (profile.payments || []).length > 0;
   const togglePayment = (pid) =>
     setInv((p) => ({
@@ -84,12 +89,26 @@ export default function StepKirim({ inv, setInv, profile, onSave, onGotoToko }) 
         </Card>
       )}
 
-      <Btn onClick={onSave} primary className="w-full py-3! text-base!">
+      <Btn onClick={doSave} primary className="w-full py-3! text-base!">
         Simpan Nota
       </Btn>
-      <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400">
-        Setelah tersimpan, ekspor PNG/PDF atau kirim via WA dari panel pratinjau.
-      </p>
+      {saved ? (
+        <div className="rounded-xl border border-teal-300 bg-teal-50 dark:border-teal-800 dark:bg-teal-950/50 p-4 text-center">
+          <p className="text-2xl">✓</p>
+          <p className="text-sm font-bold mt-1">Nota {inv.number || ""} tersimpan!</p>
+          <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1">
+            Ekspor PNG/PDF atau kirim via WA dari panel pratinjau.
+          </p>
+          <div className="mt-3 flex gap-2 justify-center">
+            <Btn onClick={onNew} className="py-2! text-xs!">+ Buat nota baru</Btn>
+            <Btn onClick={onGotoRiwayat} className="py-2! text-xs!">Lihat di Riwayat</Btn>
+          </div>
+        </div>
+      ) : (
+        <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400">
+          Setelah tersimpan, ekspor PNG/PDF atau kirim via WA dari panel pratinjau.
+        </p>
+      )}
     </div>
   );
 }

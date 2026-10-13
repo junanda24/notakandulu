@@ -106,7 +106,8 @@ export default function App() {
 
   const handleNew = () => {
     setInv(blankInvoice({ number: expandNumber(settings.numberPattern, peekCounter(), todayIso()), date: todayIso(), currency: settings.currency }));
-    persistWstep(getSteps(profile)[0].id);
+    // Mulai dari Toko kalau profil kosong, kalau tidak langsung ke Pelanggan (Toko tetap bisa diklik)
+    persistWstep(profile?.shopName?.trim() ? "pelanggan" : "toko");
     setTab("buat");
     setMobileView("form");
     showToast("Nota baru ✓");
@@ -136,7 +137,9 @@ export default function App() {
         stepId={wstep}
         setStepId={persistWstep}
         onSave={handleSave}
+        onNew={handleNew}
         onGotoToko={() => setTab("toko")}
+        onGotoRiwayat={() => setTab("riwayat")}
       />
     );
     if (tab === "toko") return <ShopPanel profile={profile} setProfile={persistProfile} />;
@@ -165,9 +168,10 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, inv, profile, settings, history, wstep]);
 
-  // Info langkah wizard untuk badge tab "Buat Nota"
+  // Info langkah wizard untuk badge tab "Buat Nota" + redup pratinjau di langkah awal
   const wizSteps = getSteps(profile);
   const wizIdx = Math.max(0, wizSteps.findIndex((s) => s.id === wstep));
+  const dimPreview = tab === "buat" && wizIdx < wizSteps.length - 2;
 
   return (
     <>
@@ -240,7 +244,12 @@ export default function App() {
             {formPanel}
           </div>
           <div className={mobileView === "preview" ? "block" : "hidden lg:block"}>
-            <div className="lg:sticky lg:top-[132px]">
+            <div className={`lg:sticky lg:top-[132px] transition-opacity duration-300 ${dimPreview ? "lg:opacity-40" : ""}`}>
+              {dimPreview && (
+                <p className="hidden lg:block text-center text-[11px] text-neutral-400 mb-2">
+                  Pratinjau live — lanjutkan langkah untuk melihat hasil akhir
+                </p>
+              )}
               <Preview inv={inv} profile={profile} settings={settings} />
             </div>
           </div>

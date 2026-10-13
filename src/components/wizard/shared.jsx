@@ -15,12 +15,9 @@ const STEP_TITLES = {
   kirim: "Bayar & Kirim",
 };
 
-// Step 0 (toko) hanya muncul kalau profil toko masih kosong — sekali saja.
+// Toko selalu jadi langkah pertama — user baru wajib lewat sini, user lama bisa klik untuk ubah.
 export function getSteps(profile) {
-  const steps = [];
-  if (!profile?.shopName?.trim()) steps.push({ id: "toko", title: STEP_TITLES.toko });
-  for (const id of ["pelanggan", "item", "gaya", "kirim"]) steps.push({ id, title: STEP_TITLES[id] });
-  return steps;
+  return STEP_IDS.map((id) => ({ id, title: STEP_TITLES[id] }));
 }
 
 export function sampleInvoice() {
