@@ -76,6 +76,18 @@ try {
   check("step kirim ada ekspor & bagikan", html.includes("Ekspor &amp; Bagikan") && html.includes("Unduh PNG"));
 } catch (e) { check("step kirim ada ringkasan + simpan", false); console.log("  error:", e.message); }
 
+// 5b. step kirim: payment radio-rows + tombol simpan informatif
+try {
+  const profPay = { ...profileFull, payments: [{ id: "p1", label: "BCA", number: "8210123456", holder: "Kopi Senja" }] };
+  const html = renderToString(
+    <Wizard inv={inv} setInv={noop} profile={profPay} persistProfile={noop}
+      settings={settings} persistSettings={noop} stepId="kirim" setStepId={noop}
+      onSave={noop} onNew={noop} onClearInv={noop} onGotoToko={noop} onGotoRiwayat={noop} />
+  );
+  check("payment rows: checkbox + holder", html.includes("a.n. Kopi Senja") && html.includes("aria-pressed"));
+  check("tombol simpan informatif: nomor + total", html.includes("Simpan Nota") && html.includes("item ·"));
+} catch (e) { check("payment rows + save informatif", false); console.log("  error:", e.message); }
+
 // 6. stepId tak valid -> fallback ke step pertama, bukan crash
 try {
   const html = renderToString(

@@ -74,17 +74,24 @@ export default function StepKirim({ inv, setInv, profile, settings, onSave, onNe
         </div>
       ) : (
         <Card title="Pembayaran di nota" sticker="opsional">
-          <p className="mb-2 font-mono2 text-[10px] text-neutral-500">Pilih metode yang tampil di nota ini:</p>
-          <div className="flex flex-wrap gap-2">
+          <p className="mb-2.5 font-mono2 text-[10px] text-neutral-500">Ketuk untuk pilih — boleh lebih dari satu. Yang kepilih tampil di nota.</p>
+          <div className="space-y-2">
             {(profile.payments || []).map((p) => {
               const on = (inv.paymentIds || []).includes(p.id);
               return (
                 <button
                   key={p.id}
                   onClick={() => togglePayment(p.id)}
-                  className={`brutal-sm rounded-lg px-3 py-1.5 text-xs font-bold transition ${on ? "bg-teal-600 border-teal-600 text-white" : "opacity-60"}`}
+                  aria-pressed={on}
+                  className={`w-full flex items-center gap-3 rounded-xl border-[1.5px] px-3.5 py-2.5 text-left transition active:scale-[0.99] ${on ? "border-teal-600 bg-teal-50 dark:bg-teal-950/50" : "border-line bg-white dark:bg-neutral-900"}`}
                 >
-                  {on ? "✓ " : ""}{p.label} · {p.number}
+                  <span className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full border-2 text-[13px] font-bold text-white transition ${on ? "border-teal-600 bg-teal-600" : "border-neutral-300 dark:border-neutral-600"}`}>
+                    {on ? "✓" : ""}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[13.5px] font-bold truncate">{p.label}</span>
+                    <span className="block text-[11.5px] text-neutral-500 tabular-nums truncate">{p.number}{p.holder ? ` · a.n. ${p.holder}` : ""}</span>
+                  </span>
                 </button>
               );
             })}
@@ -92,8 +99,11 @@ export default function StepKirim({ inv, setInv, profile, settings, onSave, onNe
         </Card>
       )}
 
-      <Btn onClick={doSave} primary className="w-full py-3! text-base!">
-        Simpan Nota
+      <Btn onClick={doSave} primary className="w-full py-3!">
+        <span className="block text-base font-extrabold">Simpan Nota</span>
+        <span className="mt-0.5 block text-[12.5px] font-semibold text-white/85 tabular-nums">
+          {inv.number || "Tanpa nomor"} · {inv.items.length} item · {fmtMoney(t.total, inv.currency)}
+        </span>
       </Btn>
       <Collapse open={saved}>
         <div className="rounded-xl border border-teal-300 bg-teal-50 dark:border-teal-800 dark:bg-teal-950/50 p-4 text-center">

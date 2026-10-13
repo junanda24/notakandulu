@@ -68,7 +68,7 @@ export function InvoiceSheet({ inv, profile, settings, id }) {  const Tpl = TPL_
   );
 }
 
-// Kartu Ekspor & Bagikan — reusable: dipakai di panel Preview dan di Step 4 wizard.
+// Kartu Ekspor & Bagikan — dipakai di Step 4 wizard (Langkah Kirim).
 // Butuh sheetRef (ref ke node InvoiceSheet yang ter-render) untuk ekspor PNG.
 export function ExportCard({ inv, profile, settings, sheetRef }) {
   const [busy, setBusy] = useState("");
@@ -114,25 +114,27 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
   return (
     <Card title="Ekspor & Bagikan" sticker="gratis">
       <div className="grid grid-cols-2 gap-2">
-        <Btn onClick={doPrint} primary>🖨️ Cetak / PDF</Btn>
-        <Btn onClick={() => doPng(false)} primary disabled={busy === "png"}>
-          {busy === "png" ? "⏳ ..." : "🖼️ Unduh PNG"}
+        <Btn onClick={doPrint} color="bg-white dark:bg-neutral-800 border-line text-neutral-900 dark:text-neutral-100" className="py-3!">
+          <span className="mr-1.5 text-base">🖨️</span>Cetak / PDF
         </Btn>
-        <a href={waShareUrl(text)} target="_blank" rel="noreferrer" className="brutal-btn rounded-lg bg-[#25d366] border-[#1da851] text-white px-4 py-2.5 text-sm font-semibold text-center">
-          💬 WA (teks)
+        <Btn onClick={() => doPng(false)} color="bg-white dark:bg-neutral-800 border-line text-neutral-900 dark:text-neutral-100" className="py-3!" disabled={busy === "png"}>
+          {busy === "png" ? "⏳ ..." : <><span className="mr-1.5 text-base">🖼️</span>Unduh PNG</>}
+        </Btn>
+        <a href={waShareUrl(text)} target="_blank" rel="noreferrer" className="brutal-btn rounded-xl border-[1.5px] border-line bg-white dark:bg-neutral-800 px-3 py-3 text-sm font-bold text-neutral-900 dark:text-neutral-100 text-center transition active:scale-[0.97]">
+          <span className="mr-1.5 text-base">💬</span>WA Teks
         </a>
-        <a href={mailtoUrl(inv, profile, settings)} className="brutal-btn rounded-lg bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100 px-4 py-2.5 text-sm font-semibold text-center">
-          ✉️ Email
+        <a href={mailtoUrl(inv, profile, settings)} className="brutal-btn rounded-xl border-[1.5px] border-line bg-white dark:bg-neutral-800 px-3 py-3 text-sm font-bold text-neutral-900 dark:text-neutral-100 text-center transition active:scale-[0.97]">
+          <span className="mr-1.5 text-base">✉️</span>Email
         </a>
       </div>
       {nativeOk && (
-        <Btn onClick={() => doPng(true)} color="bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" className="w-full mt-2" disabled={busy === "share"}>
-          {busy === "share" ? "⏳ Menyiapkan..." : "📲 Bagikan gambar (WA / aplikasi lain)"}
+        <Btn onClick={() => doPng(true)} color="bg-white dark:bg-neutral-800 border-line text-neutral-900 dark:text-neutral-100" className="w-full mt-2 py-3!" disabled={busy === "share"}>
+          {busy === "share" ? "⏳ Menyiapkan..." : <><span className="mr-1.5 text-base">📲</span>Bagikan gambar</>}
         </Btn>
       )}
       {copyOk && (
-        <Btn onClick={doCopy} color="bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" className="w-full mt-2" disabled={busy === "copy"}>
-          {busy === "copy" ? "⏳ Menyiapkan..." : copied ? "✓ Tersalin! Tempel (Ctrl+V) di chat WA" : "📋 Salin gambar nota"}
+        <Btn onClick={doCopy} color="bg-white dark:bg-neutral-800 border-line text-neutral-900 dark:text-neutral-100" className="w-full mt-2 py-3!" disabled={busy === "copy"}>
+          {busy === "copy" ? "⏳ Menyiapkan..." : copied ? "✓ Tersalin! Tempel (Ctrl+V) di chat WA" : <><span className="mr-1.5 text-base">📋</span>Salin gambar nota</>}
         </Btn>
       )}
       <p className="mt-2 font-mono2 text-[10px] text-neutral-500">
