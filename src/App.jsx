@@ -218,7 +218,7 @@ export default function App() {
             >
               ☰
             </button>
-            <Btn onClick={handleSave} primary className="py-2! px-4! text-sm!">Simpan</Btn>
+            <Btn onClick={handleSave} primary className="hidden lg:inline-block py-2! px-4! text-sm!">Simpan</Btn>
           </div>
         </div>
       </header>
@@ -264,7 +264,7 @@ export default function App() {
       )}
     </div>
 
-      {/* Floating preview button — khusus HP */}
+      {/* Floating action bar — khusus HP: Simpan + Preview */}
       {tab !== "saran" && (
         <>
           <div className="h-24 lg:hidden" />
@@ -272,12 +272,22 @@ export default function App() {
             className="lg:hidden fixed bottom-0 inset-x-0 z-40 flex justify-center px-4"
             style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
           >
-            <button
-              onClick={() => setPreviewOpen(true)}
-              className="rounded-full bg-teal-600 hover:bg-teal-500 text-white font-bold px-8 py-3.5 shadow-2xl text-[15px] transition active:scale-95"
-            >
-              👁️ Preview Invoice Ku
-            </button>
+            <div className="flex items-center gap-1 rounded-full border border-line bg-white/95 dark:bg-neutral-900/95 p-1.5 shadow-2xl backdrop-blur">
+              {tab === "buat" && (
+                <button
+                  onClick={handleSave}
+                  className="rounded-full bg-teal-600 hover:bg-teal-500 text-white font-bold px-7 py-3 shadow text-[15px] transition active:scale-95"
+                >
+                  Simpan
+                </button>
+              )}
+              <button
+                onClick={() => setPreviewOpen(true)}
+                className="rounded-full px-7 py-3 font-bold text-[15px] text-neutral-700 dark:text-neutral-200 transition active:scale-95"
+              >
+                👁️ Preview
+              </button>
+            </div>
           </div>
         </>
       )}
