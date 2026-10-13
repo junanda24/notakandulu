@@ -68,7 +68,7 @@ export default function StepKirim({ inv, setInv, profile, settings, onSave, onNe
         <div className="rounded-xl border border-dashed border-line p-4 text-[13px] text-neutral-500 dark:text-neutral-400">
           Belum ada rekening tersimpan.{" "}
           <button onClick={onGotoToko} className="font-bold text-teal-600 dark:text-teal-400 underline">
-            Tambah di tab Toko
+            Tambah di Langkah Data
           </button>{" "}
           biar info pembayaran muncul di nota — atau lewati dulu.
         </div>

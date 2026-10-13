@@ -75,7 +75,7 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
     <Card title="Riwayat Nota" sticker={`${history.length}/50`}>
       {history.length === 0 ? (
         <div className="py-6 text-center">
-                    <p className="mt-2 text-sm text-neutral-500">Belum ada nota tersimpan.<br />Klik "Simpan nota" setelah selesai mengisi.</p>
+                    <p className="mt-2 text-sm text-neutral-500">Belum ada nota tersimpan.<br />Klik "Simpan" setelah selesai mengisi.</p>
         </div>
       ) : (
         <div className="space-y-2">

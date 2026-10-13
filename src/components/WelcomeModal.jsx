@@ -4,8 +4,8 @@ import { useState } from "react";
 const WELCOME_KEY = "notakandulu:welcomed";
 
 const STEPS = [
-  { icon: "📝", title: "Isi form", desc: "Nama pelanggan, item, harga. Pratinjau di samping langsung ikut berubah." },
-  { icon: "🎨", title: "Pilih template", desc: "18 template elegant di tab Gaya, dari formal sampai struk thermal." },
+  { icon: "📝", title: "Ikuti 4 langkah", desc: "Data, item, gaya, kirim — tinggal ikuti panduannya sampai nota jadi." },
+  { icon: "🎨", title: "Atur gayanya", desc: "18 template elegan di Langkah Gaya, dari formal sampai struk thermal." },
   { icon: "📤", title: "Simpan & bagikan", desc: "Ekspor PNG/PDF atau kirim langsung via WhatsApp." },
 ];
 
@@ -45,7 +45,7 @@ export default function WelcomeModal() {
         </button>
         <div className="text-[11px] text-neutral-400 mt-3 space-y-1">
           <p>🔒 Datamu 100% privat: tersimpan hanya di browser ini, tidak dikirim ke mana pun.</p>
-          <p>⚠️ Tanpa akun berarti tanpa backup otomatis. Ekspor backup rutin di tab Riwayat.</p>
+          <p>⚠️ Tanpa akun berarti tanpa backup otomatis. Ekspor backup rutin di menu ☰ → Riwayat.</p>
         </div>
       </div>
     </div>

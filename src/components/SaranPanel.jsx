@@ -62,7 +62,7 @@ export default function SaranPanel() {
           </button>
         </div>
         <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-3">
-          berapapun sangat berarti. Terima kasih 🙏
+          Berapapun sangat berarti. Terima kasih 🙏
         </p>
       </Card>
     </div>
