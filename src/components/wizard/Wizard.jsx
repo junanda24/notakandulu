@@ -9,6 +9,8 @@ import { getSteps } from "./shared.jsx";
 import { Btn } from "../ui.jsx";
 
 function StepperHead({ steps, idx, onJump }) {
+  // Label pendek biar 4-5 step muat di kolom wizard tanpa kepotong
+  const SHORT = { toko: "Toko", pelanggan: "Pelanggan", item: "Item", gaya: "Gaya", kirim: "Kirim" };
   return (
     <div>
       {/* Desktop: numbered steps */}
@@ -17,14 +19,14 @@ function StepperHead({ steps, idx, onJump }) {
           const done = i < idx;
           const active = i === idx;
           return (
-            <li key={s.id} className="flex items-center flex-1 last:flex-none">
+            <li key={s.id} className="flex items-center min-w-0 flex-1 last:flex-none">
               <button
                 onClick={() => onJump(s.id)}
-                className="flex items-center gap-2 group shrink-0"
+                className="flex items-center gap-1.5 min-w-0 shrink-0"
                 title={s.title}
               >
                 <span
-                  className={`flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-extrabold tabular-nums transition ${
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[12px] font-extrabold tabular-nums transition ${
                     active
                       ? "bg-teal-600 text-white"
                       : done
@@ -34,12 +36,12 @@ function StepperHead({ steps, idx, onJump }) {
                 >
                   {done ? "✓" : i + 1}
                 </span>
-                <span className={`text-[12px] whitespace-nowrap ${active ? "font-bold text-ink" : "text-neutral-500 dark:text-neutral-400"}`}>
-                  {s.title}
+                <span className={`text-[12px] whitespace-nowrap truncate ${active ? "font-bold text-ink" : "text-neutral-500 dark:text-neutral-400"}`}>
+                  {SHORT[s.id] || s.title}
                 </span>
               </button>
               {i < steps.length - 1 && (
-                <span className={`mx-2 h-px flex-1 min-w-4 ${done ? "bg-teal-500" : "bg-line"}`} />
+                <span className={`mx-1.5 h-px flex-1 min-w-2 ${done ? "bg-teal-500" : "bg-line"}`} />
               )}
             </li>
           );

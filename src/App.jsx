@@ -201,24 +201,28 @@ export default function App() {
             <Btn onClick={handleSave} primary className="py-1.5! px-3! text-xs!">Simpan</Btn>
           </div>
         </div>
-        {/* Tab nav: segmented control */}
+        {/* Tab nav: aksi utama di kiri, sekunder di kanan biar fokus tidak terbagi */}
         <nav className="border-t border-line">
-          <div className="mx-auto max-w-7xl px-4 py-2">
+          <div className="mx-auto max-w-7xl px-4 py-2 flex items-center justify-between gap-2">
+            <button
+              onClick={() => { setTab("buat"); setMobileView("form"); }}
+              className={`flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2 text-[13px] font-bold transition ${tab === "buat" ? "bg-teal-600 text-white shadow" : "border border-line text-neutral-500 hover:text-ink dark:text-neutral-400"}`}
+            >
+              Buat Nota
+              <span className={`rounded-md px-1.5 py-px font-mono2 text-[10px] font-bold tabular-nums ${tab === "buat" ? "bg-white/25 text-white" : "bg-neutral-200 dark:bg-neutral-800 text-neutral-500"}`}>
+                {wizIdx + 1}/{wizSteps.length}
+              </span>
+            </button>
             <div className="flex gap-0.5 overflow-x-auto rounded-xl border border-line bg-neutral-100/70 dark:bg-neutral-900 p-1">
-              {TABS.map((t) => {
+              {TABS.filter((t) => t.id !== "buat").map((t) => {
                 const active = tab === t.id;
                 return (
                   <button
                     key={t.id}
                     onClick={() => { setTab(t.id); setMobileView("form"); }}
-                    className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-[13px] transition ${active ? "bg-white dark:bg-neutral-800 font-bold text-ink shadow-sm" : "font-medium text-neutral-500 hover:text-ink dark:text-neutral-400 dark:hover:text-neutral-100"}`}
+                    className={`shrink-0 rounded-lg px-3 py-1.5 text-[12px] transition ${active ? "bg-white dark:bg-neutral-800 font-bold text-ink shadow-sm" : "font-medium text-neutral-500 hover:text-ink dark:text-neutral-400 dark:hover:text-neutral-100"}`}
                   >
                     {t.name}
-                    {t.id === "buat" && active && (
-                      <span className="rounded-md bg-teal-600 px-1.5 py-px font-mono2 text-[10px] font-bold text-white tabular-nums">
-                        {wizIdx + 1}/{wizSteps.length}
-                      </span>
-                    )}
                   </button>
                 );
               })}
