@@ -138,7 +138,7 @@ export default function App() {
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white text-base font-extrabold">T</span>
             <div>
               <h1 className="text-[15px] font-extrabold tracking-tight leading-none">TagihkanDulu</h1>
-              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">Invoice elegant, gratis</p>
+              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">Buat invoice gratis, tanpa iklan dan login itu nyata 🔥</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
