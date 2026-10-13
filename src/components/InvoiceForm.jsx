@@ -3,6 +3,8 @@ import { Field, TextInput, TextArea, Select, Card } from "./ui.jsx";
 import { blankItem } from "../lib/calc.js";
 import { CURRENCIES } from "../lib/format.js";
 
+const UNITS = ["pcs", "box", "pak", "lusin", "kodi", "kg", "gram", "liter", "meter", "m2", "jam", "hari", "minggu", "sesi", "kali", "orang", "porsi", "lot", "paket", "set", "unit"];
+
 export default function InvoiceForm({ inv, setInv, profile }) {
   const set = (patch) => setInv((p) => ({ ...p, ...patch }));
   const setItem = (id, patch) =>
@@ -76,12 +78,12 @@ export default function InvoiceForm({ inv, setInv, profile }) {
                   <TextInput type="number" min="0" value={it.qty} onChange={(e) => setItem(it.id, { qty: e.target.value })} />
                 </Field>
                 <Field label="Satuan">
-                  <TextInput list={`unit-${it.id}`} value={it.unit || ""} onChange={(e) => setItem(it.id, { unit: e.target.value })} placeholder="pcs" />
-                  <datalist id={`unit-${it.id}`}>
-                    {["pcs", "box", "pak", "lusin", "kodi", "kg", "gram", "liter", "meter", "m2", "jam", "hari", "minggu", "sesi", "kali", "orang", "porsi", "lot", "paket", "set", "unit"].map((u) => (
-                      <option key={u} value={u} />
+                  <Select value={it.unit || "pcs"} onChange={(e) => setItem(it.id, { unit: e.target.value })}>
+                    {UNITS.map((u) => (
+                      <option key={u} value={u}>{u}</option>
                     ))}
-                  </datalist>
+                    {it.unit && !UNITS.includes(it.unit) && <option value={it.unit}>{it.unit}</option>}
+                  </Select>
                 </Field>
                 <Field label="Harga satuan">
                   <TextInput type="number" min="0" value={it.price} onChange={(e) => setItem(it.id, { price: e.target.value })} />
