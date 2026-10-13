@@ -6,7 +6,7 @@ import { TEMPLATES, FONTS, PAPER_WIDTH } from "../data/options.js";
 import { calcTotals, paymentStatus, STATUS_META } from "../lib/calc.js";
 import {
   invoiceText, waShareUrl, mailtoUrl, canNativeShareFile, canCopyPng,
-  invoiceToPng, nativeSharePng, downloadPng, copyPngToClipboard,
+  invoiceToPng, nativeSharePng, downloadPng, copyPngToClipboard, setPrintPageSize,
 } from "../lib/share.js";
 import Struk58 from "./invoices/Struk58.jsx";
 import Struk80 from "./invoices/Struk80.jsx";
@@ -76,7 +76,15 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
   const [nativeOk] = useState(() => canNativeShareFile());
   const [copyOk] = useState(() => !canNativeShareFile() && canCopyPng());
 
-  const doPrint = () => window.print();
+  // Kunci @page size = tinggi konten aktual biar tidak ada ruang putih sisa.
+  const doPrint = async () => {
+    try { await document.fonts?.ready; } catch { /* abaikan */ }
+    const node = sheetRef?.current;
+    const meta = TEMPLATES.find((x) => x.id === settings.template);
+    const w = PAPER_WIDTH[meta?.paper || "A4"];
+    if (node && node.offsetHeight > 0) setPrintPageSize(w, node.offsetHeight);
+    window.print();
+  };
 
   const doPng = async (share) => {
     if (!sheetRef?.current) return;
@@ -152,18 +160,17 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
 export default function Preview({ inv, profile, settings }) {
   const sheetRef = useRef(null);
 
-  // @page size mengikuti template saat cetak
+  // @page tanpa margin — ukuran halaman dikunci saat tombol Cetak ditekan
+  // (setPrintPageSize), mengikuti tinggi konten aktual.
   useEffect(() => {
-    const meta = TEMPLATES.find((x) => x.id === settings.template);
-    const w = PAPER_WIDTH[meta?.paper || "A4"];
     let el = document.getElementById("nd-page-size");
     if (!el) {
       el = document.createElement("style");
       el.id = "nd-page-size";
       document.head.appendChild(el);
     }
-    el.textContent = `@media print { @page { size: ${w} auto; margin: 0; } }`;
-  }, [settings.template]);
+    el.textContent = `@media print { @page { margin: 0; } }`;
+  }, []);
 
   const st = paymentStatus(inv);
   const sm = st ? STATUS_META[st] : null;
@@ -239,6 +246,15 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
   const stepIn = () => setZoom((p) => Math.min(3, +( ((p ?? fitZoom) + 0.25).toFixed(2) )));
   const stepOut = () => setZoom((p) => Math.max(0.25, +( ((p ?? fitZoom) - 0.25).toFixed(2) )));
 
+  const doPrintModal = async () => {
+    try { await document.fonts?.ready; } catch { /* abaikan */ }
+    const node = sheetRef.current;
+    const meta2 = TEMPLATES.find((x) => x.id === settings.template);
+    const w2 = PAPER_WIDTH[meta2?.paper || "A4"];
+    if (node && node.offsetHeight > 0) setPrintPageSize(w2, node.offsetHeight);
+    window.print();
+  };
+
   const doPng = async (share) => {
     if (!sheetRef.current) return;
     setBusy(share ? "share" : "png");
@@ -291,7 +307,7 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
           >
             {busy === "png" ? "⏳" : "🖼️ PNG"}
           </button>
-          <button onClick={() => window.print()} className="rounded-xl bg-white/10 text-white text-sm font-bold py-3">
+          <button onClick={doPrintModal} className="rounded-xl bg-white/10 text-white text-sm font-bold py-3">
             🖨️ PDF
           </button>
           <a

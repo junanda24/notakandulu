@@ -74,6 +74,20 @@ export async function nativeSharePng(node, inv) {
   await navigator.share({ files: [file], title: `Nota ${inv.number || ""}` });
 }
 
+// Ukur tinggi konten nota lalu kunci @page size eksplisit sebelum print.
+// (CSS "size: 210mm auto" itu invalid — Chrome mengabaikannya sehingga halaman
+// jadi full A4 dan nota pendek menyisakan ruang putih di bawah.)
+export function setPrintPageSize(widthCss, heightPx) {
+  const hMm = Math.max(10, Math.ceil((heightPx * 25.4) / 96) + 2);
+  let el = document.getElementById("nd-page-size");
+  if (!el) {
+    el = document.createElement("style");
+    el.id = "nd-page-size";
+    document.head.appendChild(el);
+  }
+  el.textContent = `@media print { @page { size: ${widthCss} ${hMm}mm; margin: 0; } }`;
+}
+
 export function downloadPng(dataUrl, filename) {
   const a = document.createElement("a");
   a.href = dataUrl;
