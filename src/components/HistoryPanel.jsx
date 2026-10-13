@@ -112,8 +112,8 @@ export default function HistoryPanel({ history, onOpen, onDelete, onNew, onResto
         <div className="h-full bg-emerald-500" style={{ width: `${Math.max(2, info.pct)}%` }} />
       </div>
       <div className="flex gap-2">
-        <Btn onClick={doExport} color="bg-indigo-500" className="flex-1 text-xs!">⬇️ Backup (JSON)</Btn>
-        <Btn onClick={() => fileRef.current?.click()} color="bg-white" className="flex-1 text-xs!">⬆️ Restore</Btn>
+        <Btn onClick={doExport} color="bg-indigo-500 text-white" className="flex-1 text-xs!">⬇️ Backup (JSON)</Btn>
+        <Btn onClick={() => fileRef.current?.click()} color="bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" className="flex-1 text-xs!">⬆️ Restore</Btn>
         <input ref={fileRef} type="file" accept=".json,application/json" className="hidden" onChange={doImport} />
       </div>
       {msg && <p className="mt-2 text-xs font-bold">{msg}</p>}

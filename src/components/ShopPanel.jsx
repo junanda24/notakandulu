@@ -86,7 +86,7 @@ export default function ShopPanel({ profile, setProfile }) {
               <img src={profile.logo} alt="Logo" className="h-14 w-14 rounded-xl object-contain border border-line bg-white p-1" />
             )}
             <div className="flex-1">
-              <label className="inline-block cursor-pointer rounded-lg border border-line bg-white px-3 py-2 text-sm font-medium hover:border-neutral-400">
+              <label className="inline-block cursor-pointer rounded-lg border border-line bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100 dark:border-neutral-700 px-3 py-2 text-sm font-medium hover:border-neutral-400">
                 {profile.logo ? "Ganti logo" : "Upload logo"}
                 <input type="file" accept="image/*" className="hidden" onChange={onLogo} />
               </label>

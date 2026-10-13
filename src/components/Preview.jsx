@@ -108,12 +108,12 @@ export default function Preview({ inv, profile, settings }) {
           <a href={waShareUrl(text)} target="_blank" rel="noreferrer" className="brutal-btn rounded-lg bg-[#25d366] border-[#1da851] text-white px-4 py-2.5 text-sm font-semibold text-center">
             💬 WA (teks)
           </a>
-          <a href={mailtoUrl(inv, profile, settings)} className="brutal-btn rounded-lg px-4 py-2.5 text-sm font-semibold text-center">
+          <a href={mailtoUrl(inv, profile, settings)} className="brutal-btn rounded-lg bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100 px-4 py-2.5 text-sm font-semibold text-center">
             ✉️ Email
           </a>
         </div>
         {nativeOk && (
-          <Btn onClick={() => doPng(true)} color="bg-white" className="w-full mt-2" disabled={busy === "share"}>
+          <Btn onClick={() => doPng(true)} color="bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" className="w-full mt-2" disabled={busy === "share"}>
             {busy === "share" ? "⏳ Menyiapkan..." : "📲 Bagikan gambar (WA / aplikasi lain)"}
           </Btn>
         )}

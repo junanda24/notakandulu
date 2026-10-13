@@ -55,7 +55,7 @@ export default function CustomizePanel({ settings, setSettings }) {
               style={{ background: c }}
             />
           ))}
-          <label className="brutal-sm rounded-lg bg-white px-2 py-1.5 font-mono2 text-[10px] font-bold cursor-pointer flex items-center gap-1.5">
+          <label className="brutal-sm rounded-lg bg-white dark:bg-neutral-800 px-2 py-1.5 font-mono2 text-[10px] font-bold cursor-pointer flex items-center gap-1.5">
             🎨
             <input type="color" value={settings.accent} onChange={(e) => set({ accent: e.target.value })} className="h-6 w-8 cursor-pointer bg-transparent border-none p-0" />
           </label>

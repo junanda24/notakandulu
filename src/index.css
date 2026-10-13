@@ -149,6 +149,12 @@ label.brutal-label {
   }
   .print-sheet {
     display: block !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .print-sheet * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
   .print-sheet .invoice-paper {
     box-shadow: none !important;
