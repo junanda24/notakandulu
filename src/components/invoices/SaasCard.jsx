@@ -1,16 +1,17 @@
 // Style 1 — Minimal SaaS Card (ala Stripe). Paling profesional: hairline,
 // label uppercase ber-spasi, angka tabular rata kanan, total sebagai destinasi.
-import { Money, PaymentBlock, NotesBlock, ShopLogo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtMoney } from "../../lib/format.js";
 import { fmtDate } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
 const hair = { borderTop: "1px solid #e5e7eb" };
 
-export default function SaasCard({ inv, profile, totals, bodyFont, accent }) {
+export default function SaasCard({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#4f46e5";
   const cur = inv.currency;
   const items = inv.items || [];
+  const dpi = dpInfo(inv, totals);
   return (
     <div style={{ fontFamily: bodyFont, fontSize: 12, lineHeight: 1.6, color: "#111827", padding: 56 }}>
       {/* Header */}
@@ -19,9 +20,9 @@ export default function SaasCard({ inv, profile, totals, bodyFont, accent }) {
           <ShopLogo logo={profile.logo} size={52} radius={12} />
           <div>
             <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.01em" }}>{profile.shopName || "Nama Usaha"}</div>
-            {(profile.address || profile.contact) && (
+            {(profile.address || profile.contact || profile.npwp) && (
               <div style={{ color: "#6b7280", fontSize: 11, marginTop: 4 }}>
-                {[profile.address, profile.contact].filter(Boolean).join(" · ")}
+                {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join(" · ")}
               </div>
             )}
           </div>
@@ -29,6 +30,7 @@ export default function SaasCard({ inv, profile, totals, bodyFont, accent }) {
         <div style={{ textAlign: "right" }}>
           <div style={{ fontSize: 22, fontWeight: 700, color: a, letterSpacing: "0.02em" }}>INVOICE</div>
           <div style={{ ...lbl, marginTop: 6 }}>{inv.number}</div>
+          {inv.poNumber && <div style={{ fontSize: 11, color: "#6b7280", marginTop: 2 }}>PO: {inv.poNumber}</div>}
         </div>
       </div>
 
@@ -38,10 +40,17 @@ export default function SaasCard({ inv, profile, totals, bodyFont, accent }) {
           <div style={lbl}>Ditagih kepada</div>
           <div style={{ fontWeight: 600, marginTop: 4 }}>{inv.customerName || "—"}</div>
           {inv.customerInfo && <div style={{ color: "#6b7280", fontSize: 11, whiteSpace: "pre-line" }}>{inv.customerInfo}</div>}
+          {inv.customerNpwp && <div style={{ color: "#6b7280", fontSize: 11 }}>NPWP: {inv.customerNpwp}</div>}
         </div>
         <div style={{ marginLeft: "auto", textAlign: "right" }}>
           <div style={lbl}>Tanggal terbit</div>
           <div style={{ marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmtDate(inv.date)}</div>
+          {inv.dueDate && (
+            <>
+              <div style={{ ...lbl, marginTop: 12 }}>Jatuh tempo</div>
+              <div style={{ marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmtDate(inv.dueDate)}</div>
+            </>
+          )}
         </div>
       </div>
 
@@ -62,7 +71,7 @@ export default function SaasCard({ inv, profile, totals, bodyFont, accent }) {
           {items.map((it) => (
             <tr key={it.id} style={{ borderBottom: "1px solid #f3f4f6" }}>
               <td style={{ padding: "13px 0", paddingRight: 16 }}>{it.name || <span style={{ color: "#9ca3af" }}>Tanpa nama</span>}</td>
-              <td style={{ padding: "13px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>{it.qty}</td>
+              <td style={{ padding: "13px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>{it.qty}{it.unit ? ` ${it.unit}` : ""}</td>
               <td style={{ padding: "13px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>{fmtMoney(it.price, cur)}</td>
               <td style={{ padding: "13px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", fontWeight: 500 }}>
                 <Money v={(Number(it.qty) || 0) * (Number(it.price) || 0)} cur={cur} />
@@ -92,6 +101,20 @@ export default function SaasCard({ inv, profile, totals, bodyFont, accent }) {
               <Money v={totals.total} cur={cur} />
             </span>
           </div>
+          {dpi && (
+            <>
+              <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", color: "#4b5563", fontSize: 12 }}>
+                <span>Uang muka (DP)</span>
+                <span style={{ fontVariantNumeric: "tabular-nums" }}><Money v={-dpi.dp} cur={cur} /></span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", paddingTop: 8 }}>
+                <span style={{ ...lbl }}>Sisa dibayar</span>
+                <span style={{ fontSize: 17, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>
+                  <Money v={dpi.sisa} cur={cur} />
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -106,6 +129,7 @@ export default function SaasCard({ inv, profile, totals, bodyFont, accent }) {
       <div style={{ marginTop: 24, color: "#9ca3af", fontSize: 10.5, textAlign: "center" }}>
         Terima kasih atas kepercayaan Anda.
       </div>
+      {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}
     </div>
   );
 }

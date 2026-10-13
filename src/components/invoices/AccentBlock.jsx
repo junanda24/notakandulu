@@ -1,14 +1,15 @@
 // Style 5 — Accent Header Block. Pita aksen penuh di atas dengan judul INVOICE
 // putih, logo dalam chip putih, sisa halaman putih dengan hairline netral.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, fmtD } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, fmtD, dpInfo } from "./shared.jsx";
 import { fmtMoney } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
 
-export default function AccentBlock({ inv, profile, totals, bodyFont, accent }) {
+export default function AccentBlock({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#4f46e5";
   const cur = inv.currency;
   const items = inv.items || [];
+  const dpi = dpInfo(inv, totals);
   return (
     <div style={{ fontFamily: bodyFont, fontSize: 12, lineHeight: 1.6, color: "#111827" }}>
       {/* Pita aksen */}
@@ -18,7 +19,11 @@ export default function AccentBlock({ inv, profile, totals, bodyFont, accent }) 
             <ShopLogo logo={profile.logo} size={52} radius={12} chip />
             <div>
               <div style={{ fontSize: 19, fontWeight: 700 }}>{profile.shopName || "Nama Usaha"}</div>
-              {profile.contact && <div style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>{profile.contact}</div>}
+              {(profile.contact || profile.npwp) && (
+                <div style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>
+                  {[profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join(" · ")}
+                </div>
+              )}
             </div>
           </div>
           <div style={{ textAlign: "right" }}>
@@ -26,6 +31,16 @@ export default function AccentBlock({ inv, profile, totals, bodyFont, accent }) 
             <div style={{ fontSize: 11, opacity: 0.85, marginTop: 6, fontVariantNumeric: "tabular-nums" }}>
               {inv.number} · {fmtD(inv.date)}
             </div>
+            {inv.dueDate && (
+              <div style={{ fontSize: 11, opacity: 0.85, marginTop: 2, fontVariantNumeric: "tabular-nums" }}>
+                Jatuh tempo: {fmtD(inv.dueDate)}
+              </div>
+            )}
+            {inv.poNumber && (
+              <div style={{ fontSize: 11, opacity: 0.85, marginTop: 2, fontVariantNumeric: "tabular-nums" }}>
+                No. PO: {inv.poNumber}
+              </div>
+            )}
           </div>
         </div>
         <div style={{ marginTop: 26, display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
@@ -39,6 +54,7 @@ export default function AccentBlock({ inv, profile, totals, bodyFont, accent }) 
             <div style={{ fontSize: 10, letterSpacing: "0.16em", opacity: 0.75 }}>DITAGIH KEPADA</div>
             <div style={{ fontWeight: 600, marginTop: 4 }}>{inv.customerName || "—"}</div>
             {inv.customerInfo && <div style={{ fontSize: 11, opacity: 0.85, whiteSpace: "pre-line" }}>{inv.customerInfo}</div>}
+            {inv.customerNpwp && <div style={{ fontSize: 11, opacity: 0.85 }}>NPWP: {inv.customerNpwp}</div>}
           </div>
         </div>
       </div>
@@ -61,7 +77,7 @@ export default function AccentBlock({ inv, profile, totals, bodyFont, accent }) 
             {items.map((it) => (
               <tr key={it.id} style={{ borderBottom: "1px solid #f3f4f6" }}>
                 <td style={{ padding: "13px 0", paddingRight: 16 }}>{it.name || <span style={{ color: "#9ca3af" }}>Tanpa nama</span>}</td>
-                <td style={{ padding: "13px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>{it.qty}</td>
+                <td style={{ padding: "13px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>{it.qty}{it.unit ? ` ${it.unit}` : ""}</td>
                 <td style={{ padding: "13px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>{fmtMoney(it.price, cur)}</td>
                 <td style={{ padding: "13px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", fontWeight: 500 }}>
                   <Money v={(Number(it.qty) || 0) * (Number(it.price) || 0)} cur={cur} />
@@ -84,6 +100,18 @@ export default function AccentBlock({ inv, profile, totals, bodyFont, accent }) 
                 <span style={{ fontVariantNumeric: "tabular-nums" }}><Money v={v} cur={cur} /></span>
               </div>
             ))}
+            {dpi && (
+              <>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", color: "#4b5563" }}>
+                  <span>Uang muka (DP)</span>
+                  <span style={{ fontVariantNumeric: "tabular-nums" }}><Money v={-dpi.dp} cur={cur} /></span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0 0", borderTop: "1px solid #e5e7eb", marginTop: 4 }}>
+                  <span style={{ fontWeight: 700 }}>Sisa dibayar</span>
+                  <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums" }}><Money v={dpi.sisa} cur={cur} /></span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -98,6 +126,7 @@ export default function AccentBlock({ inv, profile, totals, bodyFont, accent }) 
         <div style={{ marginTop: 24, color: "#9ca3af", fontSize: 10.5, textAlign: "center" }}>
           Terima kasih atas kepercayaan Anda.
         </div>
+        {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}
       </div>
     </div>
   );

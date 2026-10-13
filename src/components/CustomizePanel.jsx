@@ -62,6 +62,18 @@ export default function CustomizePanel({ settings, setSettings }) {
         </div>
       </Card>
 
+      <Card title="✒️ Tanda Tangan">
+        <label className="flex items-center justify-between gap-3 cursor-pointer">
+          <span className="text-sm">Tampilkan kolom tanda tangan di nota <span className="text-neutral-500">(kecuali struk & kwitansi)</span></span>
+          <input
+            type="checkbox"
+            checked={!!settings.showSignature}
+            onChange={(e) => set({ showSignature: e.target.checked })}
+            className="h-5 w-5 accent-indigo-600"
+          />
+        </label>
+      </Card>
+
       <Card title="🔢 Pola Nomor Nota">
         <Field label="Pilih pola">
           <Select value={settings.numberPattern} onChange={(e) => set({ numberPattern: e.target.value })}>

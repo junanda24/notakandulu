@@ -1,15 +1,16 @@
 // Style 6 — Executive Dark. Charcoal (#141414, bukan hitam pekat), satu aksen
 // metalik emas, padding lebih lega, tabel di atas panel terang. Opt-in untuk
 // usaha premium — jangan dipakai untuk cetak hitam-putih.
-import { Money, PaymentBlock, NotesBlock, ShopLogo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtMoney, fmtDate, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "#8a8a8a", fontWeight: 600 };
 const gold = "#c9a227";
 
-export default function ExecutiveDark({ inv, profile, totals, bodyFont }) {
+export default function ExecutiveDark({ inv, profile, totals, bodyFont, showSignature }) {
   const cur = inv.currency;
   const items = inv.items || [];
+  const dpi = dpInfo(inv, totals);
   const bg = "#141414";
   const panel = "#1e1e1e";
   const txt = "#f2f2f2";
@@ -23,9 +24,9 @@ export default function ExecutiveDark({ inv, profile, totals, bodyFont }) {
           <ShopLogo logo={profile.logo} size={56} radius={14} chip />
           <div>
             <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: "-0.01em" }}>{profile.shopName || "Nama Usaha"}</div>
-            {(profile.address || profile.contact) && (
+            {(profile.address || profile.contact || profile.npwp) && (
               <div style={{ color: muted, fontSize: 11, marginTop: 4 }}>
-                {[profile.address, profile.contact].filter(Boolean).join(" · ")}
+                {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join(" · ")}
               </div>
             )}
           </div>
@@ -33,6 +34,7 @@ export default function ExecutiveDark({ inv, profile, totals, bodyFont }) {
         <div style={{ textAlign: "right" }}>
           <div style={{ fontSize: 22, fontWeight: 800, color: gold, letterSpacing: "0.06em" }}>INVOICE</div>
           <div style={{ ...lbl, marginTop: 6 }}>{inv.number}</div>
+          {inv.poNumber && <div style={{ color: muted, fontSize: 11, marginTop: 2 }}>PO: {inv.poNumber}</div>}
         </div>
       </div>
 
@@ -42,10 +44,17 @@ export default function ExecutiveDark({ inv, profile, totals, bodyFont }) {
           <div style={lbl}>Ditagih kepada</div>
           <div style={{ fontWeight: 600, marginTop: 4, fontSize: 13 }}>{inv.customerName || "—"}</div>
           {inv.customerInfo && <div style={{ color: muted, fontSize: 11, whiteSpace: "pre-line" }}>{inv.customerInfo}</div>}
+          {inv.customerNpwp && <div style={{ color: muted, fontSize: 11 }}>NPWP: {inv.customerNpwp}</div>}
         </div>
         <div style={{ marginLeft: "auto", textAlign: "right" }}>
           <div style={lbl}>Tanggal terbit</div>
           <div style={{ marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmtDate(inv.date)}</div>
+          {inv.dueDate && (
+            <>
+              <div style={{ ...lbl, marginTop: 12 }}>Jatuh tempo</div>
+              <div style={{ marginTop: 4, fontVariantNumeric: "tabular-nums" }}>{fmtDate(inv.dueDate)}</div>
+            </>
+          )}
         </div>
       </div>
 
@@ -67,7 +76,7 @@ export default function ExecutiveDark({ inv, profile, totals, bodyFont }) {
             {items.map((it) => (
               <tr key={it.id} style={{ borderBottom: `1px solid ${line}` }}>
                 <td style={{ padding: "15px 0", paddingRight: 16 }}>{it.name || <span style={{ color: muted }}>Tanpa nama</span>}</td>
-                <td style={{ padding: "15px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: muted }}>{it.qty}</td>
+                <td style={{ padding: "15px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: muted }}>{it.qty}{it.unit ? ` ${it.unit}` : ""}</td>
                 <td style={{ padding: "15px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: muted }}>{fmtMoney(it.price, cur)}</td>
                 <td style={{ padding: "15px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", fontWeight: 500 }}>
                   <Money v={(Number(it.qty) || 0) * (Number(it.price) || 0)} cur={cur} />
@@ -98,9 +107,23 @@ export default function ExecutiveDark({ inv, profile, totals, bodyFont }) {
               <Money v={totals.total} cur={cur} />
             </span>
           </div>
+          {dpi && (
+            <>
+              <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", color: muted }}>
+                <span>Uang muka (DP)</span>
+                <span style={{ fontVariantNumeric: "tabular-nums" }}><Money v={-dpi.dp} cur={cur} /></span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", paddingTop: 6 }}>
+                <span style={{ ...lbl, color: gold }}>Sisa dibayar</span>
+                <span style={{ fontSize: 19, fontWeight: 800, color: gold, fontVariantNumeric: "tabular-nums" }}>
+                  <Money v={dpi.sisa} cur={cur} />
+                </span>
+              </div>
+            </>
+          )}
           {cur === "IDR" && (
             <div style={{ color: muted, fontSize: 11, fontStyle: "italic", textAlign: "right", marginTop: 4, textTransform: "capitalize" }}>
-              {terbilang(totals.total)} rupiah
+              {terbilang(dpi ? dpi.sisa : totals.total)} rupiah
             </div>
           )}
         </div>
@@ -117,6 +140,7 @@ export default function ExecutiveDark({ inv, profile, totals, bodyFont }) {
       <div style={{ marginTop: 28, color: muted, fontSize: 10.5, textAlign: "center" }}>
         Terima kasih atas kepercayaan Anda.
       </div>
+      {showSignature && <SignatureBlock dark left={profile.shopName || "Hormat kami,"} />}
     </div>
   );
 }

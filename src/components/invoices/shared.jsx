@@ -28,6 +28,13 @@ export function PaymentBlock({ inv, profile, cur, dark = false, accent = "#1e3a5
   );
 }
 
+/** Info DP: { dp, sisa } atau null bila tidak ada uang muka. */
+export function dpInfo(inv, totals) {
+  const dp = Math.max(0, Number(inv?.dp) || 0);
+  if (dp <= 0 || !totals) return null;
+  return { dp, sisa: Math.max(0, totals.total - dp) };
+}
+
 export function TotalsTable({ inv, totals, cur, dark = false, accent = "#1e3a5f", minimal = false }) {
   const row = { display: "flex", justifyContent: "space-between", fontSize: 12, padding: "3px 0" };
   const label = { color: dark ? "#a8a29e" : "#78716c" };
@@ -56,11 +63,21 @@ export function TotalsTable({ inv, totals, cur, dark = false, accent = "#1e3a5f"
 }
 
 export function NotesBlock({ inv, dark = false }) {
-  if (!inv.notes) return null;
+  if (!inv.notes && !inv.terms) return null;
+  const c = dark ? "#a8a29e" : "#57534e";
   return (
-    <p style={{ fontSize: 11.5, color: dark ? "#a8a29e" : "#57534e", marginTop: 12, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
-      {inv.notes}
-    </p>
+    <div style={{ marginTop: 12 }}>
+      {inv.terms && (
+        <p style={{ fontSize: 11.5, color: c, lineHeight: 1.6 }}>
+          <b>Syarat pembayaran:</b> {inv.terms}
+        </p>
+      )}
+      {inv.notes && (
+        <p style={{ fontSize: 11.5, color: c, marginTop: inv.terms ? 4 : 0, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>
+          {inv.notes}
+        </p>
+      )}
+    </div>
   );
 }
 

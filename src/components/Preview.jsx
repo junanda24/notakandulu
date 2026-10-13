@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Card, Btn } from "./ui.jsx";
 import { TEMPLATES, FONTS, PAPER_WIDTH } from "../data/options.js";
-import { calcTotals } from "../lib/calc.js";
+import { calcTotals, paymentStatus, STATUS_META } from "../lib/calc.js";
 import {
   invoiceText, waShareUrl, mailtoUrl, canNativeShareFile,
   invoiceToPng, nativeSharePng, downloadPng,
@@ -45,7 +45,7 @@ export function InvoiceSheet({ inv, profile, settings, id }) {
         ["--inv-accent"]: settings.accent,
       }}
     >
-      <Tpl inv={inv} profile={profile} totals={totals} bodyFont={f.body} displayFont={f.display} accent={settings.accent} />
+      <Tpl inv={inv} profile={profile} totals={totals} bodyFont={f.body} displayFont={f.display} accent={settings.accent} showSignature={settings.showSignature} />
     </div>
   );
 }
@@ -88,10 +88,20 @@ export default function Preview({ inv, profile, settings }) {
   };
 
   const text = invoiceText(inv, profile, settings);
+  const st = paymentStatus(inv);
+  const sm = st ? STATUS_META[st] : null;
 
   return (
     <div className="space-y-4">
       <Card title="👁️ Preview Live" sticker={TEMPLATES.find((t) => t.id === settings.template)?.name}>
+        {sm && (
+          <div className="mb-3">
+            <span className={`rounded-full px-3 py-1 text-xs font-bold ${sm.badge}`}>● {sm.label}</span>
+            {st === "lewat" && inv.dueDate && (
+              <span className="ml-2 text-xs text-neutral-500">jatuh tempo {inv.dueDate}</span>
+            )}
+          </div>
+        )}
         <div className="invoice-stage -m-4 sm:-m-5 rounded-b-xl p-4 sm:p-8 overflow-x-auto">
           <div ref={sheetRef} style={{ width: "fit-content", margin: "0 auto", maxWidth: "100%" }}>
             <InvoiceSheet inv={inv} profile={profile} settings={settings} />

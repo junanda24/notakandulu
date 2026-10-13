@@ -29,8 +29,23 @@ export default function InvoiceForm({ inv, setInv, profile }) {
           <Field label="Tanggal">
             <TextInput type="date" value={inv.date} onChange={(e) => set({ date: e.target.value })} />
           </Field>
+          <Field label="Jatuh tempo (opsional)">
+            <TextInput type="date" value={inv.dueDate || ""} onChange={(e) => set({ dueDate: e.target.value })} />
+          </Field>
+          <Field label="Status bayar">
+            <Select value={inv.status || "belum"} onChange={(e) => set({ status: e.target.value })}>
+              <option value="belum">Belum bayar</option>
+              <option value="lunas">Lunas</option>
+            </Select>
+          </Field>
+          <Field label="No. PO / referensi (opsional)">
+            <TextInput value={inv.poNumber || ""} onChange={(e) => set({ poNumber: e.target.value })} placeholder="cth: PO-2026-118" />
+          </Field>
           <Field label="Nama pelanggan">
             <TextInput value={inv.customerName} onChange={(e) => set({ customerName: e.target.value })} placeholder="Nama / perusahaan" />
+          </Field>
+          <Field label="NPWP pelanggan (opsional)">
+            <TextInput value={inv.customerNpwp || ""} onChange={(e) => set({ customerNpwp: e.target.value })} placeholder="cth: 01.234.567.8-901.000" />
           </Field>
           <Field label="Mata uang">
             <Select value={inv.currency} onChange={(e) => set({ currency: e.target.value })}>
@@ -56,9 +71,12 @@ export default function InvoiceForm({ inv, setInv, profile }) {
                 </button>
               </div>
               <TextInput value={it.name} onChange={(e) => setItem(it.id, { name: e.target.value })} placeholder="Nama barang / jasa" className="mb-2" />
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 <Field label="Qty">
                   <TextInput type="number" min="0" value={it.qty} onChange={(e) => setItem(it.id, { qty: e.target.value })} />
+                </Field>
+                <Field label="Satuan">
+                  <TextInput value={it.unit || "pcs"} onChange={(e) => setItem(it.id, { unit: e.target.value })} placeholder="pcs" />
                 </Field>
                 <Field label="Harga satuan">
                   <TextInput type="number" min="0" value={it.price} onChange={(e) => setItem(it.id, { price: e.target.value })} />
@@ -73,7 +91,7 @@ export default function InvoiceForm({ inv, setInv, profile }) {
       </Card>
 
       <Card title="🧮 Hitungan">
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <Field label="Diskon">
             <div className="flex gap-1.5">
               <TextInput type="number" min="0" value={inv.discount.value} onChange={(e) => set({ discount: { ...inv.discount, value: e.target.value } })} className="px-2!" />
@@ -89,7 +107,24 @@ export default function InvoiceForm({ inv, setInv, profile }) {
           <Field label="Ongkir">
             <TextInput type="number" min="0" value={inv.shipping} onChange={(e) => set({ shipping: e.target.value })} />
           </Field>
+          <Field label="Uang muka (DP)">
+            <TextInput type="number" min="0" value={inv.dp || 0} onChange={(e) => set({ dp: e.target.value })} />
+          </Field>
         </div>
+        <Field label="Syarat pembayaran (opsional)" className="mt-3">
+          <TextInput
+            list="nd-terms"
+            value={inv.terms || ""}
+            onChange={(e) => set({ terms: e.target.value })}
+            placeholder="cth: Net 14 — ketik atau pilih"
+          />
+          <datalist id="nd-terms">
+            <option value="Net 7" />
+            <option value="Net 14" />
+            <option value="Net 30" />
+            <option value="Dibayar saat terima" />
+          </datalist>
+        </Field>
         <Field label="Catatan" className="mt-3">
           <TextArea rows={2} value={inv.notes} onChange={(e) => set({ notes: e.target.value })} placeholder="Syarat & ketentuan, ucapan terima kasih, dsb." />
         </Field>

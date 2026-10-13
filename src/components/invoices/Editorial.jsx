@@ -1,15 +1,16 @@
 // Style 3 — Elegant Editorial Serif (ala HoneyBook). Serif untuk nama usaha &
 // total + sans untuk data. Small caps ber-spasi, hairline saja, tanpa fill.
-import { Money, PaymentBlock, NotesBlock, ShopLogo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtMoney, fmtDate, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#78716c", fontWeight: 600 };
 
-export default function Editorial({ inv, profile, totals, bodyFont, accent }) {
+export default function Editorial({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#4f46e5";
   const cur = inv.currency;
   const items = inv.items || [];
-  const serif = "'Fraunces', Georgia, serif";
+  const dpi = dpInfo(inv, totals);
+  const serif = '"Fraunces", Georgia, serif';
   return (
     <div style={{ fontFamily: bodyFont, fontSize: 12, lineHeight: 1.7, color: "#1c1917", padding: "60px 64px" }}>
       {/* Masthead */}
@@ -18,9 +19,9 @@ export default function Editorial({ inv, profile, totals, bodyFont, accent }) {
         <div style={{ fontFamily: serif, fontSize: 34, fontWeight: 600, letterSpacing: "0.01em" }}>
           {profile.shopName || "Nama Usaha"}
         </div>
-        {(profile.address || profile.contact) && (
+        {(profile.address || profile.contact || profile.npwp) && (
           <div style={{ color: "#78716c", fontSize: 11, marginTop: 6 }}>
-            {[profile.address, profile.contact].filter(Boolean).join("  ·  ")}
+            {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join("  ·  ")}
           </div>
         )}
       </div>
@@ -29,6 +30,7 @@ export default function Editorial({ inv, profile, totals, bodyFont, accent }) {
         <span style={{ ...lbl, fontSize: 13, color: "#1c1917", letterSpacing: "0.3em" }}>Invoice</span>
         <span style={{ fontSize: 11, color: "#78716c", fontVariantNumeric: "tabular-nums" }}>
           {inv.number} &nbsp;·&nbsp; {fmtDate(inv.date)}
+          {inv.poNumber && <>&nbsp;·&nbsp; PO: {inv.poNumber}</>}
         </span>
       </div>
 
@@ -38,10 +40,17 @@ export default function Editorial({ inv, profile, totals, bodyFont, accent }) {
           <div style={lbl}>Ditagih kepada</div>
           <div style={{ fontFamily: serif, fontSize: 17, fontWeight: 600, marginTop: 6 }}>{inv.customerName || "—"}</div>
           {inv.customerInfo && <div style={{ color: "#78716c", fontSize: 11, whiteSpace: "pre-line", marginTop: 2 }}>{inv.customerInfo}</div>}
+          {inv.customerNpwp && <div style={{ color: "#78716c", fontSize: 11, marginTop: 2 }}>NPWP: {inv.customerNpwp}</div>}
         </div>
         <div style={{ textAlign: "right" }}>
           <div style={lbl}>Tanggal</div>
           <div style={{ marginTop: 6, fontVariantNumeric: "tabular-nums" }}>{fmtDate(inv.date)}</div>
+          {inv.dueDate && (
+            <>
+              <div style={{ ...lbl, marginTop: 12 }}>Jatuh tempo</div>
+              <div style={{ marginTop: 6, fontVariantNumeric: "tabular-nums" }}>{fmtDate(inv.dueDate)}</div>
+            </>
+          )}
         </div>
       </div>
 
@@ -62,7 +71,7 @@ export default function Editorial({ inv, profile, totals, bodyFont, accent }) {
           {items.map((it) => (
             <tr key={it.id} style={{ borderBottom: "1px solid #e7e5e4" }}>
               <td style={{ padding: "14px 16px 14px 0" }}>{it.name || <span style={{ color: "#a8a29e", fontStyle: "italic" }}>Tanpa nama</span>}</td>
-              <td style={{ padding: "14px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#57534e" }}>{it.qty}</td>
+              <td style={{ padding: "14px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#57534e" }}>{it.qty}{it.unit ? ` ${it.unit}` : ""}</td>
               <td style={{ padding: "14px 0", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#57534e" }}>{fmtMoney(it.price, cur)}</td>
               <td style={{ padding: "14px 0", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
                 <Money v={(Number(it.qty) || 0) * (Number(it.price) || 0)} cur={cur} />
@@ -92,9 +101,23 @@ export default function Editorial({ inv, profile, totals, bodyFont, accent }) {
               <Money v={totals.total} cur={cur} />
             </span>
           </div>
+          {dpi && (
+            <>
+              <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", color: "#57534e" }}>
+                <span style={lbl}>Uang muka (DP)</span>
+                <span style={{ fontVariantNumeric: "tabular-nums" }}><Money v={-dpi.dp} cur={cur} /></span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", paddingTop: 6 }}>
+                <span style={lbl}>Sisa dibayar</span>
+                <span style={{ fontFamily: serif, fontSize: 21, fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>
+                  <Money v={dpi.sisa} cur={cur} />
+                </span>
+              </div>
+            </>
+          )}
           {cur === "IDR" && (
             <div style={{ fontFamily: serif, fontStyle: "italic", color: "#78716c", fontSize: 11.5, textAlign: "right", marginTop: 4, textTransform: "capitalize" }}>
-              {terbilang(totals.total)} rupiah
+              {terbilang(dpi ? dpi.sisa : totals.total)} rupiah
             </div>
           )}
         </div>
@@ -107,6 +130,7 @@ export default function Editorial({ inv, profile, totals, bodyFont, accent }) {
       <div style={{ marginTop: 36, textAlign: "center", fontFamily: serif, fontStyle: "italic", color: "#78716c", fontSize: 12 }}>
         Terima kasih atas kepercayaan Anda.
       </div>
+      {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}
     </div>
   );
 }

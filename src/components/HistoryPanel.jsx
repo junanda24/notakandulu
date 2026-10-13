@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import { Card, Btn } from "./ui.jsx";
 import { fmtMoney, fmtDate } from "../lib/format.js";
+import { paymentStatus, STATUS_META } from "../lib/calc.js";
 import { calcTotals } from "../lib/calc.js";
 import { exportData, importData, storageInfo } from "../lib/storage.js";
 import { computeStats } from "../lib/stats.js";
@@ -81,10 +82,15 @@ export default function HistoryPanel({ history, onOpen, onDelete, onNew, onResto
         <div className="space-y-2">
           {history.map((h) => {
             const t = calcTotals(h);
+            const st = paymentStatus(h);
+            const sm = st ? STATUS_META[st] : null;
             return (
               <div key={h.id} className="brutal-sm rounded-lg bg-cream px-3 py-2.5 flex items-center justify-between gap-2">
                 <button onClick={() => onOpen(h)} className="text-left flex-1 min-w-0">
-                  <p className="font-mono2 text-xs font-bold truncate">{h.number || "(tanpa nomor)"}</p>
+                  <p className="font-mono2 text-xs font-bold truncate">
+                    {h.number || "(tanpa nomor)"}{" "}
+                    {sm && <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${sm.badge}`}>{sm.label}</span>}
+                  </p>
                   <p className="text-xs text-neutral-500 truncate">
                     {fmtDate(h.date)} · {h.customerName || "—"} · <b className="text-ink">{fmtMoney(t.total, h.currency)}</b>
                   </p>

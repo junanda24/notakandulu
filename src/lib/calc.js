@@ -23,16 +23,38 @@ export const blankItem = () => ({
   id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
   name: "",
   qty: 1,
+  unit: "pcs",
   price: 0,
 });
+
+/** Status pembayaran nota: "lunas" | "lewat" (lewat tempo) | "belum" | null (nota lama tanpa status). */
+export function paymentStatus(inv) {
+  if (!inv || !("status" in inv) || !inv.status) return null;
+  if (inv.status === "lunas") return "lunas";
+  const today = new Date().toISOString().slice(0, 10);
+  if (inv.dueDate && inv.dueDate < today) return "lewat";
+  return "belum";
+}
+
+export const STATUS_META = {
+  lunas: { label: "Lunas", badge: "bg-green-100 text-green-800 dark:bg-green-900/60 dark:text-green-200" },
+  belum: { label: "Belum bayar", badge: "bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200" },
+  lewat: { label: "Lewat tempo", badge: "bg-red-100 text-red-800 dark:bg-red-900/60 dark:text-red-200" },
+};
 
 export function blankInvoice(overrides = {}) {
   return {
     id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
     number: "",
     date: new Date().toISOString().slice(0, 10),
+    dueDate: "",
+    status: "belum",
+    dp: 0,
+    terms: "",
+    poNumber: "",
     customerName: "",
     customerInfo: "",
+    customerNpwp: "",
     items: [blankItem()],
     discount: { type: "percent", value: 0 },
     tax: 0,

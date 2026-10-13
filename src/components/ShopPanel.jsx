@@ -80,6 +80,9 @@ export default function ShopPanel({ profile, setProfile }) {
         <Field label="Kontak (HP / email / IG)" className="mt-3">
           <TextInput value={profile.contact} onChange={(e) => set({ contact: e.target.value })} placeholder="0812-... / @..." />
         </Field>
+        <Field label="NPWP usaha (opsional)" className="mt-3">
+          <TextInput value={profile.npwp || ""} onChange={(e) => set({ npwp: e.target.value })} placeholder="cth: 01.234.567.8-901.000" />
+        </Field>
         <Field label="Logo usaha" className="mt-3">
           <div className="flex items-center gap-3">
             {profile.logo && (

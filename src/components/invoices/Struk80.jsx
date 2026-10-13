@@ -1,11 +1,12 @@
 // Style 9 — Struk 80mm (thermal). Konten 76mm: header tegas, item berkolom,
 // jumlah rata kanan, TOTAL tebal besar, footer singkat. Direkomendasikan saat
 // ada QR / detail pajak.
-import { Money, ShopLogo, fmtD } from "./shared.jsx";
+import { Money, ShopLogo, fmtD, dpInfo } from "./shared.jsx";
 import { fmtMoney } from "../../lib/format.js";
 
 export default function Struk80({ inv, profile, totals, bodyFont }) {
   const cur = inv.currency;
+  const dpi = dpInfo(inv, totals);
   const dash = { borderTop: "1px dashed #a8a29e", margin: "10px 0" };
   const mono = "'IBM Plex Mono', 'Courier New', monospace";
   return (
@@ -23,6 +24,8 @@ export default function Struk80({ inv, profile, totals, bodyFont }) {
         <span><b>No:</b> {inv.number}</span>
         <span>{fmtD(inv.date)}</span>
       </div>
+      {inv.dueDate && <p><b>Jt. tempo:</b> {fmtD(inv.dueDate)}</p>}
+      {inv.poNumber && <p><b>PO:</b> {inv.poNumber}</p>}
       {inv.customerName && <p><b>Pelanggan:</b> {inv.customerName}</p>}
       <div style={dash} />
       <div style={{ display: "flex", fontWeight: 700, fontSize: 10, color: "#444", textTransform: "uppercase", letterSpacing: "0.08em" }}>
@@ -35,7 +38,7 @@ export default function Struk80({ inv, profile, totals, bodyFont }) {
           <p style={{ overflowWrap: "break-word" }}>{it.name || "—"}</p>
           <div style={{ display: "flex", color: "#333" }}>
             <span style={{ flex: 1 }}>{fmtMoney(it.price, cur)} /pcs</span>
-            <span style={{ width: 36, textAlign: "right" }}>{it.qty}</span>
+            <span style={{ width: 36, textAlign: "right" }}>{it.qty}{it.unit ? ` ${it.unit}` : ""}</span>
             <span style={{ width: 92, textAlign: "right", fontWeight: 600 }}>
               <Money v={(Number(it.qty) || 0) * (Number(it.price) || 0)} cur={cur} />
             </span>
@@ -57,7 +60,19 @@ export default function Struk80({ inv, profile, totals, bodyFont }) {
         <span style={{ fontWeight: 800 }}>TOTAL</span>
         <span style={{ fontWeight: 800, fontSize: 24 }}><Money v={totals.total} cur={cur} /></span>
       </div>
+      {dpi && (
+        <>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span><b>DP:</b></span><Money v={-dpi.dp} cur={cur} />
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 4 }}>
+            <span style={{ fontWeight: 800 }}>SISA BAYAR</span>
+            <span style={{ fontWeight: 800, fontSize: 18 }}><Money v={dpi.sisa} cur={cur} /></span>
+          </div>
+        </>
+      )}
       <div style={dash} />
+      {inv.terms && <p style={{ fontSize: 10.5, marginBottom: 4 }}><b>Syarat:</b> {inv.terms}</p>}
       {inv.notes && <p style={{ fontSize: 10.5, marginBottom: 8, whiteSpace: "pre-wrap", overflowWrap: "break-word" }}>{inv.notes}</p>}
       <p style={{ textAlign: "center", fontSize: 10.5, color: "#444" }}>— Terima kasih atas kunjungan Anda —</p>
     </div>

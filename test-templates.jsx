@@ -26,15 +26,21 @@ const profile = {
 const normal = {
   number: "INV-2026-001",
   date: "2026-10-13",
+  dueDate: "2026-10-27",
+  status: "belum",
+  dp: 50000,
+  terms: "Net 14",
+  poNumber: "PO-2026-118",
   currency: "IDR",
   customerName: "Budi Santoso",
   customerInfo: "Jl. Kenangan No. 5",
+  customerNpwp: "01.234.567.8-901.000",
   tax: 11,
   discount: { type: "percent", value: 10 },
   shipping: 15000,
   items: [
-    { id: "a", name: "Kopi Arabika 200g", qty: 2, price: 85000 },
-    { id: "b", name: "Gula Aren 500g", qty: 1, price: 45000 },
+    { id: "a", name: "Kopi Arabika 200g", qty: 2, unit: "pcs", price: 85000 },
+    { id: "b", name: "Jasa roasting", qty: 3, unit: "jam", price: 45000 },
   ],
   notes: "Terima kasih!",
 };
@@ -64,11 +70,24 @@ for (const [tid, Cmp] of Object.entries(TPL)) {
   for (const [cname, inv] of Object.entries(cases)) {
     try {
       const totals = calcTotals(inv);
-      const html = renderToString(React.createElement(Cmp, { inv, profile, totals, ...fonts }));
+      const html = renderToString(React.createElement(Cmp, { inv, profile, totals, showSignature: true, ...fonts }));
       const checks = [];
       if (cname === "normal") {
         checks.push(["total muncul", html.includes("Rp") || html.includes("total") || html.includes("TOTAL")]);
         checks.push(["nama toko muncul", html.includes("Kopi Senja")]);
+        checks.push(["satuan muncul", html.includes("jam") || tid === "kwitansi"]);
+        if (tid !== "kwitansi" && !tid.startsWith("struk")) {
+          checks.push(["PO muncul", html.includes("PO-2026-118")]);
+          checks.push(["NPWP pelanggan muncul", html.includes("01.234.567.8-901.000")]);
+          checks.push(["tanda tangan muncul", html.includes("Hormat kami") || html.includes("Kopi Senja")]);
+          checks.push(["DP muncul", html.includes("Uang muka")]);
+        }
+        if (tid.startsWith("struk")) {
+          checks.push(["PO muncul di struk", html.includes("PO-2026-118")]);
+          checks.push(["DP muncul di struk", html.includes("SISA")]);
+          checks.push(["syarat bayar muncul di struk", html.includes("Net 14")]);
+        }
+        checks.push(["syarat bayar muncul", html.includes("Net 14") || tid === "kwitansi" || tid.startsWith("struk")]);
       }
       if (cname === "edge") {
         checks.push(["script tidak lolos mentah", !html.includes("<script>alert")]);

@@ -1,7 +1,7 @@
 // Versioned localStorage: shop profile (+payments), history, UI settings, number counter.
 
 const KEY = "notakandulu:v1";
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 const MAX_HISTORY = 50;
 
 function load() {
@@ -26,6 +26,8 @@ export function migrate() {
   if ((d.schemaVersion || 0) < SCHEMA_VERSION) {
     d.schemaVersion = SCHEMA_VERSION;
     // v1: bentuk awal — tidak ada transformasi
+    // v2: field baru opsional (status/dp/terms/poNumber/customerNpwp/unit/npwp/showSignature)
+    //      — nota lama tanpa field tsb tetap valid, dirender kondisional.
     save(d);
   }
   return d;
@@ -98,6 +100,7 @@ export const defaultProfile = () => ({
   tagline: "",
   address: "",
   contact: "",
+  npwp: "",
   logo: "",
   payments: [], // {id, type:'bank'|'ewallet'|'lainnya', label, number, holder}
 });
@@ -108,6 +111,7 @@ export const defaultSettings = () => ({
   accent: "#4f46e5",
   currency: "IDR",
   numberPattern: "INV-{YYYY}-{NNN}",
+  showSignature: false,
 });
 
 export function getProfile() {
