@@ -24,7 +24,7 @@ export default function Corporate({ inv, profile, totals, bodyFont, displayFont,
           </div>
         </div>
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: 26, fontWeight: 800, color: a, letterSpacing: "0.04em" }}>INVOICE</div>
+          <div style={{ fontSize: 26, fontWeight: 800, color: a, letterSpacing: "0.04em", marginRight: "-0.04em" }}>INVOICE</div>
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end", fontSize: 11.5 }}>
             <div style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{inv.number}</div>
             <div style={{ fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>{fmtDate(inv.date)}</div>
