@@ -15,7 +15,7 @@ export default function CustomizePanel({ settings, setSettings }) {
               <button
                 key={t.id}
                 onClick={() => set({ template: t.id })}
-                className={`rounded-lg border-2 p-3 text-left transition ${active ? "border-indigo-600 ring-2 ring-indigo-600/20 bg-indigo-50 dark:bg-indigo-950" : "border-line hover:border-neutral-400"}`}
+                className={`rounded-lg border-2 p-3 text-left transition ${active ? "border-emerald-600 ring-2 ring-emerald-600/20 bg-emerald-50 dark:bg-emerald-950" : "border-line hover:border-neutral-400"}`}
               >
                 <p className="text-xs font-bold">{t.name}</p>
                 <p className="font-mono2 text-[10px] text-neutral-500 mt-0.5">{t.desc} · {PAPER_WIDTH[t.paper]}</p>
@@ -34,7 +34,7 @@ export default function CustomizePanel({ settings, setSettings }) {
                 key={f.id}
                 onClick={() => set({ font: f.id })}
                 style={{ fontFamily: f.body }}
-                className={`rounded-lg border-2 p-3 text-left text-sm transition ${active ? "border-indigo-600 ring-2 ring-indigo-600/20 bg-indigo-50 dark:bg-indigo-950" : "border-line hover:border-neutral-400"}`}
+                className={`rounded-lg border-2 p-3 text-left text-sm transition ${active ? "border-emerald-600 ring-2 ring-emerald-600/20 bg-emerald-50 dark:bg-emerald-950" : "border-line hover:border-neutral-400"}`}
               >
                 {f.name}
                 <span className="block text-lg font-bold">Ag</span>
@@ -69,7 +69,7 @@ export default function CustomizePanel({ settings, setSettings }) {
             type="checkbox"
             checked={!!settings.showSignature}
             onChange={(e) => set({ showSignature: e.target.checked })}
-            className="h-5 w-5 accent-indigo-600"
+            className="h-5 w-5 accent-emerald-600"
           />
         </label>
       </Card>

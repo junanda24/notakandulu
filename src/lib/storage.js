@@ -108,7 +108,7 @@ export const defaultProfile = () => ({
 export const defaultSettings = () => ({
   template: "saas",
   font: "klasik",
-  accent: "#4f46e5",
+  accent: "#059669",
   currency: "IDR",
   numberPattern: "INV-{YYYY}-{NNN}",
   showSignature: false,

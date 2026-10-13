@@ -47,7 +47,7 @@ function Guide({ onSample }) {
     setHide(true);
   };
   return (
-    <div className="rounded-xl border border-indigo-200 bg-indigo-50 dark:border-indigo-900 dark:bg-indigo-950/40 p-4 relative">
+    <div className="rounded-xl border border-emerald-200 bg-emerald-50 dark:border-emerald-900 dark:bg-emerald-950/40 p-4 relative">
       <button onClick={dismiss} className="absolute top-2 right-3 text-neutral-400 hover:text-neutral-600 text-lg leading-none" title="Tutup">×</button>
       <p className="text-sm font-bold mb-2">Cara pakai (30 detik):</p>
       <ol className="text-[13px] text-neutral-700 dark:text-neutral-300 space-y-1 list-none">
@@ -58,7 +58,7 @@ function Guide({ onSample }) {
       <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">Rekening/e-wallet diatur sekali di tab <b>Toko</b>.</p>
       <button
         onClick={onSample}
-        className="mt-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[13px] font-bold px-4 py-2 transition"
+        className="mt-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[13px] font-bold px-4 py-2 transition"
       >
         ✨ Isi data contoh
       </button>
@@ -70,7 +70,7 @@ function Advanced({ title, children, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div className="mt-3">
-      <button onClick={() => setOpen(!open)} className="text-[12px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+      <button onClick={() => setOpen(!open)} className="text-[12px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
         {open ? "▾" : "▸"} {title}
       </button>
       {open && <div className="mt-2">{children}</div>}
@@ -229,7 +229,7 @@ export default function InvoiceForm({ inv, setInv, profile }) {
                 <button
                   key={p.id}
                   onClick={() => togglePayment(p.id)}
-                  className={`brutal-sm rounded-lg px-3 py-1.5 text-xs font-bold transition ${on ? "bg-indigo-600 border-indigo-600 text-white" : "opacity-60"}`}
+                  className={`brutal-sm rounded-lg px-3 py-1.5 text-xs font-bold transition ${on ? "bg-emerald-600 border-emerald-600 text-white" : "opacity-60"}`}
                 >
                   {on ? "✓ " : ""}{p.label} · {p.number}
                 </button>

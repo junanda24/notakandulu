@@ -8,7 +8,7 @@ const lbl = { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase",
 const hair = { borderTop: "1px solid #e5e7eb" };
 
 export default function SaasCard({ inv, profile, totals, bodyFont, accent, showSignature }) {
-  const a = accent || "#4f46e5";
+  const a = accent || "#059669";
   const cur = inv.currency;
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);

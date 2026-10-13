@@ -39,11 +39,14 @@ export default function WelcomeModal() {
         </div>
         <button
           onClick={close}
-          className="mt-6 w-full rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 text-[15px] transition"
+          className="mt-6 w-full rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 text-[15px] transition"
         >
           Mulai bikin invoice →
         </button>
-        <p className="text-[11px] text-neutral-400 mt-3">Data tersimpan otomatis di perangkatmu. Tanpa akun.</p>
+        <div className="text-[11px] text-neutral-400 mt-3 space-y-1">
+          <p>🔒 Datamu 100% privat: tersimpan hanya di browser ini, tidak dikirim ke mana pun.</p>
+          <p>⚠️ Tanpa akun berarti tanpa backup otomatis. Ekspor backup rutin di tab Riwayat.</p>
+        </div>
       </div>
     </div>
   );

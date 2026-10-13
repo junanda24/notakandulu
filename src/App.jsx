@@ -215,6 +215,9 @@ export default function App() {
         <p className="mx-auto max-w-7xl px-4 pt-4 text-[11px] text-neutral-500 dark:text-neutral-400 text-center">
           TagihkanDulu — buat invoice gratis, tanpa iklan dan login itu nyata 🔥
         </p>
+        <p className="mx-auto max-w-7xl px-4 pt-1 text-[11px] text-neutral-500 dark:text-neutral-400 text-center">
+          🔒 100% privat: data invoice hanya tersimpan di browser kamu, tidak dikirim ke mana pun
+        </p>
         <p className="mx-auto max-w-7xl px-4 pb-4 pt-1 text-[11px] text-neutral-400 dark:text-neutral-500 text-center">
           💛 Dukung via GoPay <span className="font-mono2 font-bold">0857-6362-2979</span>
         </p>

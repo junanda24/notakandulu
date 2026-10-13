@@ -18,9 +18,9 @@ export default function Splash({ onDone }) {
     <div
       onClick={skip}
       className={`fixed inset-0 z-[70] flex flex-col items-center justify-center overflow-hidden transition-opacity duration-500 cursor-pointer ${leaving ? "opacity-0" : "opacity-100"}`}
-      style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 55%, #4c1d95 100%)" }}
+      style={{ background: "linear-gradient(135deg, #022c22 0%, #065f46 55%, #047857 100%)" }}
     >
-      <div className="absolute w-72 h-72 rounded-full bg-indigo-500/20 blur-3xl" style={{ top: -60, left: -60, animation: "splash-float 5s ease-in-out infinite" }} />
+      <div className="absolute w-72 h-72 rounded-full bg-emerald-500/20 blur-3xl" style={{ top: -60, left: -60, animation: "splash-float 5s ease-in-out infinite" }} />
       <div className="absolute w-96 h-96 rounded-full bg-violet-500/20 blur-3xl" style={{ bottom: -120, right: -80, animation: "splash-float 6.5s ease-in-out infinite reverse" }} />
       <img
         src="/logo.jpg"
@@ -33,7 +33,7 @@ export default function Splash({ onDone }) {
           <span key={i} className="splash-letter" style={{ animationDelay: `${0.35 + i * 0.045}s` }}>{ch}</span>
         ))}
       </h1>
-      <p className="splash-letter mt-3 px-6 text-center text-[13px] text-indigo-200" style={{ animationDelay: "0.95s" }}>
+      <p className="splash-letter mt-3 px-6 text-center text-[13px] text-emerald-200" style={{ animationDelay: "0.95s" }}>
         Buat invoice gratis, tanpa iklan dan login itu nyata 🔥
       </p>
       <div className="mt-8 h-1 w-44 rounded-full bg-white/20 overflow-hidden">
