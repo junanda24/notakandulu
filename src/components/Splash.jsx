@@ -74,8 +74,7 @@ export default function Splash({ onDone }) {
           { y: 0, opacity: 1, rotationX: 0, duration: 0.65, stagger: 0.042, ease: "back.out(1.7)" },
           0.55
         )
-        .fromTo(".sp-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: "power3.inOut" }, 1.2)
-        .fromTo(".sp-tag", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, 1.32)
+        .fromTo(".sp-tag", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, 1.25)
         .fromTo(".sp-bar", { scaleX: 0 }, { scaleX: 1, duration: 1.05, ease: "power2.inOut" }, 1.25)
         .to(counter, {
           v: 100,
@@ -135,9 +134,8 @@ export default function Splash({ onDone }) {
             </span>
           ))}
         </h1>
-        <div className="sp-rule mt-5 h-[3px] w-40 rounded-full bg-teal-500" style={{ transformOrigin: "left center" }} />
-        <p className="sp-tag mt-4 px-6 text-center text-sm sm:text-[15px] text-white/70">{TAGLINE}</p>
-        <div className="mt-10 flex items-center gap-3">
+        <p className="sp-tag mt-5 px-6 text-center text-sm sm:text-[15px] text-white/70">{TAGLINE}</p>
+        <div className="mt-8 flex items-center gap-3">
           <div className="h-1 w-52 overflow-hidden rounded-full bg-white/15">
             <div className="sp-bar h-full rounded-full bg-teal-500" style={{ transformOrigin: "left center" }} />
           </div>
