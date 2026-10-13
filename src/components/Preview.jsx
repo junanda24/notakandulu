@@ -67,28 +67,16 @@ export function InvoiceSheet({ inv, profile, settings, id }) {  const Tpl = TPL_
   );
 }
 
-export default function Preview({ inv, profile, settings }) {
-  const sheetRef = useRef(null);
+// Kartu Ekspor & Bagikan — reusable: dipakai di panel Preview dan di Step 4 wizard.
+// Butuh sheetRef (ref ke node InvoiceSheet yang ter-render) untuk ekspor PNG.
+export function ExportCard({ inv, profile, settings, sheetRef }) {
   const [busy, setBusy] = useState("");
   const [nativeOk] = useState(() => canNativeShareFile());
-
-  // @page size mengikuti template saat cetak
-  useEffect(() => {
-    const meta = TEMPLATES.find((x) => x.id === settings.template);
-    const w = PAPER_WIDTH[meta?.paper || "A4"];
-    let el = document.getElementById("nd-page-size");
-    if (!el) {
-      el = document.createElement("style");
-      el.id = "nd-page-size";
-      document.head.appendChild(el);
-    }
-    el.textContent = `@media print { @page { size: ${w} auto; margin: 0; } }`;
-  }, [settings.template]);
 
   const doPrint = () => window.print();
 
   const doPng = async (share) => {
-    if (!sheetRef.current) return;
+    if (!sheetRef?.current) return;
     setBusy(share ? "share" : "png");
     try {
       if (share) {
@@ -103,6 +91,51 @@ export default function Preview({ inv, profile, settings }) {
       setBusy("");
     }
   };
+
+  const text = invoiceText(inv, profile, settings);
+
+  return (
+    <Card title="Ekspor & Bagikan" sticker="gratis">
+      <div className="grid grid-cols-2 gap-2">
+        <Btn onClick={doPrint} primary>🖨️ Cetak / PDF</Btn>
+        <Btn onClick={() => doPng(false)} primary disabled={busy === "png"}>
+          {busy === "png" ? "⏳ ..." : "🖼️ Unduh PNG"}
+        </Btn>
+        <a href={waShareUrl(text)} target="_blank" rel="noreferrer" className="brutal-btn rounded-lg bg-[#25d366] border-[#1da851] text-white px-4 py-2.5 text-sm font-semibold text-center">
+          💬 WA (teks)
+        </a>
+        <a href={mailtoUrl(inv, profile, settings)} className="brutal-btn rounded-lg bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100 px-4 py-2.5 text-sm font-semibold text-center">
+          ✉️ Email
+        </a>
+      </div>
+      {nativeOk && (
+        <Btn onClick={() => doPng(true)} color="bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" className="w-full mt-2" disabled={busy === "share"}>
+          {busy === "share" ? "⏳ Menyiapkan..." : "📲 Bagikan gambar (WA / aplikasi lain)"}
+        </Btn>
+      )}
+      <p className="mt-2 font-mono2 text-[10px] text-neutral-500">
+        Cetak/PDF memakai dialog bawaan browser. Hasilnya sama persis dengan preview.
+        {nativeOk ? "" : " Tombol ini cuma muncul di HP."}
+      </p>
+    </Card>
+  );
+}
+
+export default function Preview({ inv, profile, settings }) {
+  const sheetRef = useRef(null);
+
+  // @page size mengikuti template saat cetak
+  useEffect(() => {
+    const meta = TEMPLATES.find((x) => x.id === settings.template);
+    const w = PAPER_WIDTH[meta?.paper || "A4"];
+    let el = document.getElementById("nd-page-size");
+    if (!el) {
+      el = document.createElement("style");
+      el.id = "nd-page-size";
+      document.head.appendChild(el);
+    }
+    el.textContent = `@media print { @page { size: ${w} auto; margin: 0; } }`;
+  }, [settings.template]);
 
   const text = invoiceText(inv, profile, settings);
   const st = paymentStatus(inv);
@@ -126,29 +159,7 @@ export default function Preview({ inv, profile, settings }) {
         </div>
       </Card>
 
-      <Card title="Ekspor & Bagikan" sticker="gratis">
-        <div className="grid grid-cols-2 gap-2">
-          <Btn onClick={doPrint} primary>🖨️ Cetak / PDF</Btn>
-          <Btn onClick={() => doPng(false)} primary disabled={busy === "png"}>
-            {busy === "png" ? "⏳ ..." : "🖼️ Unduh PNG"}
-          </Btn>
-          <a href={waShareUrl(text)} target="_blank" rel="noreferrer" className="brutal-btn rounded-lg bg-[#25d366] border-[#1da851] text-white px-4 py-2.5 text-sm font-semibold text-center">
-            💬 WA (teks)
-          </a>
-          <a href={mailtoUrl(inv, profile, settings)} className="brutal-btn rounded-lg bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100 px-4 py-2.5 text-sm font-semibold text-center">
-            ✉️ Email
-          </a>
-        </div>
-        {nativeOk && (
-          <Btn onClick={() => doPng(true)} color="bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" className="w-full mt-2" disabled={busy === "share"}>
-            {busy === "share" ? "⏳ Menyiapkan..." : "📲 Bagikan gambar (WA / aplikasi lain)"}
-          </Btn>
-        )}
-        <p className="mt-2 font-mono2 text-[10px] text-neutral-500">
-          Cetak/PDF memakai dialog bawaan browser. Hasilnya sama persis dengan preview.
-          {nativeOk ? "" : " Tombol ini cuma muncul di HP."}
-        </p>
-      </Card>
+      <ExportCard inv={inv} profile={profile} settings={settings} sheetRef={sheetRef} />
     </div>
   );
 }

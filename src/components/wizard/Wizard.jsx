@@ -117,7 +117,7 @@ export default function Wizard({
       {cur.id === "item" && <StepItem inv={inv} setInv={setInv} />}
       {cur.id === "gaya" && <CustomizePanel settings={settings} setSettings={persistSettings} />}
       {cur.id === "kirim" && (
-        <StepKirim inv={inv} setInv={setInv} profile={profile} onSave={onSave} onNew={onNew} onGotoToko={onGotoToko} onGotoRiwayat={onGotoRiwayat} />
+        <StepKirim inv={inv} setInv={setInv} profile={profile} settings={settings} onSave={onSave} onNew={onNew} onGotoToko={onGotoToko} onGotoRiwayat={onGotoRiwayat} />
       )}
 
       <div className="mt-5 flex items-center justify-between gap-3">

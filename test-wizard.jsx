@@ -51,6 +51,7 @@ try {
       onSave={noop} onGotoToko={noop} />
   );
   check("step kirim ada ringkasan + simpan", html.includes("Ringkasan Nota") && html.includes("Simpan Nota"));
+  check("step kirim ada ekspor & bagikan", html.includes("Ekspor &amp; Bagikan") && html.includes("Unduh PNG"));
 } catch (e) { check("step kirim ada ringkasan + simpan", false); console.log("  error:", e.message); }
 
 // 5. stepId tak valid -> fallback ke step pertama, bukan crash

@@ -1,15 +1,18 @@
-// Wizard step 4 (terakhir): ringkasan nota, pilih pembayaran, simpan & kirim.
-import { useEffect, useState } from "react";
+// Wizard step 4 (terakhir): ringkasan nota, pilih pembayaran, simpan, ekspor & bagikan.
+import { useEffect, useRef, useState } from "react";
 import { Card, Btn } from "../ui.jsx";
+import { InvoiceSheet, ExportCard } from "../Preview.jsx";
 import { calcTotals } from "../../lib/calc.js";
 import { fmtMoney, fmtDate } from "../../lib/format.js";
 
-export default function StepKirim({ inv, setInv, profile, onSave, onNew, onGotoToko, onGotoRiwayat }) {
+export default function StepKirim({ inv, setInv, profile, settings, onSave, onNew, onGotoToko, onGotoRiwayat }) {
   const t = calcTotals(inv);
   const [saved, setSaved] = useState(false);
   // Nota baru (id beda) -> reset status tersimpan
   useEffect(() => { setSaved(false); }, [inv.id]);
   const doSave = () => { onSave(); setSaved(true); };
+  // Sheet tersembunyi (off-screen) khusus untuk render PNG — html-to-image butuh node ter-layout
+  const hiddenSheetRef = useRef(null);
   const hasPayments = (profile.payments || []).length > 0;
   const togglePayment = (pid) =>
     setInv((p) => ({
@@ -97,7 +100,7 @@ export default function StepKirim({ inv, setInv, profile, onSave, onNew, onGotoT
           <p className="text-2xl">✓</p>
           <p className="text-sm font-bold mt-1">Nota {inv.number || ""} tersimpan!</p>
           <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1">
-            Ekspor PNG/PDF atau kirim via WA dari panel pratinjau.
+            Ekspor PNG/PDF atau kirim via WA langsung dari bawah ini.
           </p>
           <div className="mt-3 flex gap-2 justify-center">
             <Btn onClick={onNew} className="py-2! text-xs!">+ Buat nota baru</Btn>
@@ -106,9 +109,18 @@ export default function StepKirim({ inv, setInv, profile, onSave, onNew, onGotoT
         </div>
       ) : (
         <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400">
-          Setelah tersimpan, ekspor PNG/PDF atau kirim via WA dari panel pratinjau.
+          Setelah tersimpan, ekspor atau bagikan langsung dari bawah ini.
         </p>
       )}
+
+      <ExportCard inv={inv} profile={profile} settings={settings} sheetRef={hiddenSheetRef} />
+
+      {/* Sheet off-screen untuk render PNG (tidak terlihat, tapi ter-layout untuk html-to-image) */}
+      <div aria-hidden="true" style={{ position: "fixed", left: "-10000px", top: 0, pointerEvents: "none" }}>
+        <div ref={hiddenSheetRef}>
+          <InvoiceSheet inv={inv} profile={profile} settings={settings} />
+        </div>
+      </div>
     </div>
   );
 }
