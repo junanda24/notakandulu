@@ -35,7 +35,7 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
 
   return (
     <div className="space-y-4">
-    <Card title="📊 Statistik" sticker="lokal · privat">
+    <Card title="Statistik" sticker="lokal · privat">
       {stats.totalInvoices === 0 ? (
         <p className="text-sm text-neutral-500">Belum ada data. Statistik muncul setelah kamu menyimpan nota.</p>
       ) : (
@@ -72,11 +72,10 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
         </>
       )}
     </Card>
-    <Card title="🗂️ Riwayat Nota" sticker={`${history.length}/50`}>
+    <Card title="Riwayat Nota" sticker={`${history.length}/50`}>
       {history.length === 0 ? (
         <div className="py-6 text-center">
-          <p className="text-2xl">📭</p>
-          <p className="mt-2 text-sm text-neutral-500">Belum ada nota tersimpan.<br />Klik "Simpan nota" setelah selesai mengisi.</p>
+                    <p className="mt-2 text-sm text-neutral-500">Belum ada nota tersimpan.<br />Klik "Simpan nota" setelah selesai mengisi.</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -120,7 +119,7 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
       )}
     </Card>
 
-    <Card title="💾 Backup & Restore" sticker="lokal">
+    <Card title="Backup & Restore" sticker="lokal">
       <p className="font-mono2 text-[10px] text-neutral-500 mb-1">
         Penyimpanan terpakai: {(info.used / 1024).toFixed(1)} KB dari ~5 MB ({info.pct.toFixed(1)}%)
       </p>

@@ -33,7 +33,7 @@ export default function CustomizePanel({ settings, setSettings }) {
   const curFont = FONTS.find((f) => f.id === settings.font);
   return (
     <div className="space-y-4">
-      <Accordion title="🎨 Template Nota" sticker={`${TEMPLATES.length} gaya`} summary={curTpl?.name}>
+      <Accordion title="Template Nota" sticker={`${TEMPLATES.length} gaya`} summary={curTpl?.name}>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {TEMPLATES.map((t) => {
             const active = settings.template === t.id;
@@ -52,7 +52,7 @@ export default function CustomizePanel({ settings, setSettings }) {
       </Accordion>
 
       <Accordion
-        title="✒️ Font Nota"
+        title="Font Nota"
         sticker={`${FONTS.length} font`}
         summary={curFont?.name}
         summaryStyle={curFont ? { fontFamily: curFont.body } : undefined}
@@ -75,7 +75,7 @@ export default function CustomizePanel({ settings, setSettings }) {
         </div>
       </Accordion>
 
-      <Card title="🌈 Warna Aksen">
+      <Card title="Warna Aksen">
         <div className="flex flex-wrap gap-2 items-center">
           {ACCENT_PRESETS.map((c) => (
             <button
@@ -87,13 +87,12 @@ export default function CustomizePanel({ settings, setSettings }) {
             />
           ))}
           <label className="brutal-sm rounded-lg bg-white dark:bg-neutral-800 px-2 py-1.5 font-mono2 text-[10px] font-bold cursor-pointer flex items-center gap-1.5">
-            🎨
             <input type="color" value={settings.accent} onChange={(e) => set({ accent: e.target.value })} className="h-6 w-8 cursor-pointer bg-transparent border-none p-0" />
           </label>
         </div>
       </Card>
 
-      <Card title="✒️ Tanda Tangan">
+      <Card title="Tanda Tangan">
         <label className="flex items-center justify-between gap-3 cursor-pointer">
           <span className="text-sm">Tampilkan kolom tanda tangan di nota <span className="text-neutral-500">(kecuali struk & kwitansi)</span></span>
           <input
@@ -105,7 +104,7 @@ export default function CustomizePanel({ settings, setSettings }) {
         </label>
       </Card>
 
-      <Card title="🔢 Pola Nomor Nota">
+      <Card title="Pola Nomor Nota">
         <Field label="Pilih pola">
           <Select value={settings.numberPattern} onChange={(e) => set({ numberPattern: e.target.value })}>
             {NUMBER_PATTERNS.map((p) => (

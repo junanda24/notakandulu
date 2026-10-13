@@ -97,7 +97,7 @@ export default function InvoiceForm({ inv, setInv, profile }) {
   return (
     <div className="space-y-4">
       <Guide onSample={() => setInv((p) => ({ ...p, ...sampleInvoice() }))} />
-      <Card title="📝 Data Nota" sticker="wajib">
+      <Card title="Data Nota" sticker="wajib">
         <div className="grid grid-cols-2 gap-3">
           <Field label="Nomor nota">
             <TextInput value={inv.number} onChange={(e) => set({ number: e.target.value })} placeholder="INV-2026-001" />
@@ -140,7 +140,7 @@ export default function InvoiceForm({ inv, setInv, profile }) {
         </Advanced>
       </Card>
 
-      <Card title="📦 Item" sticker={`${inv.items.length} item`}>
+      <Card title="Item" sticker={`${inv.items.length} item`}>
         <div className="space-y-3">
           {inv.items.map((it, i) => (
             <div key={it.id} className="brutal-sm rounded-lg bg-cream p-3">
@@ -175,7 +175,7 @@ export default function InvoiceForm({ inv, setInv, profile }) {
         </button>
       </Card>
 
-      <Card title="🧮 Hitungan">
+      <Card title="Hitungan">
         <div className="grid grid-cols-2 gap-3">
           <Field label="Diskon">
             <div className="flex gap-1.5">
@@ -216,11 +216,11 @@ export default function InvoiceForm({ inv, setInv, profile }) {
 
       {(profile.payments || []).length === 0 && (
         <div className="rounded-xl border border-dashed border-line p-4 text-[13px] text-neutral-500 dark:text-neutral-400">
-          💡 Tambah rekening / e-wallet di tab <b>Toko</b> biar info pembayaran muncul otomatis di nota.
+          Tambah rekening / e-wallet di tab <b>Toko</b> biar info pembayaran muncul otomatis di nota.
         </div>
       )}
       {(profile.payments || []).length > 0 && (
-        <Card title="💳 Pembayaran di nota" sticker="opsional">
+        <Card title="Pembayaran di nota" sticker="opsional">
           <p className="mb-2 font-mono2 text-[10px] text-neutral-500">Pilih metode yang tampil di nota ini:</p>
           <div className="flex flex-wrap gap-2">
             {(profile.payments || []).map((p) => {

@@ -110,7 +110,7 @@ export default function Preview({ inv, profile, settings }) {
 
   return (
     <div className="space-y-4">
-      <Card title="👁️ Preview Live" sticker={TEMPLATES.find((t) => t.id === settings.template)?.name}>
+      <Card title="Preview Live" sticker={TEMPLATES.find((t) => t.id === settings.template)?.name}>
         {sm && (
           <div className="mb-3">
             <span className={`rounded-full px-3 py-1 text-xs font-bold ${sm.badge}`}>● {sm.label}</span>
@@ -126,7 +126,7 @@ export default function Preview({ inv, profile, settings }) {
         </div>
       </Card>
 
-      <Card title="📤 Ekspor & Bagikan" sticker="gratis">
+      <Card title="Ekspor & Bagikan" sticker="gratis">
         <div className="grid grid-cols-2 gap-2">
           <Btn onClick={doPrint} primary>🖨️ Cetak / PDF</Btn>
           <Btn onClick={() => doPng(false)} primary disabled={busy === "png"}>

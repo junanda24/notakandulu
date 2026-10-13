@@ -22,7 +22,7 @@ export default function WelcomeModal() {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(3px)" }}>
       <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-line shadow-2xl max-w-md w-full p-6 sm:p-8 text-center">
         <img src="/logo.jpg" alt="Logo TagihkanDulu" className="inline h-12 w-12 rounded-xl object-cover" />
-        <h2 className="text-xl font-extrabold tracking-tight mt-4">Selamat datang di TagihkanDulu 👋</h2>
+        <h2 className="text-xl font-extrabold tracking-tight mt-4">Selamat datang di TagihkanDulu</h2>
         <p className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-1">
           Buat invoice gratis, tanpa iklan dan login itu nyata 🔥
         </p>

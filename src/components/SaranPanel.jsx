@@ -23,7 +23,7 @@ export default function SaranPanel() {
   };
   return (
     <div className="space-y-4">
-      <Card title="💬 Kritik & Saran" sticker="bantu kami">
+      <Card title="Kritik & Saran" sticker="bantu kami">
         <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
           Ada yang kurang, ada ide fitur, atau nemu bug? Klik tombol di bawah, isi formnya, pasti dibaca developer.
         </p>
@@ -38,7 +38,7 @@ export default function SaranPanel() {
         <p className="text-[11px] text-neutral-400 mt-3 text-center">Dibuka di tab baru · Google Form</p>
       </Card>
 
-      <Card title="☕ Dukung TagihkanDulu" sticker="sukarela">
+      <Card title="Dukung TagihkanDulu" sticker="sukarela">
         <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
           TagihkanDulu gratis, tanpa iklan, tanpa login. Kalau terbantu, traktir kopi via GoPay:
         </p>

@@ -65,7 +65,7 @@ export default function ShopPanel({ profile, setProfile }) {
 
   return (
     <div className="space-y-4">
-      <Card title="🏪 Profil Toko" sticker="sekali isi">
+      <Card title="Profil Toko" sticker="sekali isi">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Field label="Nama toko / usaha">
             <TextInput value={profile.shopName} onChange={(e) => set({ shopName: e.target.value })} placeholder="cth: Kopi Senja" />
@@ -105,7 +105,7 @@ export default function ShopPanel({ profile, setProfile }) {
         </Field>
       </Card>
 
-      <Card title="💳 Metode Pembayaran" sticker={`${(profile.payments || []).length} tersimpan`}>
+      <Card title="Metode Pembayaran" sticker={`${(profile.payments || []).length} tersimpan`}>
         <div className="space-y-2">
           {(profile.payments || []).map((p) => (
             <div key={p.id} className="brutal-sm rounded-lg bg-cream px-3 py-2 flex items-center justify-between gap-2">
