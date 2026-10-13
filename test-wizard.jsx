@@ -33,7 +33,7 @@ try {
 } catch (e) { check("Stepper render", false); console.log("  error:", e.message); }
 
 // 3. tiap step wizard render tanpa crash
-const STEP_MARKERS = { data: "Toko Saya", item: "Tambah item", gaya: "Template Nota", kirim: "Ringkasan Nota" };
+const STEP_MARKERS = { data: "Toko Saya", item: "Tambah", gaya: "Template Nota", kirim: "Ringkasan Nota" };
 for (const s of getSteps()) {
   try {
     const html = renderToString(

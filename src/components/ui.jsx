@@ -73,17 +73,20 @@ export function Select(props) {
   return <select {...props} className={`brutal-input ${props.className || ""}`} />;
 }
 
-export function Card({ title, sticker, children, className = "" }) {
+export function Card({ title, sticker, action, children, className = "" }) {
   return (
     <section className={`brutal p-4 sm:p-5 ${className}`}>
       {title && (
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-bold tracking-tight">{title}</h2>
-          {sticker && (
-            <span className="rounded-md bg-teal-600 px-2 py-0.5 font-mono2 text-[10px] font-bold text-white dark:bg-teal-500">
-              {sticker}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {action}
+            {sticker && (
+              <span className="rounded-md bg-teal-600 px-2 py-0.5 font-mono2 text-[10px] font-bold text-white dark:bg-teal-500">
+                {sticker}
+              </span>
+            )}
+          </div>
         </div>
       )}
       {children}
