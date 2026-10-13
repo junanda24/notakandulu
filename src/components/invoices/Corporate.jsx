@@ -25,18 +25,28 @@ export default function Corporate({ inv, profile, totals, bodyFont, displayFont,
         </div>
         <div style={{ textAlign: "right" }}>
           <div style={{ fontSize: 26, fontWeight: 800, color: a, letterSpacing: "0.04em" }}>INVOICE</div>
-          <table style={{ marginLeft: "auto", marginTop: 8, borderCollapse: "collapse", fontSize: 11.5 }}>
-            <tbody>
-              <tr><td style={{ ...lbl, paddingRight: 12, paddingBottom: 4 }}>Nomor</td><td style={{ fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>{inv.number}</td></tr>
-              <tr><td style={{ ...lbl, paddingRight: 12, paddingBottom: inv.dueDate ? 4 : 0 }}>Tanggal</td><td style={{ fontVariantNumeric: "tabular-nums" }}>{fmtDate(inv.date)}</td></tr>
-              {inv.dueDate && (
-                <tr><td style={{ ...lbl, paddingRight: 12, paddingBottom: inv.poNumber ? 4 : 0 }}>Jatuh tempo</td><td style={{ fontVariantNumeric: "tabular-nums" }}>{fmtDate(inv.dueDate)}</td></tr>
-              )}
-              {inv.poNumber && (
-                <tr><td style={{ ...lbl, paddingRight: 12 }}>No. PO</td><td style={{ fontVariantNumeric: "tabular-nums" }}>{inv.poNumber}</td></tr>
-              )}
-            </tbody>
-          </table>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 5, alignItems: "flex-end", fontSize: 11.5 }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+              <span style={{ ...lbl, width: 110, textAlign: "right" }}>Nomor</span>
+              <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: 150 }}>{inv.number}</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+              <span style={{ ...lbl, width: 110, textAlign: "right" }}>Tanggal</span>
+              <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: 150 }}>{fmtDate(inv.date)}</span>
+            </div>
+            {inv.dueDate && (
+              <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+                <span style={{ ...lbl, width: 110, textAlign: "right" }}>Jatuh tempo</span>
+                <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: 150 }}>{fmtDate(inv.dueDate)}</span>
+              </div>
+            )}
+            {inv.poNumber && (
+              <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+                <span style={{ ...lbl, width: 110, textAlign: "right" }}>No. PO</span>
+                <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: 150 }}>{inv.poNumber}</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
