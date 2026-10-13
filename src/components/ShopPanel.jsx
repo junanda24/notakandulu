@@ -1,6 +1,6 @@
 // Profil toko + kelola metode pembayaran.
 import { useState } from "react";
-import { Field, TextInput, Select, Card, Btn } from "./ui.jsx";
+import { Field, TextInput, TextArea, Select, Card, Btn } from "./ui.jsx";
 import { BANK_PRESETS, EWALLET_PRESETS, PAYMENT_TYPES } from "../data/options.js";
 import { uid } from "../lib/format.js";
 
