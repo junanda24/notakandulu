@@ -25,26 +25,14 @@ export default function Corporate({ inv, profile, totals, bodyFont, displayFont,
         </div>
         <div style={{ textAlign: "right" }}>
           <div style={{ fontSize: 26, fontWeight: 800, color: a, letterSpacing: "0.04em" }}>INVOICE</div>
-          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 5, alignItems: "flex-end", fontSize: 11.5 }}>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-              <span style={{ ...lbl, width: 110, textAlign: "right" }}>Nomor</span>
-              <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums", textAlign: "right" }}>{inv.number}</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-              <span style={{ ...lbl, width: 110, textAlign: "right" }}>Tanggal</span>
-              <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "right" }}>{fmtDate(inv.date)}</span>
-            </div>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end", fontSize: 11.5 }}>
+            <div style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{inv.number}</div>
+            <div style={{ fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>{fmtDate(inv.date)}</div>
             {inv.dueDate && (
-              <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-                <span style={{ ...lbl, width: 110, textAlign: "right" }}>Jatuh tempo</span>
-                <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "right" }}>{fmtDate(inv.dueDate)}</span>
-              </div>
+              <div style={{ fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>Jatuh tempo {fmtDate(inv.dueDate)}</div>
             )}
             {inv.poNumber && (
-              <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-                <span style={{ ...lbl, width: 110, textAlign: "right" }}>No. PO</span>
-                <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "right" }}>{inv.poNumber}</span>
-              </div>
+              <div style={{ fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>PO {inv.poNumber}</div>
             )}
           </div>
         </div>
