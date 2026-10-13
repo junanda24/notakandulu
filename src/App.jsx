@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import InvoiceForm from "./components/InvoiceForm.jsx";
+import Wizard from "./components/wizard/Wizard.jsx";
+import { getSteps, STEP_IDS } from "./components/wizard/shared.jsx";
 import ShopPanel from "./components/ShopPanel.jsx";
 import CustomizePanel from "./components/CustomizePanel.jsx";
 import HistoryPanel from "./components/HistoryPanel.jsx";
@@ -41,6 +42,21 @@ export default function App() {
   const [settings, setSettingsState] = useState(getSettings);
   const [history, setHistory] = useState(getHistory);
   const [toast, setToast] = useState("");
+  // Posisi wizard (disimpan biar refresh tidak mengulang dari awal)
+  const [wstep, setWstep] = useState(() => {
+    try {
+      const s = localStorage.getItem("notakandulu:wstep");
+      if (s && STEP_IDS.includes(s)) return s;
+    } catch {}
+    try {
+      const p = getProfile();
+      return p?.shopName?.trim() ? "pelanggan" : "toko";
+    } catch { return "pelanggan"; }
+  });
+  const persistWstep = (id) => {
+    setWstep(id);
+    try { localStorage.setItem("notakandulu:wstep", id); } catch {}
+  };
 
   const newNumber = () =>
     expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), todayIso());
@@ -90,6 +106,7 @@ export default function App() {
 
   const handleNew = () => {
     setInv(blankInvoice({ number: expandNumber(settings.numberPattern, peekCounter(), todayIso()), date: todayIso(), currency: settings.currency }));
+    persistWstep(getSteps(profile)[0].id);
     setTab("buat");
     setMobileView("form");
     showToast("Nota baru ✓");
@@ -108,7 +125,20 @@ export default function App() {
   };
 
   const formPanel = useMemo(() => {
-    if (tab === "buat") return <InvoiceForm inv={inv} setInv={setInv} profile={profile} />;
+    if (tab === "buat") return (
+      <Wizard
+        inv={inv}
+        setInv={setInv}
+        profile={profile}
+        persistProfile={persistProfile}
+        settings={settings}
+        persistSettings={persistSettings}
+        stepId={wstep}
+        setStepId={persistWstep}
+        onSave={handleSave}
+        onGotoToko={() => setTab("toko")}
+      />
+    );
     if (tab === "toko") return <ShopPanel profile={profile} setProfile={persistProfile} />;
     if (tab === "gaya") return <CustomizePanel settings={settings} setSettings={persistSettings} />;
     if (tab === "saran") return <SaranPanel />;
@@ -133,24 +163,28 @@ export default function App() {
       />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, inv, profile, settings, history]);
+  }, [tab, inv, profile, settings, history, wstep]);
+
+  // Info langkah wizard untuk badge tab "Buat Nota"
+  const wizSteps = getSteps(profile);
+  const wizIdx = Math.max(0, wizSteps.findIndex((s) => s.id === wstep));
 
   return (
     <>
     {splash && <Splash onDone={() => setSplash(false)} />}
     <WelcomeModal />
     <div className="app-shell min-h-screen">
-      {/* Header netral */}
+      {/* Header */}
       <header className="sticky top-0 z-20 border-b border-line bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur">
-        <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <img src="/logo.jpg" alt="Logo TagihkanDulu" className="h-8 w-8 rounded-lg object-cover" />
-            <div>
+        <div className="mx-auto max-w-7xl px-4 py-2.5 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <img src="/logo.jpg" alt="Logo TagihkanDulu" className="h-9 w-9 rounded-xl object-cover shrink-0" />
+            <div className="min-w-0">
               <h1 className="text-[15px] font-extrabold tracking-tight leading-none">TagihkanDulu</h1>
-              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">Buat invoice gratis, tanpa iklan dan login itu nyata 🔥</p>
+              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">Buat invoice gratis, tanpa iklan dan login itu nyata 🔥</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => {
                 const next = !dark;
@@ -167,18 +201,28 @@ export default function App() {
             <Btn onClick={handleSave} primary className="py-1.5! px-3! text-xs!">Simpan</Btn>
           </div>
         </div>
-        {/* Tab nav */}
+        {/* Tab nav: segmented control */}
         <nav className="border-t border-line">
-          <div className="mx-auto max-w-7xl px-4 flex gap-1 overflow-x-auto py-2">
-            {TABS.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => { setTab(t.id); setMobileView("form"); }}
-                className={`shrink-0 rounded-lg px-3.5 py-1.5 text-[13px] font-semibold transition ${tab === t.id ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900" : "text-neutral-500 hover:text-ink hover:bg-neutral-100 dark:hover:bg-neutral-800"}`}
-              >
-                {t.name}
-              </button>
-            ))}
+          <div className="mx-auto max-w-7xl px-4 py-2">
+            <div className="flex gap-0.5 overflow-x-auto rounded-xl border border-line bg-neutral-100/70 dark:bg-neutral-900 p-1">
+              {TABS.map((t) => {
+                const active = tab === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => { setTab(t.id); setMobileView("form"); }}
+                    className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-[13px] transition ${active ? "bg-white dark:bg-neutral-800 font-bold text-ink shadow-sm" : "font-medium text-neutral-500 hover:text-ink dark:text-neutral-400 dark:hover:text-neutral-100"}`}
+                  >
+                    {t.name}
+                    {t.id === "buat" && active && (
+                      <span className="rounded-md bg-teal-600 px-1.5 py-px font-mono2 text-[10px] font-bold text-white tabular-nums">
+                        {wizIdx + 1}/{wizSteps.length}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </nav>
       </header>
@@ -187,7 +231,7 @@ export default function App() {
         {tab === "saran" ? (
           <div className="mx-auto max-w-2xl">{formPanel}</div>
         ) : (
-        <div className="grid gap-5 lg:grid-cols-[400px_1fr]">
+        <div className="grid gap-5 lg:grid-cols-[440px_1fr]">
           <div className={mobileView === "form" ? "block" : "hidden lg:block"}>
             {formPanel}
           </div>
