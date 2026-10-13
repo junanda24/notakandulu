@@ -259,7 +259,7 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
   const text = invoiceText(inv, profile, settings);
 
   return (
-    <div ref={panelRef} className="fixed inset-0 z-[80] bg-neutral-950 flex flex-col lg:hidden">
+    <div ref={panelRef} className="no-print fixed inset-0 z-[80] bg-neutral-950 flex flex-col lg:hidden">
       {/* Header */}
       <div className="flex items-center justify-between gap-2 px-3 py-2.5 shrink-0 border-b border-white/10">
         <button onClick={handleClose} className="text-white text-sm font-bold px-2 py-1.5">✕ Tutup</button>

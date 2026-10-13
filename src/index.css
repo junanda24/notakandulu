@@ -147,6 +147,9 @@ label.brutal-label {
   .app-shell {
     display: none !important;
   }
+  .no-print {
+    display: none !important;
+  }
   .print-sheet {
     display: block !important;
     print-color-adjust: exact;

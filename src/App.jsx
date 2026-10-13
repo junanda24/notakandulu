@@ -4,7 +4,6 @@ import Wizard from "./components/wizard/Wizard.jsx";
 import { getSteps, STEP_IDS } from "./components/wizard/shared.jsx";
 import HistoryPanel from "./components/HistoryPanel.jsx";
 import Preview, { InvoiceSheet, MobilePreviewModal } from "./components/Preview.jsx";
-import { Btn } from "./components/ui.jsx";
 import { blankInvoice } from "./lib/calc.js";
 import { expandNumber, todayIso } from "./lib/format.js";
 import {
@@ -244,7 +243,6 @@ export default function App() {
             >
               ☰
             </button>
-            <Btn onClick={handleSave} primary className="hidden lg:inline-block py-2! px-4! text-sm!">Simpan</Btn>
           </div>
         </div>
       </header>
@@ -288,7 +286,6 @@ export default function App() {
           {toast}
         </div>
       )}
-    </div>
 
       {/* Floating action bar — khusus HP: Simpan + Preview */}
       {tab !== "saran" && (
@@ -317,6 +314,8 @@ export default function App() {
           </div>
         </>
       )}
+    </div>
+
 
     {/* Print sheet — sibling app-shell, hanya muncul saat cetak (bugfix: sebelumnya di dalam display:none) */}
     <div className="print-sheet">
@@ -331,8 +330,8 @@ export default function App() {
     {/* Side drawer (burger menu) */}
     {drawer && (
       <>
-        <div className="drawer-backdrop fixed inset-0 z-40 bg-black/40" onClick={() => setDrawer(false)} />
-        <aside className="drawer-panel fixed inset-y-0 right-0 z-50 w-72 max-w-[85vw] bg-white dark:bg-neutral-900 shadow-2xl flex flex-col">
+        <div className="drawer-backdrop no-print fixed inset-0 z-40 bg-black/40" onClick={() => setDrawer(false)} />
+        <aside className="drawer-panel no-print fixed inset-y-0 right-0 z-50 w-72 max-w-[85vw] bg-white dark:bg-neutral-900 shadow-2xl flex flex-col">
           <div className="flex items-center justify-between px-4 py-3.5 border-b border-line">
             <p className="font-extrabold text-[15px] tracking-tight">Menu</p>
             <button
