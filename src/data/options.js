@@ -31,6 +31,13 @@ export const PAPER_WIDTH = {
 export const FONTS = [
   { id: "klasik", name: "Klasik (Serif)", body: '"Fraunces", Georgia, serif', display: '"Fraunces", Georgia, serif' },
   { id: "modern", name: "Modern", body: '"Inter", system-ui, sans-serif', display: '"Archivo Black", "Inter", sans-serif' },
+  { id: "jakarta", name: "Jakarta Sans", body: '"Plus Jakarta Sans", system-ui, sans-serif', display: '"Plus Jakarta Sans", system-ui, sans-serif' },
+  { id: "dm", name: "DM Modern", body: '"DM Sans", system-ui, sans-serif', display: '"DM Serif Display", Georgia, serif' },
+  { id: "manrope", name: "Manrope", body: '"Manrope", system-ui, sans-serif', display: '"Manrope", system-ui, sans-serif' },
+  { id: "worksans", name: "Work Sans", body: '"Work Sans", system-ui, sans-serif', display: '"Work Sans", system-ui, sans-serif' },
+  { id: "sora", name: "Sora Tech", body: '"Sora", system-ui, sans-serif', display: '"Sora", system-ui, sans-serif' },
+  { id: "lora", name: "Lora Serif", body: '"Lora", Georgia, serif', display: '"Lora", Georgia, serif' },
+  { id: "baskerville", name: "Baskerville", body: '"Libre Baskerville", Georgia, serif', display: '"Libre Baskerville", Georgia, serif' },
   { id: "ketik", name: "Mesin Ketik", body: '"IBM Plex Mono", monospace', display: '"IBM Plex Mono", monospace' },
   { id: "tangan", name: "Tulis Tangan", body: '"Caveat", cursive', display: '"Caveat", cursive' },
 ];

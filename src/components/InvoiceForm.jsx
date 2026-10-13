@@ -2,13 +2,42 @@
 import { useState } from "react";
 import { Field, TextInput, TextArea, Select, Card } from "./ui.jsx";
 import { blankItem } from "../lib/calc.js";
-import { CURRENCIES } from "../lib/format.js";
+import { CURRENCIES, uid } from "../lib/format.js";
 
 const UNITS = ["pcs", "box", "pak", "lusin", "kodi", "kg", "gram", "liter", "meter", "m2", "jam", "hari", "minggu", "sesi", "kali", "orang", "porsi", "lot", "paket", "set", "unit"];
 const TERMS = ["Net 7", "Net 14", "Net 30", "Dibayar saat terima"];
 const GUIDE_KEY = "notakandulu:hideGuide";
 
-function Guide() {
+function sampleInvoice() {
+  const today = new Date();
+  const due = new Date(today);
+  due.setDate(due.getDate() + 14);
+  const iso = (d) => d.toISOString().slice(0, 10);
+  return {
+    number: "INV-2026-001",
+    date: iso(today),
+    dueDate: iso(due),
+    status: "belum",
+    currency: "IDR",
+    customerName: "Budi Santoso",
+    customerInfo: "Jl. Kenangan No. 5, Batam\n0812-3456-7890",
+    customerNpwp: "",
+    poNumber: "",
+    tax: 11,
+    discount: { type: "percent", value: 0 },
+    shipping: 0,
+    dp: 0,
+    terms: "Net 14",
+    notes: "Terima kasih atas kepercayaan Anda!",
+    paymentIds: [],
+    items: [
+      { id: uid(), name: "Kopi Arabika 200g", qty: 2, unit: "pcs", price: 85000 },
+      { id: uid(), name: "Jasa roasting", qty: 3, unit: "jam", price: 45000 },
+    ],
+  };
+}
+
+function Guide({ onSample }) {
   const [hide, setHide] = useState(() => {
     try { return localStorage.getItem(GUIDE_KEY) === "1"; } catch { return false; }
   });
@@ -27,6 +56,12 @@ function Guide() {
         <li><b>3.</b> Ekspor PNG/PDF atau bagikan via WA di panel pratinjau.</li>
       </ol>
       <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">Rekening/e-wallet diatur sekali di tab <b>Toko</b>.</p>
+      <button
+        onClick={onSample}
+        className="mt-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[13px] font-bold px-4 py-2 transition"
+      >
+        ✨ Isi data contoh
+      </button>
     </div>
   );
 }
@@ -61,7 +96,7 @@ export default function InvoiceForm({ inv, setInv, profile }) {
 
   return (
     <div className="space-y-4">
-      <Guide />
+      <Guide onSample={() => setInv((p) => ({ ...p, ...sampleInvoice() }))} />
       <Card title="📝 Data Nota" sticker="wajib">
         <div className="grid grid-cols-2 gap-3">
           <Field label="Nomor nota">

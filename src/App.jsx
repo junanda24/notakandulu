@@ -14,6 +14,7 @@ import {
 
 import SaranPanel from "./components/SaranPanel.jsx";
 import WelcomeModal from "./components/WelcomeModal.jsx";
+import Splash from "./components/Splash.jsx";
 
 const TABS = [
   { id: "buat", name: "Buat Nota" },
@@ -25,6 +26,7 @@ const TABS = [
 
 export default function App() {
   const [tab, setTab] = useState("buat");
+  const [splash, setSplash] = useState(true);
   const [mobileView, setMobileView] = useState("form"); // form | preview (khusus HP)
   const [dark, setDark] = useState(() => {
     try {
@@ -129,6 +131,7 @@ export default function App() {
 
   return (
     <>
+    {splash && <Splash onDone={() => setSplash(false)} />}
     <WelcomeModal />
     <div className="app-shell min-h-screen">
       {/* Header netral */}
