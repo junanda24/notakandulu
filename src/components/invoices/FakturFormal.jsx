@@ -11,11 +11,10 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
   const dpi = dpInfo(inv, totals);
   const inter = "'Inter', system-ui, sans-serif";
   const meta = [
-    ["Invoice Number", inv.number || "—"],
+    ["Invoice No.", inv.number || "—"],
     ["Date", fmtDate(inv.date)],
     inv.dueDate ? ["Due Date", fmtDate(inv.dueDate)] : null,
     inv.poNumber ? ["PO Number", inv.poNumber] : null,
-    ["Currency", cur],
   ].filter(Boolean);
   return (
     <div style={{ fontFamily: inter, fontSize: 12, lineHeight: 1.6, color: "#111827", padding: 52, background: "#fff" }}>
