@@ -115,7 +115,7 @@ export default function Corporate({ inv, profile, totals, bodyFont, displayFont,
         <div style={{ flex: 1 }}><NotesBlock inv={inv} /></div>
       </div>
       <div style={{ marginTop: 28, textAlign: "center", color: "#6b7280", fontSize: 11 }}>
-        Terima kasih atas bisnis Anda.
+        Terima kasih atas kepercayaan Anda.
       </div>
       {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}
     </div>

@@ -146,8 +146,8 @@ export default function Preview({ inv, profile, settings }) {
           </Btn>
         )}
         <p className="mt-2 font-mono2 text-[10px] text-neutral-500">
-          Cetak/PDF memakai dialog bawaan browser — hasil sama persis dengan preview.
-          {nativeOk ? "" : " Bagikan gambar langsung tersedia di HP."}
+          Cetak/PDF memakai dialog bawaan browser. Hasilnya sama persis dengan preview.
+          {nativeOk ? "" : " Tombol ini cuma muncul di HP."}
         </p>
       </Card>
     </div>

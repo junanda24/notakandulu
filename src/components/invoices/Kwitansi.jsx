@@ -58,7 +58,7 @@ export default function Kwitansi({ inv, profile, totals, bodyFont, accent }) {
           {needsMaterai && (
             <div style={{ marginTop: 10, border: "1px dashed #a8a29e", borderRadius: 8, padding: "8px 10px", maxWidth: 190, textAlign: "center" }}>
               <div style={{ fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "#78716c", fontWeight: 600 }}>Zona materai</div>
-              <div style={{ fontSize: 10, color: "#57534e", marginTop: 2 }}>Rp10.000 — tempel & tanda tangan di sini</div>
+              <div style={{ fontSize: 10, color: "#57534e", marginTop: 2 }}>Rp10.000: tempel & tanda tangan di sini</div>
             </div>
           )}
         </div>

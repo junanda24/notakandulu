@@ -37,7 +37,7 @@ export default function HistoryPanel({ history, onOpen, onDelete, onNew, onResto
     <div className="space-y-4">
     <Card title="📊 Statistik" sticker="lokal · privat">
       {stats.totalInvoices === 0 ? (
-        <p className="text-sm text-neutral-500">Belum ada data — statistik muncul setelah kamu menyimpan nota.</p>
+        <p className="text-sm text-neutral-500">Belum ada data. Statistik muncul setelah kamu menyimpan nota.</p>
       ) : (
         <>
           <div className="grid grid-cols-3 gap-2 text-center">

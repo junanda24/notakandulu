@@ -26,7 +26,7 @@ export default function SaranPanel() {
     <div className="space-y-4">
       <Card title="💬 Kritik & Saran" sticker="bantu kami">
         <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
-          Ada yang kurang, ada ide fitur, atau nemu bug? Isi form di bawah — langsung dibaca developer.
+          Ada yang kurang, ada ide fitur, atau nemu bug? Isi form di bawah, pasti dibaca developer.
         </p>
         <div className="rounded-xl overflow-hidden border border-line bg-white" style={{ height: 560 }}>
           <iframe

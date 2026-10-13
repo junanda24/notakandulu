@@ -98,7 +98,7 @@ export default function ShopPanel({ profile, setProfile }) {
                   hapus
                 </button>
               )}
-              <p className="mt-1 text-xs text-neutral-500">PNG/JPG, otomatis diresize ke ≤512px. Muncul di semua template nota.</p>
+              <p className="mt-1 text-xs text-neutral-500">PNG/JPG, otomatis diresize ke ≤512px. Logonya muncul di semua template nota.</p>
               {logoErr && <p className="mt-1 text-xs text-red-600">{logoErr}</p>}
             </div>
           </div>

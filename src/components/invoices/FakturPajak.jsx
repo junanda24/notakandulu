@@ -106,7 +106,7 @@ export default function FakturPajak({ inv, profile, totals, accent, showSignatur
         <NotesBlock inv={inv} />
       </div>
       <div style={{ fontSize: 9, color: "#94a3b8", marginTop: 18, borderTop: "1px solid #e2e8f0", paddingTop: 10 }}>
-        Sesuai UU PPN &amp; PER-16/PJ/2021 · Faktur pajak ini sah sebagai bukti pungut PPN. Nomor faktur di atas digenerate dari nomor invoice — sesuaikan dengan e-Faktur Anda.
+        Sesuai UU PPN &amp; PER-16/PJ/2021 · Faktur pajak ini sah sebagai bukti pungut PPN. Nomor faktur di atas digenerate dari nomor invoice. Sesuaikan dengan nomor di e-Faktur Anda.
       </div>
       {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}
     </div>

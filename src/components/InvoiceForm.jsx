@@ -51,7 +51,7 @@ function Guide({ onSample }) {
       <button onClick={dismiss} className="absolute top-2 right-3 text-neutral-400 hover:text-neutral-600 text-lg leading-none" title="Tutup">×</button>
       <p className="text-sm font-bold mb-2">Cara pakai (30 detik):</p>
       <ol className="text-[13px] text-neutral-700 dark:text-neutral-300 space-y-1 list-none">
-        <li><b>1.</b> Isi form di bawah, lalu <b>Simpan</b> — pratinjau live di kanan.</li>
+        <li><b>1.</b> Isi form di bawah, lalu klik <b>Simpan</b>. Pratinjau di kanan langsung ikut berubah.</li>
         <li><b>2.</b> Pilih template di tab <b>Gaya</b> (18 pilihan).</li>
         <li><b>3.</b> Ekspor PNG/PDF atau bagikan via WA di panel pratinjau.</li>
       </ol>

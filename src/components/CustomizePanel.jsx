@@ -85,7 +85,7 @@ export default function CustomizePanel({ settings, setSettings }) {
             )}
           </Select>
         </Field>
-        <Field label="Atau tulis pola sendiri — {YYYY} tahun, {MM} bulan, {N…} nomor urut" className="mt-3">
+        <Field label="Atau tulis pola sendiri: {YYYY} tahun, {MM} bulan, {N…} nomor urut" className="mt-3">
           <TextInput value={settings.numberPattern} onChange={(e) => set({ numberPattern: e.target.value })} placeholder="INV-{YYYY}-{NNN}" className="font-mono2 text-xs" />
         </Field>
       </Card>

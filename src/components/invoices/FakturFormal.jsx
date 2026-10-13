@@ -129,7 +129,7 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
         <div style={{ flex: 1, minWidth: 220 }}><NotesBlock inv={inv} /></div>
       </div>
       <div style={{ marginTop: 20, fontSize: 9.5, color: "#9ca3af", display: "flex", justifyContent: "space-between" }}>
-        <span>This invoice is provided by {profile.shopName || "Nama Usaha"}.</span>
+        <span>Issued by {profile.shopName || "Nama Usaha"}.</span>
         <span>Halaman 1 dari 1</span>
       </div>
       {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}

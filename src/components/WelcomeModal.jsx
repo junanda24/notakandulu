@@ -4,7 +4,7 @@ import { useState } from "react";
 const WELCOME_KEY = "notakandulu:welcomed";
 
 const STEPS = [
-  { icon: "📝", title: "Isi form", desc: "Nama pelanggan, item, harga — pratinjau update live di samping." },
+  { icon: "📝", title: "Isi form", desc: "Nama pelanggan, item, harga. Pratinjau di samping langsung ikut berubah." },
   { icon: "🎨", title: "Pilih template", desc: "18 template elegant di tab Gaya, dari formal sampai struk thermal." },
   { icon: "📤", title: "Simpan & bagikan", desc: "Ekspor PNG/PDF atau kirim langsung via WhatsApp." },
 ];
@@ -21,7 +21,7 @@ export default function WelcomeModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(3px)" }}>
       <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-line shadow-2xl max-w-md w-full p-6 sm:p-8 text-center">
-        <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-white text-2xl font-extrabold">T</span>
+        <img src="/logo.jpg" alt="Logo TagihkanDulu" className="inline h-12 w-12 rounded-xl object-cover" />
         <h2 className="text-xl font-extrabold tracking-tight mt-4">Selamat datang di TagihkanDulu 👋</h2>
         <p className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-1">
           Buat invoice gratis, tanpa iklan dan login itu nyata 🔥
