@@ -8,40 +8,31 @@ import StepKirim from "./StepKirim.jsx";
 import { getSteps } from "./shared.jsx";
 import { Btn } from "../ui.jsx";
 
-// Stepper untuk nav header: selalu kelihatan (sticky), bisa diklik pindah step.
+// Stepper untuk nav header: segmented bar full-width, tiap step segmen tombol yang gampang di-tap.
 export function NavStepper({ steps, idx, onJump }) {
-  // Label pendek biar muat tanpa kepotong
   const SHORT = { toko: "Toko", pelanggan: "Pelanggan", item: "Item", gaya: "Gaya", kirim: "Kirim" };
   return (
-    <ol className="flex items-center gap-1 overflow-x-auto py-1">
+    <ol className="flex gap-1 rounded-2xl bg-neutral-100/70 dark:bg-neutral-900 p-1">
       {steps.map((s, i) => {
         const done = i < idx;
         const active = i === idx;
         return (
-          <li key={s.id} className="flex items-center min-w-0 flex-none">
+          <li key={s.id} className="flex-1 min-w-0">
             <button
               onClick={() => onJump(s.id)}
-              className="flex items-center gap-1.5 min-w-0 shrink-0 rounded-lg px-1.5 py-1"
+              aria-current={active ? "step" : undefined}
               title={s.title}
+              className={`flex w-full items-center justify-center gap-1.5 rounded-xl px-2 py-2 text-[12px] transition ${
+                active
+                  ? "bg-teal-600 text-white font-bold shadow"
+                  : done
+                    ? "text-teal-700 dark:text-teal-300 font-semibold hover:bg-teal-100/60 dark:hover:bg-teal-950"
+                    : "text-neutral-400 dark:text-neutral-500 font-medium hover:text-neutral-600 dark:hover:text-neutral-300"
+              }`}
             >
-              <span
-                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-extrabold tabular-nums transition ${
-                  active
-                    ? "bg-teal-600 text-white"
-                    : done
-                      ? "bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300"
-                      : "bg-neutral-200 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400"
-                }`}
-              >
-                {done ? "✓" : i + 1}
-              </span>
-              <span className={`text-[12px] whitespace-nowrap ${active ? "font-bold text-ink" : "text-neutral-500 dark:text-neutral-400"}`}>
-                {SHORT[s.id] || s.title}
-              </span>
+              <span className="tabular-nums font-extrabold shrink-0">{done ? "✓" : i + 1}</span>
+              <span className="truncate hidden min-[420px]:inline">{SHORT[s.id] || s.title}</span>
             </button>
-            {i < steps.length - 1 && (
-              <span className={`mx-1 h-px w-3 shrink-0 ${done ? "bg-teal-500" : "bg-line"}`} />
-            )}
           </li>
         );
       })}
