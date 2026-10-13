@@ -21,7 +21,7 @@ export default function SaasCard({ inv, profile, totals, bodyFont, accent, showS
           <div>
             <div style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.01em" }}>{profile.shopName || "Nama Usaha"}</div>
             {(profile.address || profile.contact || profile.npwp) && (
-              <div style={{ color: "#6b7280", fontSize: 11, marginTop: 4 }}>
+              <div style={{ color: "#6b7280", fontSize: 11, marginTop: 4, whiteSpace: "pre-line" }}>
                 {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join(" · ")}
               </div>
             )}

@@ -16,7 +16,7 @@ export default function Struk80({ inv, profile, totals, bodyFont }) {
         <p style={{ fontWeight: 800, fontSize: 16, letterSpacing: "0.06em" }}>{profile.shopName || "TOKO"}</p>
         {profile.tagline && <p style={{ fontSize: 10.5, color: "#444", fontStyle: "italic" }}>{profile.tagline}</p>}
         {(profile.address || profile.contact) && (
-          <p style={{ fontSize: 10, color: "#444" }}>{[profile.address, profile.contact].filter(Boolean).join(" · ")}</p>
+          <p style={{ fontSize: 10, color: "#444", whiteSpace: "pre-line" }}>{[profile.address, profile.contact].filter(Boolean).join(" · ")}</p>
         )}
       </div>
       <div style={dash} />

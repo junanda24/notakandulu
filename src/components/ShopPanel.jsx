@@ -75,7 +75,7 @@ export default function ShopPanel({ profile, setProfile }) {
           </Field>
         </div>
         <Field label="Alamat" className="mt-3">
-          <TextInput value={profile.address} onChange={(e) => set({ address: e.target.value })} placeholder="Jl. ..." />
+          <TextArea rows={3} value={profile.address} onChange={(e) => set({ address: e.target.value })} placeholder="Jl. ...&#10;Kota, Kode Pos" />
         </Field>
         <Field label="Kontak (HP / email / IG)" className="mt-3">
           <TextInput value={profile.contact} onChange={(e) => set({ contact: e.target.value })} placeholder="0812-... / @..." />

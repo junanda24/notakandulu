@@ -25,7 +25,7 @@ export default function ExecutiveDark({ inv, profile, totals, bodyFont, showSign
           <div>
             <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: "-0.01em" }}>{profile.shopName || "Nama Usaha"}</div>
             {(profile.address || profile.contact || profile.npwp) && (
-              <div style={{ color: muted, fontSize: 11, marginTop: 4 }}>
+              <div style={{ color: muted, fontSize: 11, marginTop: 4, whiteSpace: "pre-line" }}>
                 {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join(" · ")}
               </div>
             )}

@@ -14,7 +14,7 @@ export default function Struk58({ inv, profile, totals, bodyFont }) {
         <ShopLogo logo={profile.logo} size={38} radius={8} grayscale style={{ margin: "0 auto 6px" }} />
         <p style={{ fontWeight: 800, fontSize: 13, letterSpacing: "0.04em" }}>{profile.shopName || "TOKO"}</p>
         {(profile.address || profile.contact) && (
-          <p style={{ fontSize: 9, color: "#444" }}>{[profile.address, profile.contact].filter(Boolean).join(" · ")}</p>
+          <p style={{ fontSize: 9, color: "#444", whiteSpace: "pre-line" }}>{[profile.address, profile.contact].filter(Boolean).join(" · ")}</p>
         )}
       </div>
       <div style={dash} />

@@ -16,7 +16,7 @@ export default function Kwitansi({ inv, profile, totals, bodyFont, accent }) {
         <ShopLogo logo={profile.logo} size={54} radius={12} style={{ margin: "0 auto 10px" }} />
         <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: "0.02em" }}>{profile.shopName || "Nama Usaha"}</div>
         {(profile.address || profile.contact) && (
-          <div style={{ color: "#78716c", fontSize: 10.5, marginTop: 3 }}>
+          <div style={{ color: "#78716c", fontSize: 10.5, marginTop: 3, whiteSpace: "pre-line" }}>
             {[profile.address, profile.contact].filter(Boolean).join("  ·  ")}
           </div>
         )}

@@ -20,7 +20,7 @@ export default function Editorial({ inv, profile, totals, bodyFont, accent, show
           {profile.shopName || "Nama Usaha"}
         </div>
         {(profile.address || profile.contact || profile.npwp) && (
-          <div style={{ color: "#78716c", fontSize: 11, marginTop: 6 }}>
+          <div style={{ color: "#78716c", fontSize: 11, marginTop: 6, whiteSpace: "pre-line" }}>
             {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join("  ·  ")}
           </div>
         )}

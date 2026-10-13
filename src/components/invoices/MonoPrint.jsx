@@ -17,7 +17,7 @@ export default function MonoPrint({ inv, profile, totals, bodyFont, showSignatur
           <div>
             <div style={{ fontSize: 20, fontWeight: 800 }}>{profile.shopName || "Nama Usaha"}</div>
             {(profile.address || profile.contact || profile.npwp) && (
-              <div style={{ fontSize: 11, color: "#444", marginTop: 4 }}>
+              <div style={{ fontSize: 11, color: "#444", marginTop: 4, whiteSpace: "pre-line" }}>
                 {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join(" · ")}
               </div>
             )}
