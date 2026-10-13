@@ -108,7 +108,7 @@ export default function StepItem({ inv, setInv }) {
 
       <Card
         title="Item"
-        sticker={`${inv.items.length} item`}
+        sticker={`x${inv.items.length}`}
         action={
           <button type="button" onClick={addAndOpen} className="text-[13px] font-extrabold text-teal-700 dark:text-teal-400 hover:underline">
             + Tambah
