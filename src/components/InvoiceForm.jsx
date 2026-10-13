@@ -4,6 +4,7 @@ import { blankItem } from "../lib/calc.js";
 import { CURRENCIES } from "../lib/format.js";
 
 const UNITS = ["pcs", "box", "pak", "lusin", "kodi", "kg", "gram", "liter", "meter", "m2", "jam", "hari", "minggu", "sesi", "kali", "orang", "porsi", "lot", "paket", "set", "unit"];
+const TERMS = ["Net 7", "Net 14", "Net 30", "Dibayar saat terima"];
 
 export default function InvoiceForm({ inv, setInv, profile }) {
   const set = (patch) => setInv((p) => ({ ...p, ...patch }));
@@ -119,18 +120,13 @@ export default function InvoiceForm({ inv, setInv, profile }) {
           </Field>
         </div>
         <Field label="Syarat pembayaran (opsional)" className="mt-3">
-          <TextInput
-            list="nd-terms"
-            value={inv.terms || ""}
-            onChange={(e) => set({ terms: e.target.value })}
-            placeholder="cth: Net 14 — ketik atau pilih"
-          />
-          <datalist id="nd-terms">
-            <option value="Net 7" />
-            <option value="Net 14" />
-            <option value="Net 30" />
-            <option value="Dibayar saat terima" />
-          </datalist>
+          <Select value={inv.terms || ""} onChange={(e) => set({ terms: e.target.value })}>
+            <option value="">— pilih atau kosongkan —</option>
+            {TERMS.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+            {inv.terms && !TERMS.includes(inv.terms) && <option value={inv.terms}>{inv.terms}</option>}
+          </Select>
         </Field>
         <Field label="Catatan" className="mt-3">
           <TextArea rows={2} value={inv.notes} onChange={(e) => set({ notes: e.target.value })} placeholder="Syarat & ketentuan, ucapan terima kasih, dsb." />
