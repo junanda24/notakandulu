@@ -41,10 +41,11 @@ export default function StepData({ inv, setInv, profile, persistProfile, onClear
       <div className="rounded-xl border border-teal-200 bg-teal-50 dark:border-teal-900 dark:bg-teal-950/40 p-4">
         <p className="text-sm font-bold">Langkah 1 — Toko & pelanggan</p>
         <p className="text-[13px] text-neutral-600 dark:text-neutral-400 mt-1">
-          Data tokomu cukup diisi sekali. Lalu isi siapa yang ditagih.
+          Data tokomu cukup diisi sekali. Lalu isi siapa yang ditagih. Klik lagi untuk
+          contoh dari usaha lain.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
-          <Btn onClick={fillSample} className="py-1.5! px-3! text-xs!">
+          <Btn onClick={fillSample} className="py-1.5! px-3! text-xs!" title="Klik lagi untuk contoh usaha lain">
             Isi data contoh
           </Btn>
           <Btn onClick={onClearInv} color="bg-white dark:bg-neutral-800 border-line text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700" className="py-1.5! px-3! text-xs!">
