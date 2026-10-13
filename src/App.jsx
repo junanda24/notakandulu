@@ -254,11 +254,6 @@ export default function App() {
         <div className="grid gap-5 lg:grid-cols-[1fr_440px]">
           <div className={mobileView === "preview" ? "block" : "hidden lg:block"}>
             <div className={`lg:sticky lg:top-[76px] transition-opacity duration-300 ${dimPreview ? "lg:opacity-40" : ""}`}>
-              {dimPreview && (
-                <p className="hidden lg:block text-center text-[11px] text-neutral-400 mb-2">
-                  Pratinjau live — lanjutkan langkah untuk melihat hasil akhir
-                </p>
-              )}
               <Preview inv={inv} profile={profile} settings={settings} />
             </div>
           </div>
