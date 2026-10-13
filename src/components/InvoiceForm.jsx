@@ -1,10 +1,47 @@
 // Form isi nota: pelanggan, nomor, tanggal, items, diskon/pajak/ongkir, catatan, pembayaran.
+import { useState } from "react";
 import { Field, TextInput, TextArea, Select, Card } from "./ui.jsx";
 import { blankItem } from "../lib/calc.js";
 import { CURRENCIES } from "../lib/format.js";
 
 const UNITS = ["pcs", "box", "pak", "lusin", "kodi", "kg", "gram", "liter", "meter", "m2", "jam", "hari", "minggu", "sesi", "kali", "orang", "porsi", "lot", "paket", "set", "unit"];
 const TERMS = ["Net 7", "Net 14", "Net 30", "Dibayar saat terima"];
+const GUIDE_KEY = "notakandulu:hideGuide";
+
+function Guide() {
+  const [hide, setHide] = useState(() => {
+    try { return localStorage.getItem(GUIDE_KEY) === "1"; } catch { return false; }
+  });
+  if (hide) return null;
+  const dismiss = () => {
+    try { localStorage.setItem(GUIDE_KEY, "1"); } catch {}
+    setHide(true);
+  };
+  return (
+    <div className="rounded-xl border border-indigo-200 bg-indigo-50 dark:border-indigo-900 dark:bg-indigo-950/40 p-4 relative">
+      <button onClick={dismiss} className="absolute top-2 right-3 text-neutral-400 hover:text-neutral-600 text-lg leading-none" title="Tutup">×</button>
+      <p className="text-sm font-bold mb-2">Cara pakai (30 detik):</p>
+      <ol className="text-[13px] text-neutral-700 dark:text-neutral-300 space-y-1 list-none">
+        <li><b>1.</b> Isi form di bawah, lalu <b>Simpan</b> — pratinjau live di kanan.</li>
+        <li><b>2.</b> Pilih template di tab <b>Gaya</b> (18 pilihan).</li>
+        <li><b>3.</b> Ekspor PNG/PDF atau bagikan via WA di panel pratinjau.</li>
+      </ol>
+      <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">Rekening/e-wallet diatur sekali di tab <b>Toko</b>.</p>
+    </div>
+  );
+}
+
+function Advanced({ title, children, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="mt-3">
+      <button onClick={() => setOpen(!open)} className="text-[12px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+        {open ? "▾" : "▸"} {title}
+      </button>
+      {open && <div className="mt-2">{children}</div>}
+    </div>
+  );
+}
 
 export default function InvoiceForm({ inv, setInv, profile }) {
   const set = (patch) => setInv((p) => ({ ...p, ...patch }));
@@ -24,6 +61,7 @@ export default function InvoiceForm({ inv, setInv, profile }) {
 
   return (
     <div className="space-y-4">
+      <Guide />
       <Card title="📝 Data Nota" sticker="wajib">
         <div className="grid grid-cols-2 gap-3">
           <Field label="Nomor nota">
@@ -32,23 +70,14 @@ export default function InvoiceForm({ inv, setInv, profile }) {
           <Field label="Tanggal">
             <TextInput type="date" value={inv.date} onChange={(e) => set({ date: e.target.value })} />
           </Field>
-          <Field label="Jatuh tempo (opsional)">
-            <TextInput type="date" value={inv.dueDate || ""} onChange={(e) => set({ dueDate: e.target.value })} />
+          <Field label="Nama pelanggan">
+            <TextInput value={inv.customerName} onChange={(e) => set({ customerName: e.target.value })} placeholder="Nama / perusahaan" />
           </Field>
           <Field label="Status bayar">
             <Select value={inv.status || "belum"} onChange={(e) => set({ status: e.target.value })}>
               <option value="belum">Belum bayar</option>
               <option value="lunas">Lunas</option>
             </Select>
-          </Field>
-          <Field label="No. PO / referensi (opsional)">
-            <TextInput value={inv.poNumber || ""} onChange={(e) => set({ poNumber: e.target.value })} placeholder="cth: PO-2026-118" />
-          </Field>
-          <Field label="Nama pelanggan">
-            <TextInput value={inv.customerName} onChange={(e) => set({ customerName: e.target.value })} placeholder="Nama / perusahaan" />
-          </Field>
-          <Field label="NPWP pelanggan (opsional)">
-            <TextInput value={inv.customerNpwp || ""} onChange={(e) => set({ customerNpwp: e.target.value })} placeholder="cth: 01.234.567.8-901.000" />
           </Field>
           <Field label="Mata uang">
             <Select value={inv.currency} onChange={(e) => set({ currency: e.target.value })}>
@@ -61,6 +90,19 @@ export default function InvoiceForm({ inv, setInv, profile }) {
         <Field label="Info pelanggan (opsional)" className="mt-3">
           <TextArea rows={2} value={inv.customerInfo} onChange={(e) => set({ customerInfo: e.target.value })} placeholder="Alamat, no. HP, dsb." />
         </Field>
+        <Advanced title="Opsi lanjutan">
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Jatuh tempo (opsional)">
+              <TextInput type="date" value={inv.dueDate || ""} onChange={(e) => set({ dueDate: e.target.value })} />
+            </Field>
+            <Field label="No. PO / referensi (opsional)">
+              <TextInput value={inv.poNumber || ""} onChange={(e) => set({ poNumber: e.target.value })} placeholder="cth: PO-2026-118" />
+            </Field>
+            <Field label="NPWP pelanggan (opsional)">
+              <TextInput value={inv.customerNpwp || ""} onChange={(e) => set({ customerNpwp: e.target.value })} placeholder="cth: 01.234.567.8-901.000" />
+            </Field>
+          </div>
+        </Advanced>
       </Card>
 
       <Card title="📦 Item" sticker={`${inv.items.length} item`}>
@@ -109,30 +151,39 @@ export default function InvoiceForm({ inv, setInv, profile }) {
               </Select>
             </div>
           </Field>
-          <Field label="Pajak %">
-            <TextInput type="number" min="0" value={inv.tax} onChange={(e) => set({ tax: e.target.value })} />
-          </Field>
-          <Field label="Ongkir">
-            <TextInput type="number" min="0" value={inv.shipping} onChange={(e) => set({ shipping: e.target.value })} />
-          </Field>
-          <Field label="Uang muka (DP)">
-            <TextInput type="number" min="0" value={inv.dp || 0} onChange={(e) => set({ dp: e.target.value })} />
-          </Field>
         </div>
-        <Field label="Syarat pembayaran (opsional)" className="mt-3">
-          <Select value={inv.terms || ""} onChange={(e) => set({ terms: e.target.value })}>
-            <option value="">— pilih atau kosongkan —</option>
-            {TERMS.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-            {inv.terms && !TERMS.includes(inv.terms) && <option value={inv.terms}>{inv.terms}</option>}
-          </Select>
-        </Field>
+        <Advanced title="Opsi lanjutan: pajak, ongkir, DP, syarat">
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Pajak %">
+              <TextInput type="number" min="0" value={inv.tax} onChange={(e) => set({ tax: e.target.value })} />
+            </Field>
+            <Field label="Ongkir">
+              <TextInput type="number" min="0" value={inv.shipping} onChange={(e) => set({ shipping: e.target.value })} />
+            </Field>
+            <Field label="Uang muka (DP)">
+              <TextInput type="number" min="0" value={inv.dp || 0} onChange={(e) => set({ dp: e.target.value })} />
+            </Field>
+            <Field label="Syarat pembayaran (opsional)">
+              <Select value={inv.terms || ""} onChange={(e) => set({ terms: e.target.value })}>
+                <option value="">— pilih atau kosongkan —</option>
+                {TERMS.map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+                {inv.terms && !TERMS.includes(inv.terms) && <option value={inv.terms}>{inv.terms}</option>}
+              </Select>
+            </Field>
+          </div>
+        </Advanced>
         <Field label="Catatan" className="mt-3">
           <TextArea rows={2} value={inv.notes} onChange={(e) => set({ notes: e.target.value })} placeholder="Syarat & ketentuan, ucapan terima kasih, dsb." />
         </Field>
       </Card>
 
+      {(profile.payments || []).length === 0 && (
+        <div className="rounded-xl border border-dashed border-line p-4 text-[13px] text-neutral-500 dark:text-neutral-400">
+          💡 Tambah rekening / e-wallet di tab <b>Toko</b> biar info pembayaran muncul otomatis di nota.
+        </div>
+      )}
       {(profile.payments || []).length > 0 && (
         <Card title="💳 Pembayaran di nota" sticker="opsional">
           <p className="mb-2 font-mono2 text-[10px] text-neutral-500">Pilih metode yang tampil di nota ini:</p>

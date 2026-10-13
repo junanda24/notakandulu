@@ -12,11 +12,14 @@ import {
   getHistory, saveToHistory, deleteHistory, nextCounter, peekCounter, migrate,
 } from "./lib/storage.js";
 
+import SaranPanel from "./components/SaranPanel.jsx";
+
 const TABS = [
   { id: "buat", name: "Buat Nota" },
   { id: "toko", name: "Toko" },
   { id: "gaya", name: "Gaya" },
   { id: "riwayat", name: "Riwayat" },
+  { id: "saran", name: "Saran" },
 ];
 
 export default function App() {
@@ -104,6 +107,7 @@ export default function App() {
     if (tab === "buat") return <InvoiceForm inv={inv} setInv={setInv} profile={profile} />;
     if (tab === "toko") return <ShopPanel profile={profile} setProfile={persistProfile} />;
     if (tab === "gaya") return <CustomizePanel settings={settings} setSettings={persistSettings} />;
+    if (tab === "saran") return <SaranPanel />;
     return (
       <HistoryPanel
         history={history}
@@ -169,6 +173,7 @@ export default function App() {
       </header>
 
       {/* Mobile: toggle form/preview */}
+      {tab !== "saran" && (
       <div className="lg:hidden sticky top-[104px] z-10 border-b border-line bg-cream px-4 py-2">
         <div className="grid grid-cols-2 gap-1 rounded-lg border border-line bg-neutral-100 dark:bg-neutral-800 p-1">
           {(["form", "preview"]).map((v) => (
@@ -182,8 +187,12 @@ export default function App() {
           ))}
         </div>
       </div>
+      )}
 
       <main className="mx-auto max-w-7xl px-4 py-5">
+        {tab === "saran" ? (
+          <div className="mx-auto max-w-2xl">{formPanel}</div>
+        ) : (
         <div className="grid gap-5 lg:grid-cols-[400px_1fr]">
           <div className={mobileView === "form" ? "block" : "hidden lg:block"}>
             {formPanel}
@@ -194,11 +203,15 @@ export default function App() {
             </div>
           </div>
         </div>
+        )}
       </main>
 
       <footer className="border-t border-line mt-8">
-        <p className="mx-auto max-w-7xl px-4 py-4 text-[11px] text-neutral-500 dark:text-neutral-400 text-center">
+        <p className="mx-auto max-w-7xl px-4 pt-4 text-[11px] text-neutral-500 dark:text-neutral-400 text-center">
           TagihkanDulu — buat invoice gratis, tanpa iklan dan login itu nyata 🔥
+        </p>
+        <p className="mx-auto max-w-7xl px-4 pb-4 pt-1 text-[11px] text-neutral-400 dark:text-neutral-500 text-center">
+          💛 Dukung via GoPay <span className="font-mono2 font-bold">0857-6362-2979</span>
         </p>
       </footer>
 
