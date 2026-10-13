@@ -131,7 +131,7 @@ export default function App() {
           <div className="flex items-center gap-2.5">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white text-base font-extrabold">T</span>
             <div>
-              <h1 className="text-[15px] font-extrabold tracking-tight leading-none">Tagihkan</h1>
+              <h1 className="text-[15px] font-extrabold tracking-tight leading-none">TagihkanDulu</h1>
               <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">Invoice elegant, gratis</p>
             </div>
           </div>
@@ -198,7 +198,7 @@ export default function App() {
 
       <footer className="border-t border-line mt-8">
         <p className="mx-auto max-w-7xl px-4 py-4 text-[11px] text-neutral-500 dark:text-neutral-400 text-center">
-          Tagihkan — buat invoice gratis, tanpa iklan dan login itu nyata 🔥
+          TagihkanDulu — buat invoice gratis, tanpa iklan dan login itu nyata 🔥
         </p>
       </footer>
 
