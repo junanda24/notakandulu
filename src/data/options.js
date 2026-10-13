@@ -10,6 +10,15 @@ export const TEMPLATES = [
   { id: "mono", name: "Monochrome Print", desc: "Hitam-putih hemat tinta", paper: "A4", dark: false },
   { id: "struk-80", name: "Struk 80mm", desc: "Thermal lebar, +detail", paper: "80mm", dark: false },
   { id: "struk-58", name: "Struk 58mm", desc: "Thermal kecil", paper: "58mm", dark: false },
+  { id: "faktur-formal", name: "Faktur Formal", desc: "Ala Adobe/GitHub, blok total hitam", paper: "A4", dark: false },
+  { id: "saas-paywall", name: "SaaS Paywall", desc: "Ala Stripe/Paper.id, total hero", paper: "A4", dark: false },
+  { id: "receipt-minimal", name: "Receipt Minimal", desc: "Ala Spotify/Uber, tanpa tabel", paper: "A4", dark: false },
+  { id: "thermal-58", name: "Thermal 58 PLN", desc: "Gaya PLN/BCA + barcode", paper: "58mm", dark: false },
+  { id: "marketplace", name: "Marketplace", desc: "Ala Tokopedia/Shopee + kode unik", paper: "A4", dark: false },
+  { id: "studio", name: "Studio / Agency", desc: "Total di header, kolom jam", paper: "A4", dark: false },
+  { id: "faktur-pajak", name: "Faktur Pajak", desc: "Invoice + faktur pajak, DPP/PPN", paper: "A4", dark: false },
+  { id: "bold-statement", name: "Bold Statement", desc: "Ungu berani ala Behance", paper: "A4", dark: true },
+  { id: "kwitansi-klasik", name: "Kwitansi Klasik", desc: "Materai + cap LUNAS", paper: "A5", dark: false },
 ];
 
 export const PAPER_WIDTH = {

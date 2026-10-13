@@ -16,6 +16,15 @@ import Kwitansi from "./invoices/Kwitansi.jsx";
 import AccentBlock from "./invoices/AccentBlock.jsx";
 import ExecutiveDark from "./invoices/ExecutiveDark.jsx";
 import MonoPrint from "./invoices/MonoPrint.jsx";
+import FakturFormal from "./invoices/FakturFormal.jsx";
+import SaasPaywall from "./invoices/SaasPaywall.jsx";
+import ReceiptMinimal from "./invoices/ReceiptMinimal.jsx";
+import Thermal58 from "./invoices/Thermal58.jsx";
+import Marketplace from "./invoices/Marketplace.jsx";
+import Studio from "./invoices/Studio.jsx";
+import FakturPajak from "./invoices/FakturPajak.jsx";
+import BoldStatement from "./invoices/BoldStatement.jsx";
+import KwitansiKlasik from "./invoices/KwitansiKlasik.jsx";
 
 const TPL_COMPONENTS = {
   "saas": SaasCard,
@@ -27,6 +36,15 @@ const TPL_COMPONENTS = {
   "mono": MonoPrint,
   "struk-80": Struk80,
   "struk-58": Struk58,
+  "faktur-formal": FakturFormal,
+  "saas-paywall": SaasPaywall,
+  "receipt-minimal": ReceiptMinimal,
+  "thermal-58": Thermal58,
+  "marketplace": Marketplace,
+  "studio": Studio,
+  "faktur-pajak": FakturPajak,
+  "bold-statement": BoldStatement,
+  "kwitansi-klasik": KwitansiKlasik,
 };
 
 export function InvoiceSheet({ inv, profile, settings, id }) {

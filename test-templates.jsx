@@ -1,4 +1,4 @@
-// SSR render test untuk 9 template nota (normal / edge / empty).
+// SSR render test untuk 18 template nota (normal / edge / empty).
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { calcTotals } from "./src/lib/calc.js";
@@ -11,8 +11,17 @@ import ExecutiveDark from "./src/components/invoices/ExecutiveDark.jsx";
 import MonoPrint from "./src/components/invoices/MonoPrint.jsx";
 import Struk58 from "./src/components/invoices/Struk58.jsx";
 import Struk80 from "./src/components/invoices/Struk80.jsx";
+import FakturFormal from "./src/components/invoices/FakturFormal.jsx";
+import SaasPaywall from "./src/components/invoices/SaasPaywall.jsx";
+import ReceiptMinimal from "./src/components/invoices/ReceiptMinimal.jsx";
+import Thermal58 from "./src/components/invoices/Thermal58.jsx";
+import Marketplace from "./src/components/invoices/Marketplace.jsx";
+import Studio from "./src/components/invoices/Studio.jsx";
+import FakturPajak from "./src/components/invoices/FakturPajak.jsx";
+import BoldStatement from "./src/components/invoices/BoldStatement.jsx";
+import KwitansiKlasik from "./src/components/invoices/KwitansiKlasik.jsx";
 
-const TPL = { saas: SaasCard, corporate: Corporate, editorial: Editorial, kwitansi: Kwitansi, accent: AccentBlock, dark: ExecutiveDark, mono: MonoPrint, "struk-58": Struk58, "struk-80": Struk80 };
+const TPL = { saas: SaasCard, corporate: Corporate, editorial: Editorial, kwitansi: Kwitansi, accent: AccentBlock, dark: ExecutiveDark, mono: MonoPrint, "struk-58": Struk58, "struk-80": Struk80, "faktur-formal": FakturFormal, "saas-paywall": SaasPaywall, "receipt-minimal": ReceiptMinimal, "thermal-58": Thermal58, marketplace: Marketplace, studio: Studio, "faktur-pajak": FakturPajak, "bold-statement": BoldStatement, "kwitansi-klasik": KwitansiKlasik };
 
 const profile = {
   shopName: "Kopi Senja",
@@ -73,21 +82,30 @@ for (const [tid, Cmp] of Object.entries(TPL)) {
       const html = renderToString(React.createElement(Cmp, { inv, profile, totals, showSignature: true, ...fonts }));
       const checks = [];
       if (cname === "normal") {
+        const lc = html.toLowerCase();
+        const isKwitansi = tid === "kwitansi" || tid === "kwitansi-klasik";
+        const isThermal58 = tid === "thermal-58";
         checks.push(["total muncul", html.includes("Rp") || html.includes("total") || html.includes("TOTAL")]);
         checks.push(["nama toko muncul", html.includes("Kopi Senja")]);
-        checks.push(["satuan muncul", html.includes("jam") || tid === "kwitansi"]);
-        if (tid !== "kwitansi" && !tid.startsWith("struk")) {
+        checks.push(["satuan muncul", lc.includes("jam") || isKwitansi]);
+        if (!isKwitansi && !tid.startsWith("struk") && !isThermal58) {
           checks.push(["PO muncul", html.includes("PO-2026-118")]);
           checks.push(["NPWP pelanggan muncul", html.includes("01.234.567.8-901.000")]);
           checks.push(["tanda tangan muncul", html.includes("Hormat kami") || html.includes("Kopi Senja")]);
           checks.push(["DP muncul", html.includes("Uang muka")]);
+        }
+        if (isThermal58) {
+          checks.push(["PO muncul di thermal", lc.includes("po-2026-118")]);
+          checks.push(["NPWP pelanggan muncul di thermal", lc.includes("01.234.567.8-901.000")]);
+          checks.push(["DP muncul di thermal", lc.includes("sisa")]);
+          checks.push(["syarat bayar muncul di thermal", lc.includes("net 14")]);
         }
         if (tid.startsWith("struk")) {
           checks.push(["PO muncul di struk", html.includes("PO-2026-118")]);
           checks.push(["DP muncul di struk", html.includes("SISA")]);
           checks.push(["syarat bayar muncul di struk", html.includes("Net 14")]);
         }
-        checks.push(["syarat bayar muncul", html.includes("Net 14") || tid === "kwitansi" || tid.startsWith("struk")]);
+        checks.push(["syarat bayar muncul", html.includes("Net 14") || lc.includes("net 14") || isKwitansi || tid.startsWith("struk") || isThermal58]);
       }
       if (cname === "edge") {
         checks.push(["script tidak lolos mentah", !html.includes("<script>alert")]);
@@ -107,6 +125,6 @@ for (const [tid, Cmp] of Object.entries(TPL)) {
   }
 }
 
-console.log(`\nSSR render: ${pass} lolos, ${fail} gagal dari ${pass + fail} kasus (9 template × 3 kasus)`);
+console.log(`\nSSR render: ${pass} lolos, ${fail} gagal dari ${pass + fail} kasus (18 template × 3 kasus)`);
 if (failures.length) { console.log("GAGAL:"); failures.forEach((f) => console.log(" - " + f)); process.exit(1); }
 console.log("SEMUA LOLOS ✓");
