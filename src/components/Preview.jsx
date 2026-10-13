@@ -1,0 +1,127 @@
+// Preview live + ekspor (cetak/PDF/PNG) + bagikan (WA/email/native).
+import { useEffect, useRef, useState } from "react";
+import { Card, Btn } from "./ui.jsx";
+import { TEMPLATES, FONTS, PAPER_WIDTH } from "../data/options.js";
+import { calcTotals } from "../lib/calc.js";
+import {
+  invoiceText, waShareUrl, mailtoUrl, canNativeShareFile,
+  invoiceToPng, nativeSharePng, downloadPng,
+} from "../lib/share.js";
+import Struk58 from "./invoices/Struk58.jsx";
+import Struk80 from "./invoices/Struk80.jsx";
+import SaasCard from "./invoices/SaasCard.jsx";
+import Corporate from "./invoices/Corporate.jsx";
+import Editorial from "./invoices/Editorial.jsx";
+import Kwitansi from "./invoices/Kwitansi.jsx";
+import AccentBlock from "./invoices/AccentBlock.jsx";
+import ExecutiveDark from "./invoices/ExecutiveDark.jsx";
+import MonoPrint from "./invoices/MonoPrint.jsx";
+
+const TPL_COMPONENTS = {
+  "saas": SaasCard,
+  "corporate": Corporate,
+  "editorial": Editorial,
+  kwitansi: Kwitansi,
+  "accent": AccentBlock,
+  "dark": ExecutiveDark,
+  "mono": MonoPrint,
+  "struk-80": Struk80,
+  "struk-58": Struk58,
+};
+
+export function InvoiceSheet({ inv, profile, settings, id }) {
+  const Tpl = TPL_COMPONENTS[settings.template] || SaasCard;
+  const totals = calcTotals(inv);
+  const f = FONTS.find((x) => x.id === settings.font) || FONTS[0];
+  const meta = TEMPLATES.find((x) => x.id === settings.template);
+  return (
+    <div
+      id={id}
+      className="invoice-paper"
+      style={{
+        width: PAPER_WIDTH[meta?.paper || "A4"],
+        maxWidth: "100%",
+        margin: "0 auto",
+        ["--inv-accent"]: settings.accent,
+      }}
+    >
+      <Tpl inv={inv} profile={profile} totals={totals} bodyFont={f.body} displayFont={f.display} accent={settings.accent} />
+    </div>
+  );
+}
+
+export default function Preview({ inv, profile, settings }) {
+  const sheetRef = useRef(null);
+  const [busy, setBusy] = useState("");
+  const [nativeOk] = useState(() => canNativeShareFile());
+
+  // @page size mengikuti template saat cetak
+  useEffect(() => {
+    const meta = TEMPLATES.find((x) => x.id === settings.template);
+    const w = PAPER_WIDTH[meta?.paper || "A4"];
+    let el = document.getElementById("nd-page-size");
+    if (!el) {
+      el = document.createElement("style");
+      el.id = "nd-page-size";
+      document.head.appendChild(el);
+    }
+    el.textContent = `@media print { @page { size: ${w} auto; margin: 0; } }`;
+  }, [settings.template]);
+
+  const doPrint = () => window.print();
+
+  const doPng = async (share) => {
+    if (!sheetRef.current) return;
+    setBusy(share ? "share" : "png");
+    try {
+      if (share) {
+        await nativeSharePng(sheetRef.current, inv);
+      } else {
+        const url = await invoiceToPng(sheetRef.current);
+        downloadPng(url, `${inv.number || "nota"}.png`);
+      }
+    } catch (e) {
+      if (e?.name !== "AbortError") alert("Gagal: " + (e.message || e));
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const text = invoiceText(inv, profile, settings);
+
+  return (
+    <div className="space-y-4">
+      <Card title="👁️ Preview Live" sticker={TEMPLATES.find((t) => t.id === settings.template)?.name}>
+        <div className="invoice-stage -m-4 sm:-m-5 rounded-b-xl p-4 sm:p-8 overflow-x-auto">
+          <div ref={sheetRef} style={{ width: "fit-content", margin: "0 auto", maxWidth: "100%" }}>
+            <InvoiceSheet inv={inv} profile={profile} settings={settings} />
+          </div>
+        </div>
+      </Card>
+
+      <Card title="📤 Ekspor & Bagikan" sticker="gratis">
+        <div className="grid grid-cols-2 gap-2">
+          <Btn onClick={doPrint} primary>🖨️ Cetak / PDF</Btn>
+          <Btn onClick={() => doPng(false)} primary disabled={busy === "png"}>
+            {busy === "png" ? "⏳ ..." : "🖼️ Unduh PNG"}
+          </Btn>
+          <a href={waShareUrl(text)} target="_blank" rel="noreferrer" className="brutal-btn rounded-lg bg-[#25d366] border-[#1da851] text-white px-4 py-2.5 text-sm font-semibold text-center">
+            💬 WA (teks)
+          </a>
+          <a href={mailtoUrl(inv, profile, settings)} className="brutal-btn rounded-lg px-4 py-2.5 text-sm font-semibold text-center">
+            ✉️ Email
+          </a>
+        </div>
+        {nativeOk && (
+          <Btn onClick={() => doPng(true)} color="bg-white" className="w-full mt-2" disabled={busy === "share"}>
+            {busy === "share" ? "⏳ Menyiapkan..." : "📲 Bagikan gambar (WA / aplikasi lain)"}
+          </Btn>
+        )}
+        <p className="mt-2 font-mono2 text-[10px] text-neutral-500">
+          Cetak/PDF memakai dialog bawaan browser — hasil sama persis dengan preview.
+          {nativeOk ? "" : " Bagikan gambar langsung tersedia di HP."}
+        </p>
+      </Card>
+    </div>
+  );
+}
