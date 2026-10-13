@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import gsap from "gsap";
 import Wizard from "./components/wizard/Wizard.jsx";
 import { getSteps, STEP_IDS } from "./components/wizard/shared.jsx";
 import HistoryPanel from "./components/HistoryPanel.jsx";
@@ -111,10 +112,29 @@ export default function App() {
     setInv((p) => ({ ...p, currency: settings.currency }));
   }, [settings.currency]);
 
+  const toastRef = useRef(null);
+  const toastTimer = useRef(null);
+
   const showToast = (m) => {
+    clearTimeout(toastTimer.current);
     setToast(m);
-    setTimeout(() => setToast(""), 2200);
+    toastTimer.current = setTimeout(() => {
+      const el = toastRef.current;
+      if (el && !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+        gsap.to(el, { y: 14, opacity: 0, duration: 0.25, ease: "power2.in", onComplete: () => setToast("") });
+      } else {
+        setToast("");
+      }
+    }, 2200);
   };
+
+  // Toast masuk: slide-up + fade.
+  useEffect(() => {
+    const el = toastRef.current;
+    if (!el || !toast) return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    gsap.fromTo(el, { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "back.out(1.6)", overwrite: true });
+  }, [toast]);
 
   const handleSave = () => {
     // kunci nomor: naikkan counter begitu nota disimpan
@@ -264,7 +284,7 @@ export default function App() {
       </footer>
 
       {toast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-lg border border-line bg-white dark:bg-neutral-900 px-5 py-3 text-sm font-semibold shadow-lg">
+        <div ref={toastRef} className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-lg border border-line bg-white dark:bg-neutral-900 px-5 py-3 text-sm font-semibold shadow-lg">
           {toast}
         </div>
       )}

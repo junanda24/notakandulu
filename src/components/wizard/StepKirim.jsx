@@ -1,6 +1,6 @@
 // Wizard step 4 (terakhir): ringkasan nota, pilih pembayaran, simpan, ekspor & bagikan.
 import { useEffect, useRef, useState } from "react";
-import { Card, Btn } from "../ui.jsx";
+import { Card, Btn, Collapse } from "../ui.jsx";
 import { InvoiceSheet, ExportCard } from "../Preview.jsx";
 import { calcTotals } from "../../lib/calc.js";
 import { fmtMoney, fmtDate } from "../../lib/format.js";
@@ -95,7 +95,7 @@ export default function StepKirim({ inv, setInv, profile, settings, onSave, onNe
       <Btn onClick={doSave} primary className="w-full py-3! text-base!">
         Simpan Nota
       </Btn>
-      {saved ? (
+      <Collapse open={saved}>
         <div className="rounded-xl border border-teal-300 bg-teal-50 dark:border-teal-800 dark:bg-teal-950/50 p-4 text-center">
           <p className="text-2xl">✓</p>
           <p className="text-sm font-bold mt-1">Nota {inv.number || ""} tersimpan!</p>
@@ -107,7 +107,8 @@ export default function StepKirim({ inv, setInv, profile, settings, onSave, onNe
             <Btn onClick={onGotoRiwayat} className="py-2! text-xs!">Lihat di Riwayat</Btn>
           </div>
         </div>
-      ) : (
+      </Collapse>
+      {!saved && (
         <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400">
           Setelah tersimpan, ekspor atau bagikan langsung dari bawah ini.
         </p>

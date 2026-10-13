@@ -1,5 +1,6 @@
 // Preview live + ekspor (cetak/PDF/PNG) + bagikan (WA/email/native).
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import { Card, Btn } from "./ui.jsx";
 import { TEMPLATES, FONTS, PAPER_WIDTH } from "../data/options.js";
 import { calcTotals, paymentStatus, STATUS_META } from "../lib/calc.js";
@@ -196,6 +197,17 @@ const PAPER_PX = { "58mm": 219, "80mm": 302, "A5": 559, "A4": 794 };
 export function MobilePreviewModal({ inv, profile, settings, onClose }) {
   const wrapRef = useRef(null);
   const sheetRef = useRef(null);
+  const panelRef = useRef(null);
+
+  // Masuk: slide-up ala bottom sheet. Keluar: slide-down dulu baru unmount.
+  useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    gsap.fromTo(panelRef.current, { y: "100%" }, { y: 0, duration: 0.45, ease: "power3.out" });
+  }, []);
+  const handleClose = () => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) { onClose(); return; }
+    gsap.to(panelRef.current, { y: "100%", duration: 0.3, ease: "power3.in", onComplete: onClose });
+  };
   const [busy, setBusy] = useState("");
   const [zoom, setZoom] = useState(null); // null = mode pas-lebar
   const [fitZoom, setFitZoom] = useState(0.5);
@@ -247,10 +259,10 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
   const text = invoiceText(inv, profile, settings);
 
   return (
-    <div className="fixed inset-0 z-[80] bg-neutral-950 flex flex-col lg:hidden">
+    <div ref={panelRef} className="fixed inset-0 z-[80] bg-neutral-950 flex flex-col lg:hidden">
       {/* Header */}
       <div className="flex items-center justify-between gap-2 px-3 py-2.5 shrink-0 border-b border-white/10">
-        <button onClick={onClose} className="text-white text-sm font-bold px-2 py-1.5">✕ Tutup</button>
+        <button onClick={handleClose} className="text-white text-sm font-bold px-2 py-1.5">✕ Tutup</button>
         <span className="text-white/70 text-xs font-semibold truncate">{meta?.name || "Pratinjau"}</span>
         <div className="flex items-center gap-1 shrink-0">
           <button onClick={stepOut} className="w-8 h-8 rounded-lg bg-white/10 text-white font-bold">−</button>

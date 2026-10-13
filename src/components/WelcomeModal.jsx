@@ -1,5 +1,6 @@
 // Modal selamat datang — tampil sekali saat pertama kali buka.
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 
 const WELCOME_KEY = "notakandulu:welcomed";
 
@@ -13,14 +14,28 @@ export default function WelcomeModal() {
   const [show, setShow] = useState(() => {
     try { return localStorage.getItem(WELCOME_KEY) !== "1"; } catch { return true; }
   });
+  const root = useRef(null);
+  useEffect(() => {
+    if (!show || !root.current) return;
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    gsap.fromTo(".wm-backdrop", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" });
+    gsap.fromTo(
+      ".wm-card",
+      { scale: 0.9, y: 24, opacity: 0 },
+      { scale: 1, y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.4)" }
+    );
+  }, [show]);
   if (!show) return null;
   const close = () => {
     try { localStorage.setItem(WELCOME_KEY, "1"); } catch {}
-    setShow(false);
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) { setShow(false); return; }
+    gsap.to(".wm-card", { scale: 0.94, y: 10, opacity: 0, duration: 0.22, ease: "power2.in" });
+    gsap.to(".wm-backdrop", { opacity: 0, duration: 0.25, ease: "power1.in", onComplete: () => setShow(false) });
   };
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(3px)" }}>
-      <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-line shadow-2xl max-w-md w-full p-6 sm:p-8 text-center">
+    <div ref={root} className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="wm-backdrop absolute inset-0" style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(3px)" }} />
+      <div className="wm-card relative bg-white dark:bg-neutral-900 rounded-2xl border border-line shadow-2xl max-w-md w-full p-6 sm:p-8 text-center">
         <img src="/logo.jpg" alt="Logo TagihkanDulu" className="inline h-12 w-12 rounded-xl object-cover" />
         <h2 className="text-xl font-extrabold tracking-tight mt-4">Selamat datang di TagihkanDulu</h2>
         <p className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-1">
