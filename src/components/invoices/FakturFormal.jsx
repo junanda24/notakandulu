@@ -11,10 +11,10 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
   const dpi = dpInfo(inv, totals);
   const inter = "'Inter', system-ui, sans-serif";
   const meta = [
-    ["Invoice No.", inv.number || "—"],
-    ["Date", fmtDate(inv.date)],
-    inv.dueDate ? ["Due Date", fmtDate(inv.dueDate)] : null,
-    inv.poNumber ? ["PO Number", inv.poNumber] : null,
+    ["No. Invoice", inv.number || "—"],
+    ["Tanggal", fmtDate(inv.date)],
+    inv.dueDate ? ["Jatuh Tempo", fmtDate(inv.dueDate)] : null,
+    inv.poNumber ? ["No. PO", inv.poNumber] : null,
   ].filter(Boolean);
   return (
     <div style={{ fontFamily: inter, fontSize: 12, lineHeight: 1.6, color: "#111827", padding: 52, background: "#fff" }}>
@@ -33,7 +33,7 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
           </div>
         </div>
         <div style={{ fontSize: 11 }}>
-          <div style={{ ...lbl, color: "#111827", marginBottom: 8, textAlign: "right" }}>Invoice Information</div>
+          <div style={{ ...lbl, color: "#111827", marginBottom: 8, textAlign: "right" }}>Informasi Invoice</div>
           {meta.map(([k, v]) => (
             <div key={k} style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline", gap: 16, padding: "3px 0" }}>
               <span style={{ ...lbl, whiteSpace: "nowrap" }}>{k}</span>
@@ -50,12 +50,12 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
       {/* Bill to */}
       <div style={{ display: "flex", gap: 40, margin: "22px 0" }}>
         <div>
-          <div style={lbl}>Bill To</div>
+          <div style={lbl}>Pelanggan</div>
           <div style={{ fontWeight: 700, fontSize: 14, marginTop: 4 }}>{inv.customerName || "—"}</div>
           {inv.customerInfo && <div style={{ color: "#6b7280", fontSize: 11, whiteSpace: "pre-line" }}>{inv.customerInfo}</div>}
         </div>
         <div>
-          <div style={lbl}>Ship To</div>
+          <div style={lbl}>Info Pajak</div>
           <div style={{ fontWeight: 600, fontSize: 12, marginTop: 4 }}>{inv.customerName || "—"}</div>
           {inv.customerNpwp && <div style={{ color: "#6b7280", fontSize: 11 }}>NPWP {inv.customerNpwp}</div>}
         </div>
@@ -102,7 +102,7 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
             </div>
           ))}
           <div style={{ background: "#111827", color: "#fff", borderRadius: 8, padding: "14px 18px", marginTop: 10, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-            <span style={{ fontSize: 10, letterSpacing: "0.2em", fontWeight: 700, opacity: 0.75 }}>GRAND TOTAL</span>
+            <span style={{ fontSize: 10, letterSpacing: "0.2em", fontWeight: 700, opacity: 0.75 }}>TOTAL TAGIHAN</span>
             <span style={{ fontSize: 20, fontWeight: 800, fontVariantNumeric: "tabular-nums" }}><Money v={totals.total} cur={cur} /></span>
           </div>
           {dpi && (
