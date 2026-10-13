@@ -15,11 +15,6 @@ import SaranPanel from "./components/SaranPanel.jsx";
 import WelcomeModal from "./components/WelcomeModal.jsx";
 import Splash from "./components/Splash.jsx";
 
-const TABS = [
-  { id: "riwayat", name: "Riwayat" },
-  { id: "saran", name: "Saran" },
-];
-
 export default function App() {
   const [tab, setTab] = useState("buat");
   const [splash, setSplash] = useState(true);
@@ -37,8 +32,7 @@ export default function App() {
   const [settings, setSettingsState] = useState(getSettings);
   const [history, setHistory] = useState(getHistory);
   const [toast, setToast] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false); // menu ⋯ khusus mobile
-  const goTab = (id) => { setTab(id); setMobileView("form"); setMenuOpen(false); };
+  const goTab = (id) => { setTab(id); setMobileView("form"); };
   // Posisi wizard (disimpan biar refresh tidak mengulang dari awal)
   const [wstep, setWstep] = useState(() => {
     try {
@@ -183,7 +177,23 @@ export default function App() {
               <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">Buat invoice gratis, tanpa iklan dan login itu nyata 🔥</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
+            {/* Riwayat & Saran pindah ke header — nav fokus 100% ke stepper */}
+            <button
+              onClick={() => goTab("riwayat")}
+              title="Riwayat nota"
+              className={`brutal-btn h-9 rounded-lg px-2.5 text-base flex items-center gap-1.5 ${tab === "riwayat" ? "bg-teal-600! border-teal-600! text-white" : ""}`}
+            >
+              📋<span className="hidden md:inline text-[13px] font-bold">Riwayat</span>
+            </button>
+            <button
+              onClick={() => goTab("saran")}
+              title="Kritik & saran"
+              className={`brutal-btn h-9 rounded-lg px-2.5 text-base flex items-center gap-1.5 ${tab === "saran" ? "bg-teal-600! border-teal-600! text-white" : ""}`}
+            >
+              💡<span className="hidden md:inline text-[13px] font-bold">Saran</span>
+            </button>
+            <span className="w-px h-6 bg-line mx-0.5" />
             <button
               onClick={() => {
                 const next = !dark;
@@ -196,61 +206,21 @@ export default function App() {
             >
               {dark ? "☀️" : "🌙"}
             </button>
-            <Btn onClick={handleNew} className="py-1.5! px-3! text-xs!">+ Baru</Btn>
+            <Btn onClick={handleNew} title="Buat nota baru" className="py-1.5! px-3! text-xs!">
+              <span className="md:hidden text-sm font-extrabold">+</span>
+              <span className="hidden md:inline">+ Baru</span>
+            </Btn>
             <Btn onClick={handleSave} primary className="py-1.5! px-3! text-xs!">Simpan</Btn>
           </div>
         </div>
-        {/* Nav: stepper di kiri, tab sekunder di kanan (mobile: menu ⋯) */}
+        {/* Nav: 100% stepper — fokus penuh ke alur pembuatan */}
         <nav className="border-t border-line">
-          <div className="mx-auto max-w-7xl px-4 py-1.5 flex items-center gap-2">
-            <div className="flex-1 min-w-0">
-              <NavStepper
-                steps={wizSteps}
-                idx={wizIdx}
-                onJump={(id) => { goTab("buat"); persistWstep(id); }}
-              />
-            </div>
-            {/* Desktop: tab sekunder kelihatan langsung */}
-            <div className="hidden sm:flex gap-0.5 shrink-0 rounded-xl border border-line bg-neutral-100/70 dark:bg-neutral-900 p-1">
-              {TABS.map((t) => {
-                const active = tab === t.id;
-                return (
-                  <button
-                    key={t.id}
-                    onClick={() => goTab(t.id)}
-                    className={`shrink-0 rounded-lg px-3 py-1.5 text-[12px] transition ${active ? "bg-white dark:bg-neutral-800 font-bold text-ink shadow-sm" : "font-medium text-neutral-500 hover:text-ink dark:text-neutral-400 dark:hover:text-neutral-100"}`}
-                  >
-                    {t.name}
-                  </button>
-                );
-              })}
-            </div>
-            {/* Mobile: tab sekunder masuk menu ⋯ */}
-            <div className="relative sm:hidden shrink-0">
-              <button
-                onClick={() => setMenuOpen(!menuOpen)}
-                title="Menu"
-                className="brutal-btn h-9 w-9 rounded-lg text-lg font-bold leading-none"
-              >
-                ⋯
-              </button>
-              {menuOpen && (
-                <>
-                  <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
-                  <div className="absolute right-0 top-full mt-1.5 z-40 w-44 rounded-xl border border-line bg-white dark:bg-neutral-900 shadow-xl p-1.5">
-                    {TABS.map((t) => (
-                      <button
-                        key={t.id}
-                        onClick={() => goTab(t.id)}
-                        className={`block w-full rounded-lg px-3 py-2.5 text-left text-[13px] transition ${tab === t.id ? "bg-teal-50 dark:bg-teal-950 font-bold text-teal-700 dark:text-teal-300" : "font-medium text-neutral-600 dark:text-neutral-300"}`}
-                      >
-                        {t.name}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
+          <div className="mx-auto max-w-7xl px-4 py-2">
+            <NavStepper
+              steps={wizSteps}
+              idx={wizIdx}
+              onJump={(id) => { goTab("buat"); persistWstep(id); }}
+            />
           </div>
         </nav>
       </header>
