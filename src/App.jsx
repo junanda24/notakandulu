@@ -37,6 +37,8 @@ export default function App() {
   const [settings, setSettingsState] = useState(getSettings);
   const [history, setHistory] = useState(getHistory);
   const [toast, setToast] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false); // menu ⋯ khusus mobile
+  const goTab = (id) => { setTab(id); setMobileView("form"); setMenuOpen(false); };
   // Posisi wizard (disimpan biar refresh tidak mengulang dari awal)
   const [wstep, setWstep] = useState(() => {
     try {
@@ -198,29 +200,56 @@ export default function App() {
             <Btn onClick={handleSave} primary className="py-1.5! px-3! text-xs!">Simpan</Btn>
           </div>
         </div>
-        {/* Nav: stepper di kiri (pengganti tombol Buat Nota), tab sekunder di kanan */}
+        {/* Nav: stepper di kiri, tab sekunder di kanan (mobile: menu ⋯) */}
         <nav className="border-t border-line">
           <div className="mx-auto max-w-7xl px-4 py-1.5 flex items-center gap-2">
             <div className="flex-1 min-w-0">
               <NavStepper
                 steps={wizSteps}
                 idx={wizIdx}
-                onJump={(id) => { setTab("buat"); setMobileView("form"); persistWstep(id); }}
+                onJump={(id) => { goTab("buat"); persistWstep(id); }}
               />
             </div>
-            <div className="flex gap-0.5 shrink-0 rounded-xl border border-line bg-neutral-100/70 dark:bg-neutral-900 p-1">
+            {/* Desktop: tab sekunder kelihatan langsung */}
+            <div className="hidden sm:flex gap-0.5 shrink-0 rounded-xl border border-line bg-neutral-100/70 dark:bg-neutral-900 p-1">
               {TABS.map((t) => {
                 const active = tab === t.id;
                 return (
                   <button
                     key={t.id}
-                    onClick={() => { setTab(t.id); setMobileView("form"); }}
+                    onClick={() => goTab(t.id)}
                     className={`shrink-0 rounded-lg px-3 py-1.5 text-[12px] transition ${active ? "bg-white dark:bg-neutral-800 font-bold text-ink shadow-sm" : "font-medium text-neutral-500 hover:text-ink dark:text-neutral-400 dark:hover:text-neutral-100"}`}
                   >
                     {t.name}
                   </button>
                 );
               })}
+            </div>
+            {/* Mobile: tab sekunder masuk menu ⋯ */}
+            <div className="relative sm:hidden shrink-0">
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                title="Menu"
+                className="brutal-btn h-9 w-9 rounded-lg text-lg font-bold leading-none"
+              >
+                ⋯
+              </button>
+              {menuOpen && (
+                <>
+                  <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
+                  <div className="absolute right-0 top-full mt-1.5 z-40 w-44 rounded-xl border border-line bg-white dark:bg-neutral-900 shadow-xl p-1.5">
+                    {TABS.map((t) => (
+                      <button
+                        key={t.id}
+                        onClick={() => goTab(t.id)}
+                        className={`block w-full rounded-lg px-3 py-2.5 text-left text-[13px] transition ${tab === t.id ? "bg-teal-50 dark:bg-teal-950 font-bold text-teal-700 dark:text-teal-300" : "font-medium text-neutral-600 dark:text-neutral-300"}`}
+                      >
+                        {t.name}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </nav>
