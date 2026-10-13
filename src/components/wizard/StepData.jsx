@@ -4,6 +4,7 @@ import ShopPanel from "../ShopPanel.jsx";
 import StepPelanggan from "./StepPelanggan.jsx";
 import { Btn } from "../ui.jsx";
 import { sampleAll } from "./shared.jsx";
+import { Collapse } from "../ui.jsx";
 
 function Section({ title, subtitle, defaultOpen, children }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -21,7 +22,9 @@ function Section({ title, subtitle, defaultOpen, children }) {
         </span>
         <span className={`text-neutral-400 text-[11px] transition-transform shrink-0 ${open ? "rotate-180" : ""}`}>▼</span>
       </button>
-      {open && <div className="px-4 sm:px-5 pb-4 sm:pb-5">{children}</div>}
+      <Collapse open={open}>
+        <div className="px-4 sm:px-5 pb-4 sm:pb-5">{children}</div>
+      </Collapse>
     </section>
   );
 }

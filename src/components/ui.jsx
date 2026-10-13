@@ -1,4 +1,56 @@
 // Primitif UI netral minimalis (gaya visual didefinisikan di index.css).
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+
+// Collapse/expand halus pakai GSAP — pengganti {open && <div>} yang pop instan.
+export function Collapse({ open, children, className = "", duration = 0.38 }) {
+  const wrap = useRef(null);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    const el = wrap.current;
+    if (!el) return;
+    if (!mounted.current) {
+      mounted.current = true;
+      el.style.display = open ? "" : "none";
+      return;
+    }
+    gsap.killTweensOf(el);
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      el.style.display = open ? "" : "none";
+      gsap.set(el, { height: "auto", opacity: 1 });
+      return;
+    }
+    if (open) {
+      el.style.display = "";
+      gsap.fromTo(
+        el,
+        { height: 0, opacity: 0 },
+        {
+          height: "auto",
+          opacity: 1,
+          duration,
+          ease: "power3.out",
+          onComplete: () => { el.style.height = "auto"; },
+        }
+      );
+    } else {
+      gsap.to(el, {
+        height: 0,
+        opacity: 0,
+        duration: duration * 0.75,
+        ease: "power3.in",
+        onComplete: () => { el.style.display = "none"; },
+      });
+    }
+  }, [open, duration]);
+
+  return (
+    <div ref={wrap} className={`overflow-hidden ${className}`} style={{ display: open ? "" : "none" }}>
+      {children}
+    </div>
+  );
+}
 
 export function Field({ label, children, className = "" }) {
   return (

@@ -1,6 +1,6 @@
 // Panel kustomisasi: template, font, aksen, pola nomor.
 import { useState } from "react";
-import { Field, Select, TextInput, Card } from "./ui.jsx";
+import { Field, Select, TextInput, Card, Collapse } from "./ui.jsx";
 import { TEMPLATES, FONTS, ACCENT_PRESETS, PAPER_WIDTH } from "../data/options.js";
 import { NUMBER_PATTERNS } from "../lib/format.js";
 
@@ -22,7 +22,9 @@ function Accordion({ title, sticker, summary, summaryStyle, children, defaultOpe
           <span className={`text-neutral-400 text-[11px] transition-transform shrink-0 ${open ? "rotate-180" : ""}`}>▼</span>
         </span>
       </button>
-      {open && <div className="px-4 sm:px-5 pb-4 sm:pb-5">{children}</div>}
+      <Collapse open={open}>
+        <div className="px-4 sm:px-5 pb-4 sm:pb-5">{children}</div>
+      </Collapse>
     </section>
   );
 }

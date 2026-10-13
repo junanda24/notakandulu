@@ -1,5 +1,6 @@
 // Helper bersama untuk step-step wizard pembuatan nota.
 import { useState } from "react";
+import { Collapse } from "../ui.jsx";
 import { blankItem } from "../../lib/calc.js";
 import { uid } from "../../lib/format.js";
 
@@ -92,7 +93,9 @@ export function Advanced({ title, children, defaultOpen = false }) {
       <button onClick={() => setOpen(!open)} className="text-[12px] font-bold text-teal-600 dark:text-teal-400 hover:underline">
         {open ? "▾" : "▸"} {title}
       </button>
-      {open && <div className="mt-2">{children}</div>}
+      <Collapse open={open}>
+        <div className="mt-2">{children}</div>
+      </Collapse>
     </div>
   );
 }
