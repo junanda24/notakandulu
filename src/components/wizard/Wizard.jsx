@@ -64,7 +64,7 @@ export function Stepper({ steps, idx, onJump }) {
 
 export default function Wizard({
   inv, setInv, profile, persistProfile, settings, persistSettings,
-  stepId, setStepId, onSave, onNew, onGotoToko, onGotoRiwayat,
+  stepId, setStepId, onSave, onNew, onClearInv, onGotoToko, onGotoRiwayat,
 }) {
   const topRef = useRef(null);
   const steps = getSteps(profile);
@@ -97,7 +97,7 @@ export default function Wizard({
     <div ref={topRef} className="scroll-mt-32" onKeyDown={onKeyDown}>
       <Stepper steps={steps} idx={idx} onJump={go} />
 
-      {cur.id === "data" && <StepData inv={inv} setInv={setInv} profile={profile} persistProfile={persistProfile} />}
+      {cur.id === "data" && <StepData inv={inv} setInv={setInv} profile={profile} persistProfile={persistProfile} onClearInv={onClearInv} />}
       {cur.id === "item" && <StepItem inv={inv} setInv={setInv} />}
       {cur.id === "gaya" && <CustomizePanel settings={settings} setSettings={persistSettings} />}
       {cur.id === "kirim" && (

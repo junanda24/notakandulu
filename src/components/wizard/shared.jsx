@@ -38,20 +38,41 @@ export function sampleInvoice() {
     currency: "IDR",
     customerName: "Budi Santoso",
     customerInfo: "Jl. Kenangan No. 5, Batam\n0812-3456-7890",
-    customerNpwp: "",
-    poNumber: "",
+    customerNpwp: "01.234.567.8-901.000",
+    poNumber: "PO-2026-042",
     tax: 11,
-    discount: { type: "percent", value: 0 },
-    shipping: 0,
-    dp: 0,
+    discount: { type: "percent", value: 5 },
+    shipping: 15000,
+    dp: 50000,
     terms: "Net 14",
-    notes: "Terima kasih atas kepercayaan Anda!",
+    notes: "Terima kasih atas kepercayaan Anda!\nPembayaran maksimal 14 hari setelah invoice diterbitkan.",
     paymentIds: [],
     items: [
-      { id: uid(), name: "Kopi Arabika 200g", qty: 2, unit: "pcs", price: 85000 },
+      { id: uid(), name: "Kopi Arabika 200g", qty: 2, unit: "pak", price: 85000 },
+      { id: uid(), name: "Kopi Robusta 500g", qty: 1, unit: "pak", price: 120000 },
       { id: uid(), name: "Jasa roasting", qty: 3, unit: "jam", price: 45000 },
+      { id: uid(), name: "Tumbler stainless 500ml", qty: 4, unit: "pcs", price: 95000 },
     ],
   };
+}
+
+// Data contoh lengkap: semua field invoice terisi + patch profil (toko & pembayaran
+// contoh hanya diisi kalau masih kosong — data asli user tidak ditimpa).
+export function sampleAll(profile) {
+  const inv = sampleInvoice();
+  const p = profile || {};
+  const profilePatch = {};
+  if (!p.shopName?.trim()) {
+    profilePatch.shopName = "Kopi Junan";
+    profilePatch.shopInfo = "Jl. Ruko No. 12, Batam\n0812-0000-1111";
+  }
+  if (!(p.payments || []).length) {
+    profilePatch.payments = [{ id: "pay-sample", label: "BCA", number: "8210123456", holder: "Kopi Junan" }];
+    inv.paymentIds = ["pay-sample"];
+  } else {
+    inv.paymentIds = [p.payments[0].id];
+  }
+  return { inv, profilePatch };
 }
 
 export function useInvSet(setInv) {

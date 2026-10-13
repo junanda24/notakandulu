@@ -3,7 +3,7 @@ import { useState } from "react";
 import ShopPanel from "../ShopPanel.jsx";
 import StepPelanggan from "./StepPelanggan.jsx";
 import { Btn } from "../ui.jsx";
-import { sampleInvoice } from "./shared.jsx";
+import { sampleAll } from "./shared.jsx";
 
 function Section({ title, subtitle, defaultOpen, children }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -26,8 +26,13 @@ function Section({ title, subtitle, defaultOpen, children }) {
   );
 }
 
-export default function StepData({ inv, setInv, profile, persistProfile }) {
+export default function StepData({ inv, setInv, profile, persistProfile, onClearInv }) {
   const shopFilled = !!profile?.shopName?.trim();
+  const fillSample = () => {
+    const { inv: sample, profilePatch } = sampleAll(profile);
+    setInv((p) => ({ ...p, ...sample }));
+    if (Object.keys(profilePatch).length) persistProfile((p) => ({ ...p, ...profilePatch }));
+  };
   return (
     <div className="space-y-4">
       <div className="rounded-xl border border-teal-200 bg-teal-50 dark:border-teal-900 dark:bg-teal-950/40 p-4">
@@ -35,9 +40,14 @@ export default function StepData({ inv, setInv, profile, persistProfile }) {
         <p className="text-[13px] text-neutral-600 dark:text-neutral-400 mt-1">
           Data tokomu cukup diisi sekali. Lalu isi siapa yang ditagih.
         </p>
-        <Btn onClick={() => setInv((p) => ({ ...p, ...sampleInvoice() }))} className="mt-3 py-1.5! px-3! text-xs!">
-          Isi data contoh
-        </Btn>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Btn onClick={fillSample} className="py-1.5! px-3! text-xs!">
+            Isi data contoh
+          </Btn>
+          <Btn onClick={onClearInv} color="bg-white dark:bg-neutral-800 border-line text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700" className="py-1.5! px-3! text-xs!">
+            Kosongkan
+          </Btn>
+        </div>
       </div>
 
       <Section

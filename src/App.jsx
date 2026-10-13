@@ -137,6 +137,11 @@ export default function App() {
     showToast("Nota baru ✓");
   };
 
+  const handleClearInv = () => {
+    setInv(blankInvoice({ number: expandNumber(settings.numberPattern, peekCounter(), todayIso()), date: todayIso(), currency: settings.currency }));
+    showToast("Data dikosongkan ✓");
+  };
+
   const openHistory = (h, duplicate = false) => {
     if (duplicate) {
       const copy = { ...h, id: `${Date.now().toString(36)}-dup`, number: expandNumber(settings.numberPattern, peekCounter(), todayIso()) };
@@ -162,6 +167,7 @@ export default function App() {
         setStepId={persistWstep}
         onSave={handleSave}
         onNew={handleNew}
+        onClearInv={handleClearInv}
         onGotoToko={() => { setTab("buat"); persistWstep("toko"); }}
         onGotoRiwayat={() => setTab("riwayat")}
       />

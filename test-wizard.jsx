@@ -86,5 +86,32 @@ try {
   check("invalid stepId fallback", html.includes("Toko Saya"));
 } catch (e) { check("invalid stepId fallback", false); }
 
+// 7. data contoh: semua field terisi + variatif; tombol Kosongkan ada
+try {
+  const { sampleInvoice, sampleAll } = require("./src/components/wizard/shared.jsx");
+  const s = sampleInvoice();
+  const fields = ["number","date","dueDate","status","currency","customerName","customerInfo","customerNpwp","poNumber","tax","discount","shipping","dp","terms","notes","paymentIds","items"];
+  const allFilled = fields.every((f) => {
+    const v = s[f];
+    if (f === "items") return Array.isArray(v) && v.length >= 3;
+    if (f === "paymentIds") return Array.isArray(v);
+    if (f === "discount") return v && typeof v.value === "number";
+    return v !== "" && v !== undefined && v !== null;
+  });
+  check("sample: semua field terisi", allFilled);
+  check("sample: npwp/po/ongkir/dp/diskon terisi", s.customerNpwp && s.poNumber && s.shipping > 0 && s.dp > 0 && s.discount.value > 0);
+  check("sample: 4 item variatif", s.items.length === 4 && new Set(s.items.map((i) => i.unit)).size >= 3);
+  const { inv: si, profilePatch } = sampleAll({ shopName: "", payments: [] });
+  check("sampleAll: profil kosong -> toko & pembayaran contoh", profilePatch.shopName && profilePatch.payments.length === 1 && si.paymentIds.length === 1);
+  const kept = sampleAll({ shopName: "Tokoku", shopInfo: "x", payments: [{ id: "p1", label: "QRIS", number: "1" }] });
+  check("sampleAll: data toko user tidak ditimpa", !kept.profilePatch.shopName && kept.inv.paymentIds[0] === "p1");
+  const html = renderToString(
+    <Wizard inv={inv} setInv={noop} profile={profileFull} persistProfile={noop}
+      settings={settings} persistSettings={noop} stepId="data" setStepId={noop}
+      onSave={noop} onNew={noop} onClearInv={noop} onGotoToko={noop} onGotoRiwayat={noop} />
+  );
+  check("step data ada tombol Isi data contoh + Kosongkan", html.includes("Isi data contoh") && html.includes("Kosongkan"));
+} catch (e) { check("sample data", false); console.log("  error:", e.message); }
+
 console.log(`\nWizard SSR: ${pass} pass, ${fail} fail`);
 process.exit(fail ? 1 : 0);
