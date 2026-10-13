@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import Wizard from "./components/wizard/Wizard.jsx";
+import Wizard, { NavStepper } from "./components/wizard/Wizard.jsx";
 import { getSteps, STEP_IDS } from "./components/wizard/shared.jsx";
-import ShopPanel from "./components/ShopPanel.jsx";
-import CustomizePanel from "./components/CustomizePanel.jsx";
 import HistoryPanel from "./components/HistoryPanel.jsx";
 import Preview, { InvoiceSheet, MobilePreviewModal } from "./components/Preview.jsx";
 import { Btn } from "./components/ui.jsx";
@@ -18,9 +16,6 @@ import WelcomeModal from "./components/WelcomeModal.jsx";
 import Splash from "./components/Splash.jsx";
 
 const TABS = [
-  { id: "buat", name: "Buat Nota" },
-  { id: "toko", name: "Toko" },
-  { id: "gaya", name: "Gaya" },
   { id: "riwayat", name: "Riwayat" },
   { id: "saran", name: "Saran" },
 ];
@@ -138,12 +133,10 @@ export default function App() {
         setStepId={persistWstep}
         onSave={handleSave}
         onNew={handleNew}
-        onGotoToko={() => setTab("toko")}
+        onGotoToko={() => { setTab("buat"); persistWstep("toko"); }}
         onGotoRiwayat={() => setTab("riwayat")}
       />
     );
-    if (tab === "toko") return <ShopPanel profile={profile} setProfile={persistProfile} />;
-    if (tab === "gaya") return <CustomizePanel settings={settings} setSettings={persistSettings} />;
     if (tab === "saran") return <SaranPanel />;
     return (
       <HistoryPanel
@@ -205,20 +198,18 @@ export default function App() {
             <Btn onClick={handleSave} primary className="py-1.5! px-3! text-xs!">Simpan</Btn>
           </div>
         </div>
-        {/* Tab nav: aksi utama di kiri, sekunder di kanan biar fokus tidak terbagi */}
+        {/* Nav: stepper di kiri (pengganti tombol Buat Nota), tab sekunder di kanan */}
         <nav className="border-t border-line">
-          <div className="mx-auto max-w-7xl px-4 py-2 flex items-center justify-between gap-2">
-            <button
-              onClick={() => { setTab("buat"); setMobileView("form"); }}
-              className={`flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2 text-[13px] font-bold transition ${tab === "buat" ? "bg-teal-600 text-white shadow" : "border border-line text-neutral-500 hover:text-ink dark:text-neutral-400"}`}
-            >
-              Buat Nota
-              <span className={`rounded-md px-1.5 py-px font-mono2 text-[10px] font-bold tabular-nums ${tab === "buat" ? "bg-white/25 text-white" : "bg-neutral-200 dark:bg-neutral-800 text-neutral-500"}`}>
-                {wizIdx + 1}/{wizSteps.length}
-              </span>
-            </button>
-            <div className="flex gap-0.5 overflow-x-auto rounded-xl border border-line bg-neutral-100/70 dark:bg-neutral-900 p-1">
-              {TABS.filter((t) => t.id !== "buat").map((t) => {
+          <div className="mx-auto max-w-7xl px-4 py-1.5 flex items-center gap-2">
+            <div className="flex-1 min-w-0">
+              <NavStepper
+                steps={wizSteps}
+                idx={wizIdx}
+                onJump={(id) => { setTab("buat"); setMobileView("form"); persistWstep(id); }}
+              />
+            </div>
+            <div className="flex gap-0.5 shrink-0 rounded-xl border border-line bg-neutral-100/70 dark:bg-neutral-900 p-1">
+              {TABS.map((t) => {
                 const active = tab === t.id;
                 return (
                   <button
