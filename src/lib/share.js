@@ -82,3 +82,16 @@ export function downloadPng(dataUrl, filename) {
   a.click();
   a.remove();
 }
+
+// Salin PNG nota ke clipboard — user tinggal tempel (Ctrl+V) di chat WhatsApp Web/aplikasi.
+export async function copyPngToClipboard(node) {
+  const dataUrl = await invoiceToPng(node);
+  const res = await fetch(dataUrl);
+  const blob = await res.blob();
+  await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+}
+
+export const canCopyPng = () =>
+  typeof navigator !== "undefined" &&
+  !!navigator.clipboard?.write &&
+  typeof ClipboardItem !== "undefined";

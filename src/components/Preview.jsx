@@ -4,8 +4,8 @@ import { Card, Btn } from "./ui.jsx";
 import { TEMPLATES, FONTS, PAPER_WIDTH } from "../data/options.js";
 import { calcTotals, paymentStatus, STATUS_META } from "../lib/calc.js";
 import {
-  invoiceText, waShareUrl, mailtoUrl, canNativeShareFile,
-  invoiceToPng, nativeSharePng, downloadPng,
+  invoiceText, waShareUrl, mailtoUrl, canNativeShareFile, canCopyPng,
+  invoiceToPng, nativeSharePng, downloadPng, copyPngToClipboard,
 } from "../lib/share.js";
 import Struk58 from "./invoices/Struk58.jsx";
 import Struk80 from "./invoices/Struk80.jsx";
@@ -71,7 +71,9 @@ export function InvoiceSheet({ inv, profile, settings, id }) {  const Tpl = TPL_
 // Butuh sheetRef (ref ke node InvoiceSheet yang ter-render) untuk ekspor PNG.
 export function ExportCard({ inv, profile, settings, sheetRef }) {
   const [busy, setBusy] = useState("");
+  const [copied, setCopied] = useState(false);
   const [nativeOk] = useState(() => canNativeShareFile());
+  const [copyOk] = useState(() => !canNativeShareFile() && canCopyPng());
 
   const doPrint = () => window.print();
 
@@ -87,6 +89,20 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
       }
     } catch (e) {
       if (e?.name !== "AbortError") alert("Gagal: " + (e.message || e));
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const doCopy = async () => {
+    if (!sheetRef?.current) return;
+    setBusy("copy");
+    try {
+      await copyPngToClipboard(sheetRef.current);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
+    } catch (e) {
+      alert("Gagal menyalin: " + (e.message || e));
     } finally {
       setBusy("");
     }
@@ -113,9 +129,18 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
           {busy === "share" ? "⏳ Menyiapkan..." : "📲 Bagikan gambar (WA / aplikasi lain)"}
         </Btn>
       )}
+      {copyOk && (
+        <Btn onClick={doCopy} color="bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" className="w-full mt-2" disabled={busy === "copy"}>
+          {busy === "copy" ? "⏳ Menyiapkan..." : copied ? "✓ Tersalin! Tempel (Ctrl+V) di chat WA" : "📋 Salin gambar nota"}
+        </Btn>
+      )}
       <p className="mt-2 font-mono2 text-[10px] text-neutral-500">
         Cetak/PDF memakai dialog bawaan browser. Hasilnya sama persis dengan preview.
-        {nativeOk ? "" : " Tombol ini cuma muncul di HP."}
+        {nativeOk
+          ? " Gambar dikirim lewat menu bagikan di HP."
+          : copyOk
+            ? " Di laptop: salin gambar lalu tempel di chat WhatsApp, atau unduh PNG dan lampirkan manual."
+            : ""}
       </p>
     </Card>
   );
