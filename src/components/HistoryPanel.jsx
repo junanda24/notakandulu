@@ -128,6 +128,7 @@ export default function HistoryPanel({ history, onOpen, onDelete, onNew, onResto
       </p>
       <p className="mt-1 font-mono2 text-[10px] text-amber-600 dark:text-amber-400 font-bold">
         ⚠️ Data cuma ada di browser ini. Kalau data browser dihapus, invoice hilang permanen. Backup rutin ya.
+      </p>
     </Card>
     </div>
   );
