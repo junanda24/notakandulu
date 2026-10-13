@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketsa Template v4 — Riset Invoice Asli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #f4f4f5; color: #18181b; padding: 32px 16px 64px; }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  .hero { text-align: center; margin-bottom: 40px; }
+  .hero h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+  .hero p { color: #71717a; margin-top: 8px; font-size: 14px; max-width: 680px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 32px; }
+  @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+  .concept { background: #fff; border: 1px solid #e4e4e7; border-radius: 16px; overflow: hidden; }
+  .concept-head { padding: 20px 24px; border-bottom: 1px solid #f4f4f5; }
+  .concept-head .num { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: #4f46e5; }
+  .concept-head h2 { font-size: 20px; margin-top: 4px; }
+  .concept-head p { font-size: 13px; color: #71717a; margin-top: 6px; line-height: 1.55; }
+  .concept-head .tag { display: inline-block; margin-top: 10px; font-size: 11px; font-weight: 600; background: #f4f4f5; border: 1px solid #e4e4e7; padding: 4px 10px; border-radius: 999px; color: #52525b; }
+  .concept-head .ref { display: block; margin-top: 8px; font-size: 11px; color: #a1a1aa; }
+  .paper { padding: 24px; display: flex; justify-content: center; background: #fafafa; }
+  .sheet { width: 100%; max-width: 460px; box-shadow: 0 12px 32px rgba(0,0,0,0.14); background: #fff; position: relative; overflow: hidden; }
+  .tnum { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>Sketsa Template v4 — Bedah Invoice Asli</h1>
+    <p>Dibedah dari 25 invoice asli perusahaan terkenal (Apple, Stripe, Adobe, GitHub, Gojek, Grab, Tokopedia, Paper.id, Telkomsel, PLN…). Tiap konsep nyontek satu pola nyata yang terbukti. Data contoh sama semua.</p>
+  </div>
+  <div class="grid">
+
+    <!-- A FAKTUR FORMAL -->
+    <div class="concept">
+      <div class="concept-head">
+        <div class="num">A</div>
+        <h2>📄 Faktur Formal</h2>
+        <p>Nyontek Adobe + GitHub: hierarki murni dari kapitalisasi &amp; bold, tanpa warna. GRAND TOTAL di blok hitam. Buat yang nagih ke PT/CV.</p>
+        <span class="tag">Cocok: PT/CV, konsultan, B2B</span>
+        <span class="ref">Referensi: invoice Adobe (transkrip PDF) · GitHub billing</span>
+      </div>
+      <div class="paper"><div class="sheet" style="padding:36px 34px;font-size:11px;color:#111827;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div style="font-weight:800;font-size:15px;">Kopi Senja</div>
+            <div style="font-size:10px;color:#6b7280;margin-top:4px;">Jl. Merdeka No. 1, Batam<br>NPWP 01.234.567.8-901.000</div>
+          </div>
+          <div class="tnum" style="text-align:right;font-size:10px;color:#6b7280;line-height:1.8;">
+            INVOICE NUMBER<br><b style="color:#111827;">INV-2026-001</b><br>
+            DATE: 13-10-2026<br>PO: PO-2026-118
+          </div>
+        </div>
+        <div style="font-weight:800;font-size:28px;letter-spacing:6px;margin-top:22px;padding-bottom:12px;border-bottom:3px solid #111827;">INVOICE</div>
+        <table class="tnum" style="width:100%;border-collapse:collapse;margin-top:18px;">
+          <tr style="background:#111827;color:#fff;font-size:9px;letter-spacing:.1em;">
+            <td style="padding:9px 10px;">DESKRIPSI</td><td style="padding:9px 10px;text-align:right;">QTY</td><td style="padding:9px 10px;text-align:right;">PAJAK</td><td style="padding:9px 10px;text-align:right;">JUMLAH</td>
+          </tr>
+          <tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:9px 10px;">Kopi Arabika 200g</td><td style="padding:9px 10px;text-align:right;">2 pcs</td><td style="padding:9px 10px;text-align:right;">11%</td><td style="padding:9px 10px;text-align:right;">Rp170.000</td></tr>
+          <tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:9px 10px;">Jasa roasting</td><td style="padding:9px 10px;text-align:right;">3 jam</td><td style="padding:9px 10px;text-align:right;">11%</td><td style="padding:9px 10px;text-align:right;">Rp135.000</td></tr>
+        </table>
+        <div style="display:flex;justify-content:flex-end;margin-top:16px;">
+          <div style="background:#111827;color:#fff;padding:14px 22px;border-radius:8px;text-align:right;">
+            <div style="font-size:9px;letter-spacing:.2em;opacity:.7;">GRAND TOTAL</div>
+            <div class="tnum" style="font-weight:800;font-size:20px;margin-top:4px;">Rp305.000</div>
+          </div>
+        </div>
+        <div style="font-style:italic;font-size:10.5px;color:#6b7280;margin-top:12px;">Terbilang: <i>tiga ratus lima ribu rupiah</i></div>
+        <div style="font-size:9px;color:#9ca3af;margin-top:18px;">Halaman 1 dari 1 · Ditagih kepada Budi Santoso · Jatuh tempo 27 Okt 2026</div>
+      </div></div>
+    </div>
+
+    <!-- B SAAS PAYWALL -->
+    <div class="concept">
+      <div class="concept-head">
+        <div class="num">B</div>
+        <h2>💳 SaaS Paywall</h2>
+        <p>Nyontek Stripe + Paper.id: invoice = halaman checkout. Total hero + tombol bayar full-width + baris "Sisa Tagihan" terpisah.</p>
+        <span class="tag">Cocok: freelancer digital, kreator</span>
+        <span class="ref">Referensi: Stripe hosted invoice page · Paper.id</span>
+      </div>
+      <div class="paper"><div class="sheet" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;color:#111827;">
+        <div style="height:64px;background:#fff;border-bottom:1px solid #eef0f3;display:flex;align-items:center;justify-content:space-between;padding:0 28px;">
+          <div style="font-weight:800;">Kopi Senja</div>
+          <div style="background:#fef3c7;color:#92400e;font-weight:700;font-size:10px;padding:6px 14px;border-radius:999px;">● BELUM BAYAR</div>
+        </div>
+        <div style="padding:28px;">
+          <div class="tnum" style="font-size:10px;color:#6b7280;">INV-2026-001 · untuk Budi Santoso</div>
+          <div class="tnum" style="font-weight:800;font-size:44px;letter-spacing:-0.02em;margin-top:8px;">Rp305.000</div>
+          <div class="tnum" style="font-size:11px;color:#6b7280;margin-top:6px;">Jatuh tempo 27 Okt 2026</div>
+          <div style="background:#fff;border:1px solid #eef0f3;border-radius:12px;margin-top:18px;overflow:hidden;">
+            <div class="tnum" style="padding:12px 16px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;"><span>Kopi Arabika 200g · 2 pcs</span><span>Rp170.000</span></div>
+            <div class="tnum" style="padding:12px 16px;display:flex;justify-content:space-between;"><span>Jasa roasting · 3 jam</span><span>Rp135.000</span></div>
+          </div>
+          <div class="tnum" style="background:#fef3c7;border-radius:12px;margin-top:12px;padding:12px 16px;display:flex;justify-content:space-between;font-weight:700;">
+            <span>Sisa Tagihan</span><span>Rp305.000</span>
+          </div>
+          <div class="tnum" style="background:#4f46e5;color:#fff;font-weight:800;font-size:15px;text-align:center;border-radius:12px;margin-top:14px;padding:15px;">Bayar Rp305.000</div>
+          <div style="text-align:center;font-size:10px;color:#9ca3af;margin-top:10px;">Transfer · QRIS · VA · Kartu</div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- C RECEIPT MINIMAL -->
+    <div class="concept">
+      <div class="concept-head">
+        <div class="num">C</div>
+        <h2>🧾 Receipt Minimal</h2>
+        <p>Nyontek Spotify + Uber: tanpa tabel sama sekali. Maks 8 baris label:nilai, total di tengah. Buat jasa cepat &amp; transaksi kecil.</p>
+        <span class="tag">Cocok: jasa cepat, transaksi kecil</span>
+        <span class="ref">Referensi: Spotify receipt · Uber receipt (total di atas)</span>
+      </div>
+      <div class="paper"><div class="sheet" style="padding:40px 36px;font-size:13px;color:#111827;text-align:center;max-width:380px;">
+        <div style="font-weight:800;font-size:17px;">Kopi Senja</div>
+        <div class="tnum" style="font-weight:800;font-size:40px;margin-top:14px;letter-spacing:-0.02em;">Rp305.000</div>
+        <div style="border-top:2px dashed #d4d4d8;margin:20px 0;"></div>
+        <div class="tnum" style="text-align:left;">
+          <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:#71717a;">Tanggal</span><span>13 Okt 2026</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:#71717a;">No. invoice</span><span>INV-2026-001</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:#71717a;">Pelanggan</span><span>Budi Santoso</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:#71717a;">Kopi Arabika × 2</span><span>Rp170.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:#71717a;">Jasa roasting × 3</span><span>Rp135.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:#71717a;">Jatuh tempo</span><span>27 Okt 2026</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:#71717a;">Bayar ke</span><span>BCA 1234567890</span></div>
+        </div>
+        <div style="margin-top:22px;font-size:13px;">Terima kasih 🙏</div>
+      </div></div>
+    </div>
+
+    <!-- D STRUK THERMAL 58 -->
+    <div class="concept">
+      <div class="concept-head">
+        <div class="num">D</div>
+        <h2>🖨️ Struk Thermal 58mm</h2>
+        <p>Nyontek PLN + BCA: full kapital monospace, dot leaders, "bukti pembayaran yang sah". Buat yang cetak pakai printer thermal.</p>
+        <span class="tag">Cocok: warung, kuliner, cetak thermal</span>
+        <span class="ref">Referensi: struk PLN · BCA e-statement</span>
+      </div>
+      <div class="paper"><div class="sheet" style="max-width:300px;background:#fff;padding:26px 22px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#111;">
+        <div style="text-align:center;font-weight:700;">KOPI SENJA<br><span style="font-weight:400;font-size:9px;">JL. MERDEKA NO.1, BATAM</span></div>
+        <div style="border-top:1px dashed #999;margin:12px 0;"></div>
+        <div class="tnum">
+          <div>NO....: INV-2026-001</div>
+          <div>TGL...: 13-10-2026</div>
+          <div>KASIR.: JUNAN</div>
+        </div>
+        <div style="border-top:1px dashed #999;margin:12px 0;"></div>
+        <div class="tnum">
+          <div style="display:flex;"><span>KOPI ARABIKA</span></div>
+          <div style="display:flex;"><span>2 X 85.000</span><span style="border-bottom:1px dotted #111;flex:1;margin:0 4px;"></span><span>170.000</span></div>
+          <div style="display:flex;margin-top:6px;"><span>JASA ROASTING</span></div>
+          <div style="display:flex;"><span>3 X 45.000</span><span style="border-bottom:1px dotted #111;flex:1;margin:0 4px;"></span><span>135.000</span></div>
+        </div>
+        <div style="border-top:1px dashed #999;margin:12px 0;"></div>
+        <div class="tnum" style="display:flex;justify-content:space-between;font-weight:700;font-size:16px;"><span>TOTAL</span><span>305.000</span></div>
+        <div style="font-size:10px;margin-top:8px;">TERBILANG: TIGA RATUS LIMA RIBU RUPIAH</div>
+        <div style="margin:14px auto 6px;width:170px;height:40px;background:repeating-linear-gradient(90deg,#111 0 2px,transparent 2px 5px,#111 5px 6px,transparent 6px 10px,#111 10px 13px,transparent 13px 15px);"></div>
+        <div style="text-align:center;font-size:9px;">*INV-2026-001*<br>STRUK INI BUKTI PEMBAYARAN YANG SAH</div>
+      </div></div>
+    </div>
+
+    <!-- E MARKETPLACE -->
+    <div class="concept">
+      <div class="concept-head">
+        <div class="num">E</div>
+        <h2>🛒 Marketplace</h2>
+        <p>Nyontek Tokopedia + Shopee: "TOTAL BELANJA vs TOTAL TAGIHAN" dua angka, kode unik, "sah dan diproses oleh komputer". Familiar buat online seller.</p>
+        <span class="tag">Cocok: online seller</span>
+        <span class="ref">Referensi: invoice Tokopedia · nota Shopee</span>
+      </div>
+      <div class="paper"><div class="sheet" style="padding:36px 34px;font-size:11px;color:#111827;">
+        <div style="text-align:center;font-weight:800;font-size:20px;letter-spacing:8px;">INVOICE</div>
+        <div class="tnum" style="text-align:center;font-size:10px;color:#6b7280;margin-top:8px;">INV/20261013/MPL/001 · 13 Okt 2026</div>
+        <div style="display:flex;gap:20px;margin-top:20px;">
+          <div style="flex:1;"><div style="font-size:9px;letter-spacing:.12em;color:#6b7280;">DITERBITKAN ATAS NAMA</div><div style="font-weight:700;margin-top:4px;">Kopi Senja</div></div>
+          <div style="flex:1;"><div style="font-size:9px;letter-spacing:.12em;color:#6b7280;">UNTUK</div><div style="font-weight:700;margin-top:4px;">Budi Santoso</div></div>
+        </div>
+        <div class="tnum" style="margin-top:18px;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;">
+          <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>Kopi Arabika 200g × 2</span><span>Rp170.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>Jasa roasting × 3</span><span>Rp135.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;color:#059669;"><span>Kode Unik</span><span>Rp123</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0 0;margin-top:6px;border-top:1px dashed #e5e7eb;font-size:15px;"><span>TOTAL BELANJA</span><span style="font-weight:700;">Rp305.123</span></div>
+        </div>
+        <div class="tnum" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;margin-top:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-weight:800;font-size:13px;color:#065f46;">TOTAL TAGIHAN</span>
+          <span style="font-weight:800;font-size:22px;color:#065f46;">Rp305.123</span>
+        </div>
+        <div style="text-align:center;font-size:9px;color:#9ca3af;margin-top:16px;">Invoice ini sah dan diproses oleh komputer.<br>Jatuh tempo 27 Okt 2026 · BCA 1234567890</div>
+        <div style="text-align:center;font-size:9px;color:#9ca3af;margin-top:8px;letter-spacing:.2em;">— END OF RECEIPT —</div>
+      </div></div>
+    </div>
+
+    <!-- F KARTU MANUSIA -->
+    <div class="concept">
+      <div class="concept-head">
+        <div class="num">F</div>
+        <h2>🙌 Kartu Manusia</h2>
+        <p>Nyontek Gojek + Grab: sapaan hangat, kartu penyedia jasa (foto inisial + rating), timeline pengerjaan, tombol "ada masalah?". Tagihan yang manusiawi.</p>
+        <span class="tag">Cocok: fotografer, teknisi, jasa lapangan</span>
+        <span class="ref">Referensi: receipt Gojek · e-receipt Grab</span>
+      </div>
+      <div class="paper"><div class="sheet" style="padding:34px 32px;font-size:11px;color:#111827;">
+        <div style="font-size:14px;">Makasih udah pakai jasa kami 🙌</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;">
+          <div class="tnum" style="font-weight:800;font-size:38px;letter-spacing:-0.02em;">Rp305.000</div>
+          <div class="tnum" style="background:#fef3c7;color:#92400e;font-weight:700;font-size:10px;padding:7px 14px;border-radius:999px;">⏰ 14 hari lagi</div>
+        </div>
+        <div class="tnum" style="font-size:10px;color:#6b7280;margin-top:6px;">INV-2026-001 · Jatuh tempo 27 Okt 2026</div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:18px;background:#f9fafb;border:1px solid #eef0f3;border-radius:12px;padding:12px 14px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;">KS</div>
+          <div>
+            <div style="font-weight:700;">Kopi Senja</div>
+            <div style="font-size:10px;color:#6b7280;">⭐ 4.9 · 120 proyek selesai</div>
+          </div>
+        </div>
+        <div class="tnum" style="margin-top:16px;">
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;"><span>Kopi Arabika 200g · 2 pcs</span><span>Rp170.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;"><span>Jasa roasting · 3 jam</span><span>Rp135.000</span></div>
+        </div>
+        <div style="margin-top:16px;">
+          <div style="font-size:10px;color:#6b7280;margin-bottom:8px;">TIMELINE PENGERJAAN</div>
+          <div style="font-size:10.5px;line-height:2;" class="tnum">
+            <div>● <b>13 Okt</b> — Pesanan diterima</div>
+            <div>● <b>14 Okt</b> — Roasting batch 1</div>
+            <div>○ <b>20 Okt</b> — Pengiriman</div>
+          </div>
+        </div>
+        <div class="tnum" style="margin-top:16px;background:#16a34a;color:#fff;font-weight:700;text-align:center;border-radius:10px;padding:12px;font-family:'IBM Plex Mono',monospace;">BCA 1234567890 ⧉ salin</div>
+        <div style="text-align:center;font-size:10px;color:#6b7280;margin-top:12px;">Ada masalah? <b style="color:#16a34a;">Hubungi kami</b></div>
+      </div></div>
+    </div>
+
+    <!-- G STUDIO AGENCY -->
+    <div class="concept">
+      <div class="concept-head">
+        <div class="num">G</div>
+        <h2>🎨 Studio / Agency</h2>
+        <p>Nyontek invoice studio asli (Telko.id → Telkomsel): total juga di header, "Kepada: Nama, Jabatan", kolom jam, diskon tampil terbuka, klausul denda.</p>
+        <span class="tag">Cocok: desainer, agensi, konsultan</span>
+        <span class="ref">Referensi: invoice studio Telko.id (sampel asli)</span>
+      </div>
+      <div class="paper"><div class="sheet" style="font-family:'Space Grotesk',sans-serif;padding:36px 34px;font-size:11px;color:#111827;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div style="font-weight:700;font-size:18px;">Kopi Senja<sup style="font-size:9px;">®</sup></div>
+            <div style="font-size:10px;color:#6b7280;margin-top:4px;">Creative roastery &amp; consultancy</div>
+          </div>
+          <div class="tnum" style="text-align:right;">
+            <div style="font-size:10px;color:#6b7280;">TOTAL DUE</div>
+            <div style="font-weight:700;font-size:22px;">Rp305.000</div>
+          </div>
+        </div>
+        <div class="tnum" style="display:flex;gap:16px;margin-top:20px;font-size:10px;">
+          <div style="flex:1;background:#f9fafb;border-radius:8px;padding:10px 12px;"><div style="color:#6b7280;">INVOICE #</div><div style="font-weight:700;margin-top:2px;">INV-2026-001</div></div>
+          <div style="flex:1;background:#f9fafb;border-radius:8px;padding:10px 12px;"><div style="color:#6b7280;">PROJECT</div><div style="font-weight:700;margin-top:2px;">Rebrand — Fase: Delivery</div></div>
+          <div style="flex:1;background:#f9fafb;border-radius:8px;padding:10px 12px;"><div style="color:#6b7280;">PO · DUE</div><div style="font-weight:700;margin-top:2px;">#45009 · 30 hari</div></div>
+        </div>
+        <div style="margin-top:16px;">Kepada: <b>Budi Santoso</b>, <span style="color:#6b7280;">Owner</span></div>
+        <table class="tnum" style="width:100%;border-collapse:collapse;margin-top:14px;">
+          <tr style="font-size:9px;letter-spacing:.1em;color:#6b7280;border-bottom:1px solid #111827;">
+            <td style="padding:8px 0;">SERVICE</td><td style="text-align:right;">HRS/QTY</td><td style="text-align:right;">RATE</td><td style="text-align:right;">SUBTOTAL</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 0;">Kopi Arabika 200g</td><td style="text-align:right;">2 pcs</td><td style="text-align:right;">85.000</td><td style="text-align:right;">170.000</td></tr>
+          <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:9px 0;">Jasa roasting</td><td style="text-align:right;">3 jam</td><td style="text-align:right;">45.000</td><td style="text-align:right;">135.000</td></tr>
+          <tr><td style="padding:9px 0;color:#16a34a;">Diskon partner -10%</td><td></td><td></td><td style="text-align:right;color:#16a34a;">-30.500</td></tr>
+        </table>
+        <div class="tnum" style="text-align:right;margin-top:12px;">
+          <div style="font-weight:700;font-size:20px;">Total Rp274.500</div>
+        </div>
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;font-size:10px;color:#92400e;margin-top:14px;">
+          ⚠️ Keterlambatan dikenakan denda 5% per bulan dari total tagihan.
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:22px;font-size:10px;color:#6b7280;">
+          <div>Hormat kami,<br><br><br><b style="color:#111827;">Kopi Senja</b></div>
+          <div style="text-align:right;" class="tnum">BCA 1234567890<br>a.n. Kopi Senja</div>
+        </div>
+        <div style="margin-top:16px;font-size:10px;color:#9ca3af;font-style:italic;">Thank you for the creative partnership.</div>
+      </div></div>
+    </div>
+
+    <!-- H FAKTUR PAJAK GANDA -->
+    <div class="concept">
+      <div class="concept-head">
+        <div class="num">H</div>
+        <h2>🏛️ Faktur Pajak Ganda</h2>
+        <p>Nyontek Telkomsel + Adobe: satu dokumen = invoice + faktur pajak. NPWP dua pihak, kolom DPP &amp; PPN 11% terpisah, dasar hukum di footer.</p>
+        <span class="tag">Cocok: PT/CV wajib faktur pajak</span>
+        <span class="ref">Referensi: e-bill Telkomsel Halo · invoice Adobe</span>
+      </div>
+      <div class="paper"><div class="sheet" style="padding:36px 34px;font-size:11px;color:#1e293b;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div style="font-weight:800;font-size:16px;color:#1e3a8a;">Kopi Senja</div>
+            <div style="font-size:10px;color:#64748b;margin-top:4px;">Jl. Merdeka No. 1, Batam<br>NPWP: 01.234.567.8-901.000 · PKP</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-weight:800;font-size:15px;color:#1e3a8a;letter-spacing:2px;">INVOICE</div>
+            <div style="font-size:9px;color:#64748b;letter-spacing:1px;">FAKTUR PAJAK</div>
+          </div>
+        </div>
+        <div class="tnum" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;margin-top:16px;padding:10px 14px;font-size:10px;display:flex;justify-content:space-between;">
+          <span>No. Faktur Pajak: <b>010.000-26.00000001</b></span><span>INV-2026-001 · 13-10-2026</span>
+        </div>
+        <div style="font-size:10px;color:#64748b;margin-top:12px;">Pembeli: <b style="color:#1e293b;">Budi Santoso</b> · NPWP: 02.345.678.9-012.000</div>
+        <table class="tnum" style="width:100%;border-collapse:collapse;margin-top:12px;">
+          <tr style="background:#1e3a8a;color:#fff;font-size:9px;letter-spacing:.08em;">
+            <td style="padding:8px 10px;">URAIAN</td><td style="padding:8px 10px;text-align:right;">DPP</td><td style="padding:8px 10px;text-align:right;">PPN 11%</td><td style="padding:8px 10px;text-align:right;">JUMLAH</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:8px 10px;">Kopi Arabika 200g × 2</td><td style="padding:8px 10px;text-align:right;">153.153</td><td style="padding:8px 10px;text-align:right;">16.847</td><td style="padding:8px 10px;text-align:right;">170.000</td></tr>
+          <tr style="border-bottom:1px solid #e2e8f0;"><td style="padding:8px 10px;">Jasa roasting × 3</td><td style="padding:8px 10px;text-align:right;">121.622</td><td style="padding:8px 10px;text-align:right;">13.378</td><td style="padding:8px 10px;text-align:right;">135.000</td></tr>
+        </table>
+        <div class="tnum" style="text-align:right;margin-top:12px;">
+          <div style="font-size:10px;color:#64748b;">DPP Rp274.775 · PPN Rp30.225</div>
+          <div style="font-weight:800;font-size:20px;color:#1e3a8a;margin-top:4px;">Rp305.000</div>
+        </div>
+        <div style="font-style:italic;font-size:10px;color:#64748b;margin-top:10px;">Terbilang: <i>tiga ratus lima ribu rupiah</i></div>
+        <div style="font-size:9px;color:#94a3b8;margin-top:14px;border-top:1px solid #e2e8f0;padding-top:10px;">Sesuai UU PPN &amp; PER-16/PJ/2021 · Faktur pajak ini sah sebagai bukti pungut PPN.</div>
+      </div></div>
+    </div>
+
+    <!-- I BOLD STATEMENT -->
+    <div class="concept">
+      <div class="concept-head">
+        <div class="num">I</div>
+        <h2>⚡ Bold Statement</h2>
+        <p>Budaya Behance: background ungu full, angka hero 72px, kartu putih overlap. Buat kreator Gen-Z yang invoice-nya juga personal branding.</p>
+        <span class="tag">Cocok: kreator Gen-Z</span>
+        <span class="ref">Referensi: tren invoice bold Behance</span>
+      </div>
+      <div class="paper"><div class="sheet" style="background:#7c3aed;color:#fff;padding:0;font-size:11px;">
+        <div style="padding:36px 32px 0;">
+          <div style="font-size:11px;letter-spacing:10px;font-weight:700;opacity:.85;">INVOICE</div>
+          <div class="tnum" style="font-weight:800;font-size:clamp(52px,14vw,72px);letter-spacing:-0.03em;line-height:1;margin-top:10px;">Rp305<span style="font-size:.6em;">.000</span></div>
+          <div class="tnum" style="font-size:10px;opacity:.8;margin-top:8px;">INV-2026-001 · Budi Santoso · jatuh tempo 27 Okt 2026</div>
+        </div>
+        <div style="background:#fff;color:#18181b;border-radius:16px 16px 0 0;margin-top:24px;padding:22px 26px;">
+          <div class="tnum">
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;"><span>Kopi Arabika 200g · 2 pcs</span><span>Rp170.000</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;"><span>Jasa roasting · 3 jam</span><span>Rp135.000</span></div>
+          </div>
+          <div style="text-align:center;margin-top:18px;">
+            <div style="font-weight:800;font-size:13px;">Gas bayar ke sini 👇</div>
+            <canvas id="qr2" width="140" height="140" style="margin:12px auto;display:block;"></canvas>
+            <div class="tnum" style="font-size:10px;color:#71717a;">atau BCA 1234567890 a.n. Kopi Senja</div>
+          </div>
+          <div style="text-align:center;font-size:10px;color:#a1a1aa;margin-top:16px;">Dibuat dengan ☕ dan begadang.</div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- J KWITANSI KLASIK -->
+    <div class="concept">
+      <div class="concept-head">
+        <div class="num">J</div>
+        <h2>📝 Kwitansi Klasik</h2>
+        <p>Kwitansi Indonesia yang sesungguhnya: "Sudah terima dari", terbilang gaya #…#, kotak materai dashed, cap LUNAS miring. Buat transaksi tunai tradisional.</p>
+        <span class="tag">Cocok: sewa, jasa lokal, tunai</span>
+        <span class="ref">Referensi: konvensi kwitansi Indonesia</span>
+      </div>
+      <div class="paper"><div class="sheet" style="background:#fffef7;color:#1c1917;padding:12px;font-size:11px;">
+        <div style="border:3px double #1c1917;padding:28px 26px;position:relative;">
+          <div style="text-align:center;font-weight:800;font-size:24px;letter-spacing:4px;">KWITANSI</div>
+          <div class="tnum" style="text-align:center;font-size:10px;color:#57534e;margin-top:6px;">No. KWT-2026-001 · 13 Oktober 2026</div>
+          <div style="margin-top:20px;line-height:2.1;">
+            <div>Sudah terima dari: <b>Budi Santoso</b></div>
+            <div>Uang sejumlah: <b class="tnum">Rp305.000</b></div>
+            <div style="font-family:Georgia,serif;font-style:italic;">Terbilang: <b># tiga ratus lima ribu rupiah #</b></div>
+            <div>Untuk pembayaran: <b>kopi arabika &amp; jasa roasting</b></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:22px;">
+            <div style="border:1.5px dashed #a8a29e;width:80px;height:100px;display:flex;align-items:center;justify-content:center;font-size:8px;color:#a8a29e;text-align:center;">MAT E<br>RAI<br>10.000</div>
+            <div style="border:2.5px solid #dc2626;color:#dc2626;font-weight:800;letter-spacing:.12em;padding:8px 22px;transform:rotate(-8deg);font-size:15px;">LUNAS</div>
+            <div style="text-align:center;font-size:10px;">Batam, 13-10-2026<br><br><br>( Kopi Senja )</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+  <div style="text-align:center;margin-top:44px;color:#71717a;font-size:13px;line-height:1.7;">
+    10 konsep dari bedah 25 invoice asli. Bilang aja huruf mana yang oke / mau diubah, atau "gas" buat dibangun.
+  </div>
+</div>
+<script>
+function drawQR(id){
+  var c = document.getElementById(id); if(!c) return;
+  var x = c.getContext('2d'), n = 25, s = c.width / n;
+  x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+  x.fillStyle = '#111827';
+  var seed = 987654;
+  function rnd(){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+  function finder(fx, fy){
+    for (var i = 0; i < 7; i++) for (var j = 0; j < 7; j++){
+      var edge = (i === 0 || i === 6 || j === 0 || j === 6), core = (i >= 2 && i <= 4 && j >= 2 && j <= 4);
+      if (edge || core) x.fillRect((fx + j) * s, (fy + i) * s, s, s);
+    }
+  }
+  function inFinder(i, j){ return (i < 8 && j < 8) || (i < 8 && j >= n - 8) || (i >= n - 8 && j < 8); }
+  for (var i = 0; i < n; i++) for (var j = 0; j < n; j++){
+    if (!inFinder(i, j) && rnd() > 0.52) x.fillRect(j * s, i * s, s, s);
+  }
+  finder(0, 0); finder(n - 7, 0); finder(0, n - 7);
+}
+drawQR('qr1'); drawQR('qr2');
+</script>
+</body>
+</html>
