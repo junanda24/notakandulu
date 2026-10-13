@@ -253,10 +253,7 @@ export default function App() {
         {tab === "saran" ? (
           <div className="mx-auto max-w-2xl">{formPanel}</div>
         ) : (
-        <div className="grid gap-5 lg:grid-cols-[440px_1fr]">
-          <div className={mobileView === "form" ? "block" : "hidden lg:block"}>
-            {formPanel}
-          </div>
+        <div className="grid gap-5 lg:grid-cols-[1fr_440px]">
           <div className={mobileView === "preview" ? "block" : "hidden lg:block"}>
             <div className={`lg:sticky lg:top-[76px] transition-opacity duration-300 ${dimPreview ? "lg:opacity-40" : ""}`}>
               {dimPreview && (
@@ -266,6 +263,9 @@ export default function App() {
               )}
               <Preview inv={inv} profile={profile} settings={settings} />
             </div>
+          </div>
+          <div className={mobileView === "form" ? "block" : "hidden lg:block"}>
+            {formPanel}
           </div>
         </div>
         )}
