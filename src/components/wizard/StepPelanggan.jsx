@@ -1,23 +1,13 @@
-// Wizard step 1: data pelanggan + data nota.
-import { Field, TextInput, TextArea, Select, Card, Btn } from "../ui.jsx";
+// Wizard: field data pelanggan + meta nota (dipakai di dalam StepData).
+import { Field, TextInput, TextArea, Select, Card } from "../ui.jsx";
 import { CURRENCIES } from "../../lib/format.js";
-import { Advanced, sampleInvoice, useInvSet } from "./shared.jsx";
+import { Advanced, useInvSet } from "./shared.jsx";
 
 export default function StepPelanggan({ inv, setInv }) {
   const { set } = useInvSet(setInv);
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-teal-200 bg-teal-50 dark:border-teal-900 dark:bg-teal-950/40 p-4">
-        <p className="text-sm font-bold">Langkah 1 — Siapa yang ditagih?</p>
-        <p className="text-[13px] text-neutral-600 dark:text-neutral-400 mt-1">
-          Isi nama pelanggan dan tanggal nota. Sisanya bisa belakangan.
-        </p>
-        <Btn onClick={() => setInv((p) => ({ ...p, ...sampleInvoice() }))} className="mt-3 py-1.5! px-3! text-xs!">
-          Isi data contoh
-        </Btn>
-      </div>
-
-      <Card title="Data Nota" sticker="wajib">
+      <Card title="Pelanggan" sticker="wajib">
         <div className="grid grid-cols-2 gap-3">
           <Field label="Nomor nota">
             <TextInput value={inv.number} onChange={(e) => set({ number: e.target.value })} placeholder="INV-2026-001" />

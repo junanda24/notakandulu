@@ -1,42 +1,64 @@
 // Wizard pembuatan nota: stepper 4-5 langkah, progress bisa diklik, data tidak hilang saat mundur.
 import { useRef } from "react";
-import ShopPanel from "../ShopPanel.jsx";
 import CustomizePanel from "../CustomizePanel.jsx";
-import StepPelanggan from "./StepPelanggan.jsx";
+import StepData from "./StepData.jsx";
 import StepItem from "./StepItem.jsx";
 import StepKirim from "./StepKirim.jsx";
 import { getSteps } from "./shared.jsx";
 import { Btn } from "../ui.jsx";
 
-// Stepper untuk nav header: segmented bar full-width, tiap step segmen tombol yang gampang di-tap.
-export function NavStepper({ steps, idx, onJump }) {
-  const SHORT = { toko: "Toko", pelanggan: "Pelanggan", item: "Item", gaya: "Gaya", kirim: "Kirim" };
+// Stepper kanonis: lingkaran indikator + garis konektor + label (anatomi baku Material/Flowbite).
+// Ditaruh di konten (bukan nav) biar dapat ruang vertikal yang layak.
+export function Stepper({ steps, idx, onJump }) {
   return (
-    <ol className="flex gap-1 rounded-2xl bg-neutral-100/70 dark:bg-neutral-900 p-1">
-      {steps.map((s, i) => {
-        const done = i < idx;
-        const active = i === idx;
-        return (
-          <li key={s.id} className="flex-1 min-w-0">
-            <button
-              onClick={() => onJump(s.id)}
-              aria-current={active ? "step" : undefined}
-              title={s.title}
-              className={`flex w-full items-center justify-center gap-1.5 rounded-xl px-2 py-2 text-[12px] transition ${
-                active
-                  ? "bg-teal-600 text-white font-bold shadow"
-                  : done
-                    ? "text-teal-700 dark:text-teal-300 font-semibold hover:bg-teal-100/60 dark:hover:bg-teal-950"
-                    : "text-neutral-400 dark:text-neutral-500 font-medium hover:text-neutral-600 dark:hover:text-neutral-300"
-              }`}
-            >
-              <span className="tabular-nums font-extrabold shrink-0">{done ? "✓" : i + 1}</span>
-              <span className="truncate hidden min-[420px]:inline">{SHORT[s.id] || s.title}</span>
-            </button>
-          </li>
-        );
-      })}
-    </ol>
+    <div className="mb-6">
+      <ol className="flex items-start">
+        {steps.map((s, i) => {
+          const done = i < idx;
+          const active = i === idx;
+          const last = i === steps.length - 1;
+          return (
+            <li key={s.id} className={`flex items-start ${last ? "" : "flex-1"}`}>
+              <button
+                onClick={() => onJump(s.id)}
+                aria-current={active ? "step" : undefined}
+                title={s.title}
+                className="flex flex-col items-center gap-1.5 shrink-0"
+              >
+                <span
+                  className={`flex h-8 w-8 items-center justify-center rounded-full text-[13px] font-extrabold tabular-nums transition ${
+                    active
+                      ? "bg-teal-600 text-white ring-4 ring-teal-600/20"
+                      : done
+                        ? "bg-teal-600 text-white"
+                        : "border-2 border-neutral-300 dark:border-neutral-700 text-neutral-400 dark:text-neutral-500"
+                  }`}
+                >
+                  {done ? "✓" : i + 1}
+                </span>
+                <span
+                  className={`text-[11px] sm:text-[12px] whitespace-nowrap ${
+                    active
+                      ? "font-bold text-neutral-900 dark:text-neutral-100"
+                      : done
+                        ? "font-semibold text-neutral-600 dark:text-neutral-300"
+                        : "text-neutral-400 dark:text-neutral-500"
+                  }`}
+                >
+                  {s.short}
+                </span>
+              </button>
+              {!last && (
+                <span className={`mt-4 h-0.5 flex-1 mx-1.5 sm:mx-2.5 rounded-full ${done ? "bg-teal-500" : "bg-neutral-200 dark:bg-neutral-800"}`} />
+              )}
+            </li>
+          );
+        })}
+      </ol>
+      <p className="text-center text-[11px] text-neutral-400 dark:text-neutral-500 mt-2.5 tabular-nums">
+        Langkah {idx + 1} dari {steps.length}
+      </p>
+    </div>
   );
 }
 
@@ -73,8 +95,9 @@ export default function Wizard({
 
   return (
     <div ref={topRef} className="scroll-mt-32" onKeyDown={onKeyDown}>
-      {cur.id === "toko" && <ShopPanel profile={profile} setProfile={persistProfile} />}
-      {cur.id === "pelanggan" && <StepPelanggan inv={inv} setInv={setInv} />}
+      <Stepper steps={steps} idx={idx} onJump={go} />
+
+      {cur.id === "data" && <StepData inv={inv} setInv={setInv} profile={profile} persistProfile={persistProfile} />}
       {cur.id === "item" && <StepItem inv={inv} setInv={setInv} />}
       {cur.id === "gaya" && <CustomizePanel settings={settings} setSettings={persistSettings} />}
       {cur.id === "kirim" && (

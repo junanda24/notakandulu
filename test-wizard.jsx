@@ -1,7 +1,7 @@
-// SSR smoke test untuk wizard: semua step render tanpa crash, step kondisional benar.
+// SSR smoke test untuk wizard: semua step render tanpa crash, stepper kanonis benar.
 import React from "react";
 import { renderToString } from "react-dom/server";
-import Wizard, { NavStepper } from "./src/components/wizard/Wizard.jsx";
+import Wizard, { Stepper } from "./src/components/wizard/Wizard.jsx";
 import { getSteps } from "./src/components/wizard/shared.jsx";
 import { blankInvoice } from "./src/lib/calc.js";
 
@@ -14,21 +14,27 @@ const settings = { template: "saas", font: "jakarta", accent: "#0d9488", showSig
 let pass = 0, fail = 0;
 const check = (name, cond) => { cond ? pass++ : (fail++, console.log("FAIL:", name)); };
 
-// 1. getSteps: selalu 5 step, diawali toko
-check("getSteps -> 5 steps mulai dari toko", getSteps(profileEmpty).length === 5 && getSteps(profileEmpty)[0].id === "toko");
-check("getSteps profil isi -> tetap 5 steps", getSteps(profileFull).length === 5 && getSteps(profileFull)[0].id === "toko");
+// 1. getSteps: 4 step — data, item, gaya, kirim
+{
+  const steps = getSteps();
+  check("getSteps -> 4 steps", steps.length === 4);
+  check("urutan step benar", steps.map((s) => s.id).join(",") === "data,item,gaya,kirim");
+  check("step punya short label", steps.every((s) => s.short && s.title));
+}
 
-// 2. NavStepper: semua step ter-render + bisa diklik (ada 5 tombol)
+// 2. Stepper kanonis: <ol>, 4 tombol, indikator + konektor + aria-current
 try {
-  const steps = getSteps(profileFull);
-  const html = renderToString(<NavStepper steps={steps} idx={2} onJump={noop} />);
+  const steps = getSteps();
+  const html = renderToString(<Stepper steps={steps} idx={1} onJump={noop} />);
   const btnCount = (html.match(/<button/g) || []).length;
-  check("NavStepper 5 tombol step", btnCount === 5 && html.includes("Kirim"));
-} catch (e) { check("NavStepper 5 tombol step", false); console.log("  error:", e.message); }
+  check("Stepper 4 tombol step", btnCount === 4);
+  check("Stepper ada <ol> + aria-current", html.includes("<ol") && html.includes('aria-current="step"'));
+  check("Stepper ada konektor", html.includes("rounded-full") && html.includes("Langkah"));
+} catch (e) { check("Stepper render", false); console.log("  error:", e.message); }
 
-// 3. tiap step wizard render tanpa crash (konten step, bukan judul nav)
-const STEP_MARKERS = { toko: "Profil Toko", pelanggan: "Data Nota", item: "Tambah item", gaya: "Template Nota", kirim: "Ringkasan Nota" };
-for (const s of getSteps(profileFull)) {
+// 3. tiap step wizard render tanpa crash
+const STEP_MARKERS = { data: "Toko Saya", item: "Tambah item", gaya: "Template Nota", kirim: "Ringkasan Nota" };
+for (const s of getSteps()) {
   try {
     const html = renderToString(
       <Wizard inv={inv} setInv={noop} profile={profileFull} persistProfile={noop}
@@ -42,17 +48,24 @@ for (const s of getSteps(profileFull)) {
   }
 }
 
-// 3. step toko render (profil kosong)
+// 4. step data: section toko terbuka kalau profil kosong, tertutup (ada subtitle) kalau sudah isi
 try {
-  const html = renderToString(
+  const htmlEmpty = renderToString(
     <Wizard inv={inv} setInv={noop} profile={profileEmpty} persistProfile={noop}
-      settings={settings} persistSettings={noop} stepId="toko" setStepId={noop}
+      settings={settings} persistSettings={noop} stepId="data" setStepId={noop}
       onSave={noop} onNew={noop} onGotoToko={noop} onGotoRiwayat={noop} />
   );
-  check("render step toko", html.includes("Profil Toko"));
-} catch (e) { check("render step toko", false); console.log("  error:", e.message); }
+  const htmlFull = renderToString(
+    <Wizard inv={inv} setInv={noop} profile={profileFull} persistProfile={noop}
+      settings={settings} persistSettings={noop} stepId="data" setStepId={noop}
+      onSave={noop} onNew={noop} onGotoToko={noop} onGotoRiwayat={noop} />
+  );
+  check("step data profil kosong -> form toko terbuka", htmlEmpty.includes("Nama toko / usaha"));
+  check("step data profil isi -> ada subtitle nama toko", htmlFull.includes("Kopi Senja"));
+  check("step data ada field pelanggan", htmlEmpty.includes("Nama pelanggan") && htmlFull.includes("Nama pelanggan"));
+} catch (e) { check("step data sections", false); console.log("  error:", e.message); }
 
-// 4. step kirim memuat ringkasan total
+// 5. step kirim memuat ringkasan + ekspor
 try {
   const html = renderToString(
     <Wizard inv={inv} setInv={noop} profile={profileFull} persistProfile={noop}
@@ -63,14 +76,14 @@ try {
   check("step kirim ada ekspor & bagikan", html.includes("Ekspor &amp; Bagikan") && html.includes("Unduh PNG"));
 } catch (e) { check("step kirim ada ringkasan + simpan", false); console.log("  error:", e.message); }
 
-// 5. stepId tak valid -> fallback ke step pertama, bukan crash
+// 6. stepId tak valid -> fallback ke step pertama, bukan crash
 try {
   const html = renderToString(
     <Wizard inv={inv} setInv={noop} profile={profileFull} persistProfile={noop}
       settings={settings} persistSettings={noop} stepId="ngawur" setStepId={noop}
       onSave={noop} onNew={noop} onGotoToko={noop} onGotoRiwayat={noop} />
   );
-  check("invalid stepId fallback", html.includes("Profil Toko"));
+  check("invalid stepId fallback", html.includes("Toko Saya"));
 } catch (e) { check("invalid stepId fallback", false); }
 
 console.log(`\nWizard SSR: ${pass} pass, ${fail} fail`);

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import Wizard, { NavStepper } from "./components/wizard/Wizard.jsx";
+import Wizard from "./components/wizard/Wizard.jsx";
 import { getSteps, STEP_IDS } from "./components/wizard/shared.jsx";
 import HistoryPanel from "./components/HistoryPanel.jsx";
 import Preview, { InvoiceSheet, MobilePreviewModal } from "./components/Preview.jsx";
@@ -14,6 +14,22 @@ import {
 import SaranPanel from "./components/SaranPanel.jsx";
 import WelcomeModal from "./components/WelcomeModal.jsx";
 import Splash from "./components/Splash.jsx";
+
+function DrawerItem({ icon, label, active, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm transition ${
+        active
+          ? "bg-teal-50 dark:bg-teal-950 font-bold text-teal-700 dark:text-teal-300"
+          : "font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+      }`}
+    >
+      <span className="text-lg leading-none">{icon}</span>
+      {label}
+    </button>
+  );
+}
 
 export default function App() {
   const [tab, setTab] = useState("buat");
@@ -32,17 +48,35 @@ export default function App() {
   const [settings, setSettingsState] = useState(getSettings);
   const [history, setHistory] = useState(getHistory);
   const [toast, setToast] = useState("");
-  const goTab = (id) => { setTab(id); setMobileView("form"); };
+  const [drawer, setDrawer] = useState(false); // side menu (burger)
+  const goTab = (id) => { setTab(id); setMobileView("form"); setDrawer(false); };
+
+  const toggleDark = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    try { localStorage.setItem("notakandulu:theme", next ? "dark" : "light"); } catch {}
+  };
+
+  // Kunci scroll + Escape saat drawer terbuka
+  useEffect(() => {
+    if (!drawer) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => { if (e.key === "Escape") setDrawer(false); };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [drawer]);
   // Posisi wizard (disimpan biar refresh tidak mengulang dari awal)
   const [wstep, setWstep] = useState(() => {
     try {
       const s = localStorage.getItem("notakandulu:wstep");
       if (s && STEP_IDS.includes(s)) return s;
     } catch {}
-    try {
-      const p = getProfile();
-      return p?.shopName?.trim() ? "pelanggan" : "toko";
-    } catch { return "pelanggan"; }
+    return "data";
   });
   const persistWstep = (id) => {
     setWstep(id);
@@ -97,8 +131,7 @@ export default function App() {
 
   const handleNew = () => {
     setInv(blankInvoice({ number: expandNumber(settings.numberPattern, peekCounter(), todayIso()), date: todayIso(), currency: settings.currency }));
-    // Mulai dari Toko kalau profil kosong, kalau tidak langsung ke Pelanggan (Toko tetap bisa diklik)
-    persistWstep(profile?.shopName?.trim() ? "pelanggan" : "toko");
+    persistWstep("data");
     setTab("buat");
     setMobileView("form");
     showToast("Nota baru ✓");
@@ -157,8 +190,8 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, inv, profile, settings, history, wstep]);
 
-  // Info langkah wizard untuk badge tab "Buat Nota" + redup pratinjau di langkah awal
-  const wizSteps = getSteps(profile);
+  // Info langkah wizard untuk redup pratinjau di langkah awal
+  const wizSteps = getSteps();
   const wizIdx = Math.max(0, wizSteps.findIndex((s) => s.id === wstep));
   const dimPreview = tab === "buat" && wizIdx < wizSteps.length - 2;
 
@@ -177,52 +210,17 @@ export default function App() {
               <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">Buat invoice gratis, tanpa iklan dan login itu nyata 🔥</p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 shrink-0">
-            {/* Riwayat & Saran pindah ke header — nav fokus 100% ke stepper */}
+          <div className="flex items-center gap-2 shrink-0">
             <button
-              onClick={() => goTab("riwayat")}
-              title="Riwayat nota"
-              className={`brutal-btn h-9 rounded-lg px-2.5 text-base flex items-center gap-1.5 ${tab === "riwayat" ? "bg-teal-600! border-teal-600! text-white" : ""}`}
+              onClick={() => setDrawer(true)}
+              title="Menu"
+              className="brutal-btn h-9 w-9 rounded-lg text-lg leading-none"
             >
-              📋<span className="hidden md:inline text-[13px] font-bold">Riwayat</span>
+              ☰
             </button>
-            <button
-              onClick={() => goTab("saran")}
-              title="Kritik & saran"
-              className={`brutal-btn h-9 rounded-lg px-2.5 text-base flex items-center gap-1.5 ${tab === "saran" ? "bg-teal-600! border-teal-600! text-white" : ""}`}
-            >
-              💡<span className="hidden md:inline text-[13px] font-bold">Saran</span>
-            </button>
-            <span className="w-px h-6 bg-line mx-0.5" />
-            <button
-              onClick={() => {
-                const next = !dark;
-                setDark(next);
-                document.documentElement.classList.toggle("dark", next);
-                try { localStorage.setItem("notakandulu:theme", next ? "dark" : "light"); } catch {}
-              }}
-              title={dark ? "Mode terang" : "Mode gelap"}
-              className="brutal-btn h-9 w-9 rounded-lg text-base"
-            >
-              {dark ? "☀️" : "🌙"}
-            </button>
-            <Btn onClick={handleNew} title="Buat nota baru" className="py-1.5! px-3! text-xs!">
-              <span className="md:hidden text-sm font-extrabold">+</span>
-              <span className="hidden md:inline">+ Baru</span>
-            </Btn>
-            <Btn onClick={handleSave} primary className="py-1.5! px-3! text-xs!">Simpan</Btn>
+            <Btn onClick={handleSave} primary className="py-2! px-4! text-sm!">Simpan</Btn>
           </div>
         </div>
-        {/* Nav: 100% stepper — fokus penuh ke alur pembuatan */}
-        <nav className="border-t border-line">
-          <div className="mx-auto max-w-7xl px-4 py-2">
-            <NavStepper
-              steps={wizSteps}
-              idx={wizIdx}
-              onJump={(id) => { goTab("buat"); persistWstep(id); }}
-            />
-          </div>
-        </nav>
       </header>
 
       <main className="mx-auto max-w-7xl px-4 py-5">
@@ -234,7 +232,7 @@ export default function App() {
             {formPanel}
           </div>
           <div className={mobileView === "preview" ? "block" : "hidden lg:block"}>
-            <div className={`lg:sticky lg:top-[132px] transition-opacity duration-300 ${dimPreview ? "lg:opacity-40" : ""}`}>
+            <div className={`lg:sticky lg:top-[76px] transition-opacity duration-300 ${dimPreview ? "lg:opacity-40" : ""}`}>
               {dimPreview && (
                 <p className="hidden lg:block text-center text-[11px] text-neutral-400 mb-2">
                   Pratinjau live — lanjutkan langkah untuk melihat hasil akhir
@@ -292,6 +290,37 @@ export default function App() {
     {/* Modal preview full-screen khusus HP */}
     {previewOpen && (
       <MobilePreviewModal inv={inv} profile={profile} settings={settings} onClose={() => setPreviewOpen(false)} />
+    )}
+
+    {/* Side drawer (burger menu) */}
+    {drawer && (
+      <>
+        <div className="drawer-backdrop fixed inset-0 z-40 bg-black/40" onClick={() => setDrawer(false)} />
+        <aside className="drawer-panel fixed inset-y-0 right-0 z-50 w-72 max-w-[85vw] bg-white dark:bg-neutral-900 shadow-2xl flex flex-col">
+          <div className="flex items-center justify-between px-4 py-3.5 border-b border-line">
+            <p className="font-extrabold text-[15px] tracking-tight">Menu</p>
+            <button
+              onClick={() => setDrawer(false)}
+              title="Tutup"
+              className="brutal-btn h-9 w-9 rounded-lg text-base leading-none"
+            >
+              ✕
+            </button>
+          </div>
+          <nav className="p-2.5 space-y-1">
+            <DrawerItem icon="📋" label="Riwayat nota" active={tab === "riwayat"} onClick={() => goTab("riwayat")} />
+            <DrawerItem icon="💡" label="Kritik & saran" active={tab === "saran"} onClick={() => goTab("saran")} />
+            <DrawerItem icon="＋" label="Buat nota baru" onClick={() => { handleNew(); setDrawer(false); }} />
+          </nav>
+          <div className="mt-auto p-2.5 border-t border-line">
+            <DrawerItem
+              icon={dark ? "☀️" : "🌙"}
+              label={dark ? "Mode terang" : "Mode gelap"}
+              onClick={toggleDark}
+            />
+          </div>
+        </aside>
+      </>
     )}
     </>
   );

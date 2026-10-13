@@ -6,18 +6,23 @@ import { uid } from "../../lib/format.js";
 export const UNITS = ["pcs", "box", "pak", "lusin", "kodi", "kg", "gram", "liter", "meter", "m2", "jam", "hari", "minggu", "sesi", "kali", "orang", "porsi", "lot", "paket", "set", "unit"];
 export const TERMS = ["Net 7", "Net 14", "Net 30", "Dibayar saat terima"];
 
-export const STEP_IDS = ["toko", "pelanggan", "item", "gaya", "kirim"];
+export const STEP_IDS = ["data", "item", "gaya", "kirim"];
 const STEP_TITLES = {
-  toko: "Data Toko",
-  pelanggan: "Pelanggan",
+  data: "Data Toko & Pelanggan",
   item: "Item & Hitungan",
   gaya: "Gaya Nota",
   kirim: "Bayar & Kirim",
 };
+const STEP_SHORT = {
+  data: "Data",
+  item: "Item",
+  gaya: "Gaya",
+  kirim: "Kirim",
+};
 
-// Toko selalu jadi langkah pertama — user baru wajib lewat sini, user lama bisa klik untuk ubah.
-export function getSteps(profile) {
-  return STEP_IDS.map((id) => ({ id, title: STEP_TITLES[id] }));
+// Toko & Pelanggan digabung dalam satu step "Data" (dipisah section) — 4 step lebih lega.
+export function getSteps() {
+  return STEP_IDS.map((id) => ({ id, title: STEP_TITLES[id], short: STEP_SHORT[id] }));
 }
 
 export function sampleInvoice() {
