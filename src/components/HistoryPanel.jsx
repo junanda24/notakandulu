@@ -7,7 +7,7 @@ import { calcTotals } from "../lib/calc.js";
 import { exportData, importData, storageInfo } from "../lib/storage.js";
 import { computeStats } from "../lib/stats.js";
 
-export default function HistoryPanel({ history, onOpen, onDelete, onNew, onRestored, settings }) {
+export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus, onNew, onRestored, settings }) {
   const fileRef = useRef(null);
   const [msg, setMsg] = useState("");
   const info = storageInfo();
@@ -86,15 +86,25 @@ export default function HistoryPanel({ history, onOpen, onDelete, onNew, onResto
             const sm = st ? STATUS_META[st] : null;
             return (
               <div key={h.id} className="brutal-sm rounded-lg bg-cream px-3 py-2.5 flex items-center justify-between gap-2">
-                <button onClick={() => onOpen(h)} className="text-left flex-1 min-w-0">
-                  <p className="font-mono2 text-xs font-bold truncate">
-                    {h.number || "(tanpa nomor)"}{" "}
-                    {sm && <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${sm.badge}`}>{sm.label}</span>}
+                <div className="flex-1 min-w-0">
+                  <p className="flex items-center gap-1.5">
+                    <button onClick={() => onOpen(h)} className="font-mono2 text-xs font-bold truncate text-left">
+                      {h.number || "(tanpa nomor)"}
+                    </button>
+                    {sm && (
+                      <button
+                        onClick={() => onToggleStatus(h.id)}
+                        title="Klik untuk ubah status"
+                        className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold cursor-pointer transition hover:opacity-75 active:scale-95 ${sm.badge}`}
+                      >
+                        {sm.label}
+                      </button>
+                    )}
                   </p>
-                  <p className="text-xs text-neutral-500 truncate">
+                  <button onClick={() => onOpen(h)} className="text-xs text-neutral-500 truncate block w-full text-left">
                     {fmtDate(h.date)} · {h.customerName || "—"} · <b className="text-ink">{fmtMoney(t.total, h.currency)}</b>
-                  </p>
-                </button>
+                  </button>
+                </div>
                 <div className="flex gap-2 shrink-0">
                   <button onClick={() => onOpen(h, true)} className="font-mono2 text-[10px] font-bold text-blue-700 hover:underline">
                     duplikat

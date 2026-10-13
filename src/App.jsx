@@ -116,6 +116,11 @@ export default function App() {
         history={history}
         onOpen={openHistory}
         onDelete={(id) => setHistory(deleteHistory(id))}
+        onToggleStatus={(id) => {
+          const item = history.find((h) => h.id === id);
+          if (!item) return;
+          setHistory(saveToHistory({ ...item, status: (item.status || "belum") === "lunas" ? "belum" : "lunas" }));
+        }}
         onNew={handleNew}
         settings={settings}
         onRestored={() => {
