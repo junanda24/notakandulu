@@ -163,7 +163,6 @@ export default function Preview({ inv, profile, settings }) {
     el.textContent = `@media print { @page { size: ${w} auto; margin: 0; } }`;
   }, [settings.template]);
 
-  const text = invoiceText(inv, profile, settings);
   const st = paymentStatus(inv);
   const sm = st ? STATUS_META[st] : null;
 
@@ -185,7 +184,6 @@ export default function Preview({ inv, profile, settings }) {
         </div>
       </Card>
 
-      <ExportCard inv={inv} profile={profile} settings={settings} sheetRef={sheetRef} />
     </div>
   );
 }

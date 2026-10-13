@@ -114,7 +114,9 @@ export default function Wizard({
 
   return (
     <div ref={topRef} className="scroll-mt-32" onKeyDown={onKeyDown}>
-      <Stepper steps={steps} idx={idx} onJump={go} />
+      <div className="sticky top-[57px] z-10 -mx-4 px-4 pt-4 pb-1 bg-cream/95 backdrop-blur">
+        <Stepper steps={steps} idx={idx} onJump={go} />
+      </div>
 
       <div ref={contentRef}>
         {cur.id === "data" && <StepData inv={inv} setInv={setInv} profile={profile} persistProfile={persistProfile} onClearInv={onClearInv} />}
