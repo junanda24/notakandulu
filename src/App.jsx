@@ -183,30 +183,6 @@ export default function App() {
         </nav>
       </header>
 
-      {/* Mobile: toggle form/preview */}
-      {tab !== "saran" && (
-      <div className="lg:hidden sticky top-[104px] z-10 border-b border-line bg-cream px-4 py-2">
-        <div className="grid grid-cols-2 gap-1 rounded-lg border border-line bg-neutral-100 dark:bg-neutral-800 p-1">
-          {(["form", "preview"]).map((v) => (
-            <button
-              key={v}
-              onClick={() => {
-                // Di HP, preview dibuka sebagai modal full-screen (lebih nyaman dibaca).
-                if (v === "preview" && !window.matchMedia("(min-width: 1024px)").matches) {
-                  setPreviewOpen(true);
-                } else {
-                  setMobileView(v);
-                }
-              }}
-              className={`rounded-md py-1.5 text-xs font-semibold transition ${mobileView === v ? "bg-white dark:bg-neutral-900 shadow-sm" : "text-neutral-500"}`}
-            >
-              {v === "form" ? "Isi" : "Preview"}
-            </button>
-          ))}
-        </div>
-      </div>
-      )}
-
       <main className="mx-auto max-w-7xl px-4 py-5">
         {tab === "saran" ? (
           <div className="mx-auto max-w-2xl">{formPanel}</div>
@@ -242,6 +218,29 @@ export default function App() {
         </div>
       )}
     </div>
+
+      {/* Floating bottom bar — khusus HP */}
+      {tab !== "saran" && (
+        <>
+          <div className="h-24 lg:hidden" />
+          <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 px-4" style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}>
+            <div className="mx-auto max-w-sm grid grid-cols-2 gap-1.5 rounded-2xl border border-line bg-white/95 dark:bg-neutral-900/95 backdrop-blur shadow-2xl p-1.5">
+              <button
+                onClick={() => { setMobileView("form"); setPreviewOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                className="rounded-xl py-3 text-sm font-bold text-neutral-600 dark:text-neutral-300"
+              >
+                📝 Isi
+              </button>
+              <button
+                onClick={() => setPreviewOpen(true)}
+                className="rounded-xl py-3 text-sm font-bold bg-teal-600 text-white shadow-lg"
+              >
+                👁️ Preview
+              </button>
+            </div>
+          </div>
+        </>
+      )}
 
     {/* Print sheet — sibling app-shell, hanya muncul saat cetak (bugfix: sebelumnya di dalam display:none) */}
     <div className="print-sheet">
