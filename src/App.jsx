@@ -219,25 +219,20 @@ export default function App() {
       )}
     </div>
 
-      {/* Floating bottom bar — khusus HP */}
+      {/* Floating preview button — khusus HP */}
       {tab !== "saran" && (
         <>
           <div className="h-24 lg:hidden" />
-          <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 px-4" style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}>
-            <div className="mx-auto max-w-sm grid grid-cols-2 gap-1.5 rounded-2xl border border-line bg-white/95 dark:bg-neutral-900/95 backdrop-blur shadow-2xl p-1.5">
-              <button
-                onClick={() => { setMobileView("form"); setPreviewOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                className="rounded-xl py-3 text-sm font-bold text-neutral-600 dark:text-neutral-300"
-              >
-                📝 Isi
-              </button>
-              <button
-                onClick={() => setPreviewOpen(true)}
-                className="rounded-xl py-3 text-sm font-bold bg-teal-600 text-white shadow-lg"
-              >
-                👁️ Preview
-              </button>
-            </div>
+          <div
+            className="lg:hidden fixed bottom-0 inset-x-0 z-40 flex justify-center px-4"
+            style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
+          >
+            <button
+              onClick={() => setPreviewOpen(true)}
+              className="rounded-full bg-teal-600 hover:bg-teal-500 text-white font-bold px-8 py-3.5 shadow-2xl text-[15px] transition active:scale-95"
+            >
+              👁️ Preview Invoice Ku
+            </button>
           </div>
         </>
       )}
