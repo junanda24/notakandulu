@@ -47,8 +47,7 @@ const TPL_COMPONENTS = {
   "kwitansi-klasik": KwitansiKlasik,
 };
 
-export function InvoiceSheet({ inv, profile, settings, id }) {
-  const Tpl = TPL_COMPONENTS[settings.template] || SaasCard;
+export function InvoiceSheet({ inv, profile, settings, id }) {  const Tpl = TPL_COMPONENTS[settings.template] || SaasCard;
   const totals = calcTotals(inv);
   const f = FONTS.find((x) => x.id === settings.font) || FONTS[0];
   const meta = TEMPLATES.find((x) => x.id === settings.template);
@@ -150,6 +149,113 @@ export default function Preview({ inv, profile, settings }) {
           {nativeOk ? "" : " Tombol ini cuma muncul di HP."}
         </p>
       </Card>
+    </div>
+  );
+}
+
+// Lebar kertas dalam px (96dpi) untuk preview zoomable.
+const PAPER_PX = { "58mm": 219, "80mm": 302, "A5": 559, "A4": 794 };
+
+// Preview full-screen ala PDF reader — khusus mobile: zoom + geser + ekspor.
+export function MobilePreviewModal({ inv, profile, settings, onClose }) {
+  const wrapRef = useRef(null);
+  const sheetRef = useRef(null);
+  const [busy, setBusy] = useState("");
+  const [zoom, setZoom] = useState(null); // null = mode pas-lebar
+  const [fitZoom, setFitZoom] = useState(0.5);
+  const [sheetH, setSheetH] = useState(1100);
+  const meta = TEMPLATES.find((x) => x.id === settings.template);
+  const paperPx = PAPER_PX[meta?.paper || "A4"] || 794;
+
+  useEffect(() => {
+    const measure = () => {
+      if (wrapRef.current) setFitZoom(Math.max(0.2, (wrapRef.current.clientWidth - 24) / paperPx));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [paperPx]);
+
+  useEffect(() => {
+    if (sheetRef.current) setSheetH(sheetRef.current.offsetHeight || 1100);
+  });
+
+  // Kunci scroll body saat modal terbuka.
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  const z = zoom ?? fitZoom;
+  const stepIn = () => setZoom((p) => Math.min(3, +( ((p ?? fitZoom) + 0.25).toFixed(2) )));
+  const stepOut = () => setZoom((p) => Math.max(0.25, +( ((p ?? fitZoom) - 0.25).toFixed(2) )));
+
+  const doPng = async (share) => {
+    if (!sheetRef.current) return;
+    setBusy(share ? "share" : "png");
+    try {
+      if (share) {
+        await nativeSharePng(sheetRef.current, inv);
+      } else {
+        const url = await invoiceToPng(sheetRef.current);
+        downloadPng(url, `${inv.number || "nota"}.png`);
+      }
+    } catch (e) {
+      if (e?.name !== "AbortError") alert("Gagal: " + (e.message || e));
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const text = invoiceText(inv, profile, settings);
+
+  return (
+    <div className="fixed inset-0 z-[80] bg-neutral-950 flex flex-col lg:hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-2 px-3 py-2.5 shrink-0 border-b border-white/10">
+        <button onClick={onClose} className="text-white text-sm font-bold px-2 py-1.5">✕ Tutup</button>
+        <span className="text-white/70 text-xs font-semibold truncate">{meta?.name || "Pratinjau"}</span>
+        <div className="flex items-center gap-1 shrink-0">
+          <button onClick={stepOut} className="w-8 h-8 rounded-lg bg-white/10 text-white font-bold">−</button>
+          <button onClick={() => setZoom(null)} title="Pas layar" className="h-8 px-2 rounded-lg bg-white/10 text-white text-[11px] font-bold min-w-[52px]">
+            {Math.round(z * 100)}%
+          </button>
+          <button onClick={stepIn} className="w-8 h-8 rounded-lg bg-white/10 text-white font-bold">+</button>
+        </div>
+      </div>
+      {/* Kertas — bisa di-zoom & digeser */}
+      <div ref={wrapRef} className="flex-1 overflow-auto p-3" style={{ WebkitOverflowScrolling: "touch" }}>
+        <div style={{ width: paperPx * z, height: sheetH * z, margin: "0 auto", position: "relative", overflow: "hidden" }}>
+          <div ref={sheetRef} style={{ width: paperPx, transform: `scale(${z})`, transformOrigin: "top left" }}>
+            <InvoiceSheet inv={inv} profile={profile} settings={settings} />
+          </div>
+        </div>
+        <p className="text-center text-white/40 text-[11px] mt-3">Geser untuk baca · gunakan +/− untuk zoom</p>
+      </div>
+      {/* Ekspor */}
+      <div className="p-3 shrink-0 border-t border-white/10 bg-neutral-900">
+        <div className="grid grid-cols-3 gap-2">
+          <button
+            onClick={() => doPng(false)}
+            disabled={busy === "png"}
+            className="rounded-xl bg-teal-600 text-white text-sm font-bold py-3 disabled:opacity-50"
+          >
+            {busy === "png" ? "⏳" : "🖼️ PNG"}
+          </button>
+          <button onClick={() => window.print()} className="rounded-xl bg-white/10 text-white text-sm font-bold py-3">
+            🖨️ PDF
+          </button>
+          <a
+            href={waShareUrl(text)}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-xl bg-[#25d366] text-white text-sm font-bold py-3 text-center"
+          >
+            💬 WA
+          </a>
+        </div>
+      </div>
     </div>
   );
 }

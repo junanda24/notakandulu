@@ -3,7 +3,7 @@ import InvoiceForm from "./components/InvoiceForm.jsx";
 import ShopPanel from "./components/ShopPanel.jsx";
 import CustomizePanel from "./components/CustomizePanel.jsx";
 import HistoryPanel from "./components/HistoryPanel.jsx";
-import Preview, { InvoiceSheet } from "./components/Preview.jsx";
+import Preview, { InvoiceSheet, MobilePreviewModal } from "./components/Preview.jsx";
 import { Btn } from "./components/ui.jsx";
 import { blankInvoice } from "./lib/calc.js";
 import { expandNumber, todayIso } from "./lib/format.js";
@@ -28,6 +28,7 @@ export default function App() {
   const [tab, setTab] = useState("buat");
   const [splash, setSplash] = useState(true);
   const [mobileView, setMobileView] = useState("form"); // form | preview (khusus HP)
+  const [previewOpen, setPreviewOpen] = useState(false); // modal preview full-screen (HP)
   const [dark, setDark] = useState(() => {
     try {
       const saved = localStorage.getItem("notakandulu:theme");
@@ -189,7 +190,14 @@ export default function App() {
           {(["form", "preview"]).map((v) => (
             <button
               key={v}
-              onClick={() => setMobileView(v)}
+              onClick={() => {
+                // Di HP, preview dibuka sebagai modal full-screen (lebih nyaman dibaca).
+                if (v === "preview" && !window.matchMedia("(min-width: 1024px)").matches) {
+                  setPreviewOpen(true);
+                } else {
+                  setMobileView(v);
+                }
+              }}
               className={`rounded-md py-1.5 text-xs font-semibold transition ${mobileView === v ? "bg-white dark:bg-neutral-900 shadow-sm" : "text-neutral-500"}`}
             >
               {v === "form" ? "Isi" : "Preview"}
@@ -239,6 +247,11 @@ export default function App() {
     <div className="print-sheet">
       <InvoiceSheet inv={inv} profile={profile} settings={settings} id="print-invoice" />
     </div>
+
+    {/* Modal preview full-screen khusus HP */}
+    {previewOpen && (
+      <MobilePreviewModal inv={inv} profile={profile} settings={settings} onClose={() => setPreviewOpen(false)} />
+    )}
     </>
   );
 }
