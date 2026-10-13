@@ -117,7 +117,7 @@ export default function Editorial({ inv, profile, totals, bodyFont, accent, show
           )}
           {cur === "IDR" && (
             <div style={{ fontFamily: serif, fontStyle: "italic", color: "#78716c", fontSize: 11.5, textAlign: "right", marginTop: 4, textTransform: "capitalize" }}>
-              {terbilang(dpi ? dpi.sisa : totals.total)} rupiah
+              {terbilang(dpi ? dpi.sisa : totals.total)}
             </div>
           )}
         </div>

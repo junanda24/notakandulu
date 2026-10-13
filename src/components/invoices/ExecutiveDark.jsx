@@ -123,7 +123,7 @@ export default function ExecutiveDark({ inv, profile, totals, bodyFont, showSign
           )}
           {cur === "IDR" && (
             <div style={{ color: muted, fontSize: 11, fontStyle: "italic", textAlign: "right", marginTop: 4, textTransform: "capitalize" }}>
-              {terbilang(dpi ? dpi.sisa : totals.total)} rupiah
+              {terbilang(dpi ? dpi.sisa : totals.total)}
             </div>
           )}
         </div>

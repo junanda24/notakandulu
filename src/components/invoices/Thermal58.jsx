@@ -58,7 +58,7 @@ export default function Thermal58({ inv, profile, totals }) {
         )}
       </div>
       {cur === "IDR" && (
-        <div style={{ fontSize: 10, marginTop: 8 }}>TERBILANG: {terbilang(dpi ? dpi.sisa : totals.total).toUpperCase()} RUPIAH</div>
+        <div style={{ fontSize: 10, marginTop: 8 }}>TERBILANG: {terbilang(dpi ? dpi.sisa : totals.total).toUpperCase()}</div>
       )}
       {inv.terms && <div style={{ fontSize: 10, marginTop: 4 }}>SYARAT: {inv.terms.toUpperCase()}</div>}
       {inv.notes && <div style={{ fontSize: 10, marginTop: 4, whiteSpace: "pre-wrap" }}>{inv.notes.toUpperCase()}</div>}

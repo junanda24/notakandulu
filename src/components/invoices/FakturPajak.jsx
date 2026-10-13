@@ -96,7 +96,7 @@ export default function FakturPajak({ inv, profile, totals, accent, showSignatur
         )}
         {cur === "IDR" && (
           <div style={{ fontStyle: "italic", fontSize: 11, color: "#64748b", marginTop: 6, textTransform: "capitalize" }}>
-            Terbilang: {terbilang(dpi ? dpi.sisa : totals.total)} rupiah
+            Terbilang: {terbilang(dpi ? dpi.sisa : totals.total)}
           </div>
         )}
       </div>

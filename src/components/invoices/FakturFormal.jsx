@@ -37,7 +37,7 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
           {meta.map(([k, v]) => (
             <div key={k} style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline", gap: 16, padding: "3px 0" }}>
               <span style={{ ...lbl, whiteSpace: "nowrap" }}>{k}</span>
-              <span style={{ fontWeight: 600, minWidth: 150, textAlign: "left", fontVariantNumeric: "tabular-nums" }}>{v}</span>
+              <span style={{ fontWeight: 600, minWidth: 150, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{v}</span>
             </div>
           ))}
         </div>
@@ -54,32 +54,32 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
           <div style={{ fontWeight: 700, fontSize: 14, marginTop: 4 }}>{inv.customerName || "—"}</div>
           {inv.customerInfo && <div style={{ color: "#6b7280", fontSize: 11, whiteSpace: "pre-line" }}>{inv.customerInfo}</div>}
         </div>
-        <div>
-          <div style={lbl}>Info Pajak</div>
-          <div style={{ fontWeight: 600, fontSize: 12, marginTop: 4 }}>{inv.customerName || "—"}</div>
-          {inv.customerNpwp && <div style={{ color: "#6b7280", fontSize: 11 }}>NPWP {inv.customerNpwp}</div>}
-        </div>
+        {inv.customerNpwp && (
+          <div>
+            <div style={lbl}>Info Pajak</div>
+            <div style={{ color: "#6b7280", fontSize: 11, marginTop: 4 }}>NPWP {inv.customerNpwp}</div>
+          </div>
+        )}
       </div>
 
       {/* Tabel */}
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr style={{ background: "#111827", color: "#fff" }}>
-            {["Deskripsi", "Qty", "Harga Satuan", "Pajak", "Jumlah"].map((h, i) => (
+            {["Deskripsi", "Qty", "Harga Satuan", "Jumlah"].map((h, i) => (
               <th key={h} style={{ textAlign: i === 0 ? "left" : "right", padding: "10px 12px", fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 700 }}>{h}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {items.length === 0 && (
-            <tr><td colSpan={5} style={{ padding: "20px 0", color: "#9ca3af", textAlign: "center" }}>Belum ada item</td></tr>
+            <tr><td colSpan={4} style={{ padding: "20px 0", color: "#9ca3af", textAlign: "center" }}>Belum ada item</td></tr>
           )}
           {items.map((it, idx) => (
             <tr key={it.id} style={{ background: idx % 2 ? "#f9fafb" : "#fff", borderBottom: "1px solid #e5e7eb" }}>
               <td style={{ padding: "11px 12px" }}>{it.name || <span style={{ color: "#9ca3af" }}>Tanpa nama</span>}</td>
               <td style={{ padding: "11px 12px", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>{it.qty}{it.unit ? ` ${it.unit}` : ""}</td>
               <td style={{ padding: "11px 12px", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#4b5563" }}><Money v={Number(it.price) || 0} cur={cur} /></td>
-              <td style={{ padding: "11px 12px", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#4b5563" }}>{inv.tax ? `${inv.tax}%` : "—"}</td>
               <td style={{ padding: "11px 12px", textAlign: "right", fontVariantNumeric: "tabular-nums", fontWeight: 600 }}>
                 <Money v={(Number(it.qty) || 0) * (Number(it.price) || 0)} cur={cur} />
               </td>
@@ -118,7 +118,7 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
           )}
           {cur === "IDR" && (
             <div style={{ fontStyle: "italic", color: "#6b7280", fontSize: 11, textAlign: "right", marginTop: 6, textTransform: "capitalize" }}>
-              {terbilang(dpi ? dpi.sisa : totals.total)} rupiah
+              {terbilang(dpi ? dpi.sisa : totals.total)}
             </div>
           )}
         </div>

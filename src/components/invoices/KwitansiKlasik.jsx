@@ -38,7 +38,7 @@ export default function KwitansiKlasik({ inv, profile, totals }) {
           </div>
           {cur === "IDR" && (
             <div style={{ fontFamily: serif, fontStyle: "italic", marginTop: 6 }}>
-              Terbilang: <b># {terbilang(nominal)} rupiah #</b>
+              Terbilang: <b># {terbilang(nominal)} #</b>
             </div>
           )}
           <div style={{ marginTop: 6 }}>
