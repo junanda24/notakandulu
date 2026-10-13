@@ -7,7 +7,7 @@
   --color-cream: #fafafa; /* app bg (light) */
   --color-ink: #171717; /* text (light) */
   --color-line: #e5e5e5; /* thin borders (light) */
-  --color-accent: #059669; /* emerald — satu aksen */
+  --color-accent: #ea580c; /* orange — satu aksen */
 
   --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
   --font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
@@ -184,10 +184,6 @@ label.brutal-label {
 @keyframes splash-bar {
   0% { width: 0; }
   100% { width: 100%; }
-}
-@keyframes splash-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-18px); }
 }
 .splash-letter {
   display: inline-block;

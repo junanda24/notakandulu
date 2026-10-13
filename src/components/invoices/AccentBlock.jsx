@@ -6,7 +6,7 @@ import { fmtMoney } from "../../lib/format.js";
 const lbl = { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
 
 export default function AccentBlock({ inv, profile, totals, bodyFont, accent, showSignature }) {
-  const a = accent || "#059669";
+  const a = accent || "#ea580c";
   const cur = inv.currency;
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);

@@ -12,7 +12,7 @@ function kodeUnik(number) {
 }
 
 export default function Marketplace({ inv, profile, totals, accent, showSignature }) {
-  const a = accent || "#059669";
+  const a = accent || "#ea580c";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);

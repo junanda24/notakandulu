@@ -5,7 +5,7 @@ import { Money, ShopLogo, fmtD } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
 export default function Kwitansi({ inv, profile, totals, bodyFont, accent }) {
-  const a = accent || "#059669";
+  const a = accent || "#ea580c";
   const cur = inv.currency || "IDR";
   const needsMaterai = cur === "IDR" && totals.total >= 5000000;
   const serif = "'Fraunces', Georgia, serif";
