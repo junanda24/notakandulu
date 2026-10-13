@@ -47,16 +47,16 @@ export function storageInfo() {
 export async function exportData() {
   try {
     const d = load();
-    const name = `notakandulu-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    const name = `tagihkandulu-backup-${new Date().toISOString().slice(0, 10)}.json`;
     const json = JSON.stringify(
-      { app: "notakandulu", schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(), data: d },
+      { app: "tagihkandulu", schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(), data: d },
       null, 2
     );
     const file = new File([json], name, { type: "application/json" });
     const isMobile = window.matchMedia?.("(pointer: coarse)").matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || "");
     if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
-        await navigator.share({ files: [file], title: "Backup NotakanDulu" });
+        await navigator.share({ files: [file], title: "Backup TagihkanDulu" });
         return { ok: true, via: "share" };
       } catch (e) {
         if (e && e.name === "AbortError") return { ok: true, via: "share", cancelled: true };
@@ -80,8 +80,8 @@ export async function exportData() {
 export function importData(json) {
   try {
     const parsed = typeof json === "string" ? JSON.parse(json) : json;
-    if (parsed.app !== "notakandulu" || !parsed.data || typeof parsed.data !== "object") {
-      return { ok: false, error: "File bukan backup NotakanDulu yang valid." };
+    if ((parsed.app !== "tagihkandulu" && parsed.app !== "notakandulu") || !parsed.data || typeof parsed.data !== "object") {
+      return { ok: false, error: "File bukan backup TagihkanDulu yang valid." };
     }
     const d = parsed.data;
     // Validasi ringan bentuk data
