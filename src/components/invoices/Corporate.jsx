@@ -28,22 +28,22 @@ export default function Corporate({ inv, profile, totals, bodyFont, displayFont,
           <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 5, alignItems: "flex-end", fontSize: 11.5 }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
               <span style={{ ...lbl, width: 110, textAlign: "right" }}>Nomor</span>
-              <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: 150 }}>{inv.number}</span>
+              <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums", textAlign: "right" }}>{inv.number}</span>
             </div>
             <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
               <span style={{ ...lbl, width: 110, textAlign: "right" }}>Tanggal</span>
-              <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: 150 }}>{fmtDate(inv.date)}</span>
+              <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "right" }}>{fmtDate(inv.date)}</span>
             </div>
             {inv.dueDate && (
               <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
                 <span style={{ ...lbl, width: 110, textAlign: "right" }}>Jatuh tempo</span>
-                <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: 150 }}>{fmtDate(inv.dueDate)}</span>
+                <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "right" }}>{fmtDate(inv.dueDate)}</span>
               </div>
             )}
             {inv.poNumber && (
               <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
                 <span style={{ ...lbl, width: 110, textAlign: "right" }}>No. PO</span>
-                <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "left", minWidth: 150 }}>{inv.poNumber}</span>
+                <span style={{ fontVariantNumeric: "tabular-nums", textAlign: "right" }}>{inv.poNumber}</span>
               </div>
             )}
           </div>
