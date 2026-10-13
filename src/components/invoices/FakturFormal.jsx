@@ -32,12 +32,12 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
             {profile.npwp && <div style={{ color: "#6b7280", fontSize: 11 }}>NPWP {profile.npwp}</div>}
           </div>
         </div>
-        <div style={{ textAlign: "right", fontSize: 11 }}>
-          <div style={{ ...lbl, color: "#111827", marginBottom: 6 }}>Invoice Information</div>
+        <div style={{ fontSize: 11 }}>
+          <div style={{ ...lbl, color: "#111827", marginBottom: 8, textAlign: "right" }}>Invoice Information</div>
           {meta.map(([k, v]) => (
-            <div key={k} style={{ display: "flex", justifyContent: "flex-end", gap: 14, padding: "2px 0" }}>
-              <span style={{ ...lbl }}>{k}</span>
-              <span style={{ fontWeight: 600, minWidth: 130, textAlign: "left", fontVariantNumeric: "tabular-nums" }}>{v}</span>
+            <div key={k} style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline", gap: 16, padding: "3px 0" }}>
+              <span style={{ ...lbl, whiteSpace: "nowrap" }}>{k}</span>
+              <span style={{ fontWeight: 600, minWidth: 150, textAlign: "left", fontVariantNumeric: "tabular-nums" }}>{v}</span>
             </div>
           ))}
         </div>
