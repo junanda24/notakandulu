@@ -1,13 +1,39 @@
 // Panel kustomisasi: template, font, aksen, pola nomor.
+import { useState } from "react";
 import { Field, Select, TextInput, Card } from "./ui.jsx";
 import { TEMPLATES, FONTS, ACCENT_PRESETS, PAPER_WIDTH } from "../data/options.js";
 import { NUMBER_PATTERNS } from "../lib/format.js";
 
+function Accordion({ title, sticker, summary, summaryStyle, children, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <section className="brutal">
+      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between gap-2 p-4 sm:p-5 text-left">
+        <h2 className="text-sm font-bold tracking-tight shrink-0">{title}</h2>
+        <span className="flex items-center gap-2 min-w-0">
+          {!open && summary && (
+            <span className="truncate text-[11px] text-neutral-500 max-w-[150px]" style={summaryStyle}>{summary}</span>
+          )}
+          {sticker && (
+            <span className="rounded-md bg-teal-600 px-2 py-0.5 font-mono2 text-[10px] font-bold text-white dark:bg-teal-500 shrink-0">
+              {sticker}
+            </span>
+          )}
+          <span className={`text-neutral-400 text-[11px] transition-transform shrink-0 ${open ? "rotate-180" : ""}`}>▼</span>
+        </span>
+      </button>
+      {open && <div className="px-4 sm:px-5 pb-4 sm:pb-5">{children}</div>}
+    </section>
+  );
+}
+
 export default function CustomizePanel({ settings, setSettings }) {
   const set = (patch) => setSettings((p) => ({ ...p, ...patch }));
+  const curTpl = TEMPLATES.find((t) => t.id === settings.template);
+  const curFont = FONTS.find((f) => f.id === settings.font);
   return (
     <div className="space-y-4">
-      <Card title="🎨 Template Nota" sticker="6 gaya">
+      <Accordion title="🎨 Template Nota" sticker={`${TEMPLATES.length} gaya`} summary={curTpl?.name}>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {TEMPLATES.map((t) => {
             const active = settings.template === t.id;
@@ -23,9 +49,14 @@ export default function CustomizePanel({ settings, setSettings }) {
             );
           })}
         </div>
-      </Card>
+      </Accordion>
 
-      <Card title="✒️ Font Nota">
+      <Accordion
+        title="✒️ Font Nota"
+        sticker={`${FONTS.length} font`}
+        summary={curFont?.name}
+        summaryStyle={curFont ? { fontFamily: curFont.body } : undefined}
+      >
         <div className="grid grid-cols-2 gap-2">
           {FONTS.map((f) => {
             const active = settings.font === f.id;
@@ -42,7 +73,7 @@ export default function CustomizePanel({ settings, setSettings }) {
             );
           })}
         </div>
-      </Card>
+      </Accordion>
 
       <Card title="🌈 Warna Aksen">
         <div className="flex flex-wrap gap-2 items-center">
