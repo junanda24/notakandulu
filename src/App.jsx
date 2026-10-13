@@ -13,6 +13,7 @@ import {
 } from "./lib/storage.js";
 
 import SaranPanel from "./components/SaranPanel.jsx";
+import WelcomeModal from "./components/WelcomeModal.jsx";
 
 const TABS = [
   { id: "buat", name: "Buat Nota" },
@@ -128,6 +129,7 @@ export default function App() {
 
   return (
     <>
+    <WelcomeModal />
     <div className="app-shell min-h-screen">
       {/* Header netral */}
       <header className="sticky top-0 z-20 border-b border-line bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur">
