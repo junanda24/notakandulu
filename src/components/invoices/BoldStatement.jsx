@@ -3,16 +3,15 @@
 import { Money, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtDate } from "../../lib/format.js";
 
-const PURPLE = "#7c3aed";
-
-export default function BoldStatement({ inv, profile, totals, showSignature }) {
+export default function BoldStatement({ inv, profile, totals, accent, showSignature }) {
+  const a = accent || "#7c3aed";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
   const inter = "'Inter', system-ui, sans-serif";
   const pays = (profile.payments || []).filter((p) => (inv.paymentIds || []).includes(p.id));
   return (
-    <div style={{ fontFamily: inter, fontSize: 12, lineHeight: 1.6, color: "#fff", background: PURPLE }}>
+    <div style={{ fontFamily: inter, fontSize: 12, lineHeight: 1.6, color: "#fff", background: a }}>
       <div style={{ padding: "40px 36px 0" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <ShopLogo logo={profile.logo} size={34} radius={10} />

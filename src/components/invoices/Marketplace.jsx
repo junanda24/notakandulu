@@ -1,24 +1,14 @@
 // Template E — Marketplace (nyontek Tokopedia + Shopee).
-// TOTAL BELANJA vs TOTAL TAGIHAN + kode unik + "diproses oleh komputer".
+// Rincian biaya berlapis + total tagihan + "diproses oleh komputer".
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtDate } from "../../lib/format.js";
-
-/** Kode unik 3 digit deterministik dari nomor invoice (konvensi marketplace). */
-function kodeUnik(number) {
-  const s = String(number || "0");
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
-  return (h % 900) + 100;
-}
 
 export default function Marketplace({ inv, profile, totals, accent, showSignature }) {
   const a = accent || "#0d9488";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
-  const ku = kodeUnik(inv.number);
-  const belanja = totals.total;
-  const tagihan = belanja + ku;
+  const tagihan = totals.total;
   const inter = "'Inter', system-ui, sans-serif";
   return (
     <div style={{ fontFamily: inter, fontSize: 12, lineHeight: 1.6, color: "#111827", background: "#fff", padding: "44px 40px" }}>
@@ -59,13 +49,6 @@ export default function Marketplace({ inv, profile, totals, accent, showSignatur
         {totals.discountAmt > 0 && <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", color: "#4b5563" }}><span>Diskon</span><span>-<Money v={totals.discountAmt} cur={cur} /></span></div>}
         {totals.taxAmt > 0 && <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", color: "#4b5563" }}><span>Pajak</span><span><Money v={totals.taxAmt} cur={cur} /></span></div>}
         {totals.shipping > 0 && <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", color: "#4b5563" }}><span>Ongkir</span><span><Money v={totals.shipping} cur={cur} /></span></div>}
-        <div style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", color: a, fontWeight: 600 }}>
-          <span>Kode Unik</span><span><Money v={ku} cur={cur} /></span>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0 0", marginTop: 8, borderTop: "1px dashed #e5e7eb", fontSize: 15 }}>
-          <span style={{ fontWeight: 600 }}>TOTAL BELANJA</span>
-          <span style={{ fontWeight: 700 }}><Money v={belanja} cur={cur} /></span>
-        </div>
       </div>
 
       {/* Total tagihan */}
@@ -75,7 +58,7 @@ export default function Marketplace({ inv, profile, totals, accent, showSignatur
       </div>
       {dpi && (
         <div style={{ fontSize: 11, color: "#065f46", marginTop: 6, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
-          Uang muka (DP) <Money v={dpi.dp} cur={cur} /> · Sisa <Money v={dpi.sisa + ku} cur={cur} />
+          Uang muka (DP) <Money v={dpi.dp} cur={cur} /> · Sisa <Money v={dpi.sisa} cur={cur} />
         </div>
       )}
       {inv.dueDate && (

@@ -4,6 +4,7 @@ import { Money, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtDate } from "../../lib/format.js";
 
 export default function ReceiptMinimal({ inv, profile, totals, accent, showSignature }) {
+  const a = accent || "#111827";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
@@ -26,7 +27,7 @@ export default function ReceiptMinimal({ inv, profile, totals, accent, showSigna
       <div style={{ textAlign: "center" }}>
         <ShopLogo logo={profile.logo} size={44} radius={10} style={{ margin: "0 auto 10px" }} />
         <div style={{ fontWeight: 800, fontSize: 17 }}>{profile.shopName || "Nama Usaha"}</div>
-        <div style={{ fontWeight: 800, fontSize: 40, marginTop: 16, letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums" }}>
+        <div style={{ fontWeight: 800, fontSize: 40, marginTop: 16, letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums", color: a }}>
           <Money v={dpi ? dpi.sisa : totals.total} cur={cur} />
         </div>
         {dpi && (

@@ -7,6 +7,7 @@ const grotesk = "'Space Grotesk', 'Inter', system-ui, sans-serif";
 const inter = "'Inter', system-ui, sans-serif";
 
 export default function Studio({ inv, profile, totals, accent, showSignature }) {
+  const a = accent || "#0d9488";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
@@ -19,7 +20,6 @@ export default function Studio({ inv, profile, totals, accent, showSignature }) 
             <ShopLogo logo={profile.logo} size={44} radius={10} />
             <div>
               <div style={{ fontWeight: 700, fontSize: 19 }}>{profile.shopName || "Nama Usaha"}<sup style={{ fontSize: 9 }}>®</sup></div>
-              {profile.tagline && <div style={{ fontSize: 10.5, color: "#6b7280", fontFamily: inter }}>{profile.tagline}</div>}
             </div>
           </div>
           {(profile.address || profile.contact) && (
@@ -30,7 +30,7 @@ export default function Studio({ inv, profile, totals, accent, showSignature }) 
         </div>
         <div style={{ textAlign: "right" }}>
           <div style={{ fontSize: 10, color: "#6b7280", fontFamily: inter }}>TOTAL DUE</div>
-          <div style={{ fontWeight: 700, fontSize: 22, fontVariantNumeric: "tabular-nums" }}><Money v={totals.total} cur={cur} /></div>
+          <div style={{ fontWeight: 700, fontSize: 22, fontVariantNumeric: "tabular-nums", color: a }}><Money v={totals.total} cur={cur} /></div>
         </div>
       </div>
 
@@ -38,8 +38,8 @@ export default function Studio({ inv, profile, totals, accent, showSignature }) 
       <div style={{ display: "flex", gap: 14, marginTop: 22, fontSize: 10.5, fontFamily: inter }}>
         {[
           ["INVOICE #", inv.number || "—"],
-          ["PROJECT", inv.notes ? String(inv.notes).split("\n")[0].slice(0, 28) : "—"],
-          ["PO · DUE", `${inv.poNumber ? `#${inv.poNumber}` : "—"} · ${inv.dueDate ? fmtDate(inv.dueDate) : "—"}`],
+          ["NO. PO", inv.poNumber || "—"],
+          ["JATUH TEMPO", inv.dueDate ? fmtDate(inv.dueDate) : "—"],
         ].map(([k, v]) => (
           <div key={k} style={{ flex: 1, background: "#f9fafb", borderRadius: 8, padding: "10px 12px" }}>
             <div style={{ color: "#6b7280", fontSize: 9, letterSpacing: "0.08em" }}>{k}</div>
@@ -100,7 +100,7 @@ export default function Studio({ inv, profile, totals, accent, showSignature }) 
       </table>
 
       <div style={{ textAlign: "right", marginTop: 14 }}>
-        <div style={{ fontWeight: 700, fontSize: 20, fontVariantNumeric: "tabular-nums" }}>
+        <div style={{ fontWeight: 700, fontSize: 20, fontVariantNumeric: "tabular-nums", color: a }}>
           Total <Money v={totals.total} cur={cur} />
         </div>
         {dpi && (

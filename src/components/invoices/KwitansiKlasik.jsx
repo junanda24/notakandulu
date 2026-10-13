@@ -4,7 +4,8 @@ import { Money, ShopLogo, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 import { paymentStatus } from "../../lib/calc.js";
 
-export default function KwitansiKlasik({ inv, profile, totals }) {
+export default function KwitansiKlasik({ inv, profile, totals, accent }) {
+  const a = accent || "#1c1917";
   const cur = inv.currency || "IDR";
   const dpi = dpInfo(inv, totals);
   const nominal = dpi ? dpi.sisa : totals.total;
@@ -25,7 +26,7 @@ export default function KwitansiKlasik({ inv, profile, totals }) {
           )}
         </div>
 
-        <div style={{ textAlign: "center", fontWeight: 800, fontSize: 24, letterSpacing: 4, marginTop: 18 }}>KWITANSI</div>
+        <div style={{ textAlign: "center", fontWeight: 800, fontSize: 24, letterSpacing: 4, marginTop: 18, color: a }}>KWITANSI</div>
         <div style={{ textAlign: "center", fontSize: 10.5, color: "#57534e", marginTop: 4, fontFamily: mono, fontVariantNumeric: "tabular-nums" }}>
           No. {(inv.number || "—").replace(/^INV/i, "KWT")} · {fmtDate(inv.date)}
         </div>

@@ -6,6 +6,7 @@ import { terbilang, fmtDate } from "../../lib/format.js";
 const lbl = { fontSize: 9.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
 
 export default function FakturFormal({ inv, profile, totals, accent, showSignature }) {
+  const a = accent || "#111827";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
@@ -101,7 +102,7 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
               <span>{k}</span><span style={{ fontVariantNumeric: "tabular-nums" }}><Money v={v} cur={cur} /></span>
             </div>
           ))}
-          <div style={{ background: "#111827", color: "#fff", borderRadius: 8, padding: "14px 18px", marginTop: 10, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <div style={{ background: a, color: "#fff", borderRadius: 8, padding: "14px 18px", marginTop: 10, display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
             <span style={{ fontSize: 10, letterSpacing: "0.2em", fontWeight: 700, opacity: 0.75 }}>TOTAL TAGIHAN</span>
             <span style={{ fontSize: 20, fontWeight: 800, fontVariantNumeric: "tabular-nums" }}><Money v={totals.total} cur={cur} /></span>
           </div>

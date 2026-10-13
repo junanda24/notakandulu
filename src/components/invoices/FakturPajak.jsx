@@ -3,14 +3,6 @@
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
-/** No. faktur pajak deterministik dari nomor invoice (sesuaikan di e-Faktur). */
-function noFaktur(number) {
-  const s = String(number || "0");
-  let h = 7;
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
-  return `010.000-26.${String(h % 100000000).padStart(8, "0")}`;
-}
-
 export default function FakturPajak({ inv, profile, totals, accent, showSignature }) {
   const a = accent || "#1e3a8a";
   const cur = inv.currency || "IDR";
@@ -49,8 +41,8 @@ export default function FakturPajak({ inv, profile, totals, accent, showSignatur
       </div>
 
       <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 8, marginTop: 18, padding: "10px 16px", fontSize: 10.5, display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", fontVariantNumeric: "tabular-nums" }}>
-        <span>No. Faktur Pajak: <b>{noFaktur(inv.number)}</b></span>
-        <span>{inv.number || "—"} · {fmtDate(inv.date)}{inv.dueDate ? ` · Tempo ${fmtDate(inv.dueDate)}` : ""}</span>
+        <span><b>{inv.number || "—"}</b> · {fmtDate(inv.date)}{inv.dueDate ? ` · Tempo ${fmtDate(inv.dueDate)}` : ""}{inv.poNumber ? ` · PO ${inv.poNumber}` : ""}</span>
+        <span>DPP & PPN terperinci per baris</span>
       </div>
       <div style={{ fontSize: 10.5, color: "#64748b", marginTop: 12 }}>
         Pembeli: <b style={{ color: "#1e293b" }}>{inv.customerName || "—"}</b>
@@ -106,7 +98,7 @@ export default function FakturPajak({ inv, profile, totals, accent, showSignatur
         <NotesBlock inv={inv} />
       </div>
       <div style={{ fontSize: 9, color: "#94a3b8", marginTop: 18, borderTop: "1px solid #e2e8f0", paddingTop: 10 }}>
-        Sesuai UU PPN &amp; PER-16/PJ/2021 · Faktur pajak ini sah sebagai bukti pungut PPN. Nomor faktur di atas digenerate dari nomor invoice. Sesuaikan dengan nomor di e-Faktur Anda.
+        Sesuai UU PPN · Rincian DPP/PPN mengikuti tarif pajak pada invoice. Cantumkan nomor faktur pajak resmi dari e-Faktur Anda bila diperlukan.
       </div>
       {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}
     </div>
