@@ -43,7 +43,7 @@ export default function SaranPanel() {
           href={FORM_OPEN}
           target="_blank"
           rel="noreferrer"
-          className="inline-block mt-3 text-sm font-semibold text-orange-600 dark:text-orange-400 hover:underline"
+          className="inline-block mt-3 text-sm font-semibold text-teal-600 dark:text-teal-400 hover:underline"
         >
           Buka form di tab baru →
         </a>

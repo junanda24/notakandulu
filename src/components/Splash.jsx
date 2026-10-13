@@ -35,7 +35,7 @@ export default function Splash({ onDone }) {
         Buat invoice gratis, tanpa iklan dan login itu nyata 🔥
       </p>
       <div className="mt-10 h-1 w-52 rounded-full bg-white/15 overflow-hidden">
-        <div className="h-full rounded-full bg-orange-600" style={{ animation: "splash-bar 1.5s ease-out 0.3s both" }} />
+        <div className="h-full rounded-full bg-teal-600" style={{ animation: "splash-bar 1.5s ease-out 0.3s both" }} />
       </div>
     </div>
   );

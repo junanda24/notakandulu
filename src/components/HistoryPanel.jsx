@@ -49,9 +49,9 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
               <p className="font-display text-xl">{stats.monthCount}</p>
               <p className="font-mono2 text-[9px] font-bold text-neutral-500 mt-0.5">BULAN INI</p>
             </div>
-            <div className="brutal-sm rounded-lg bg-orange-600 dark:bg-orange-500 p-2.5">
+            <div className="brutal-sm rounded-lg bg-teal-600 dark:bg-teal-500 p-2.5">
               <p className="font-display text-sm leading-6 truncate text-white tnum" title={fmtMoney(stats.totalNominal, settings?.currency)}>{fmtMoney(stats.totalNominal, settings?.currency)}</p>
-              <p className="font-mono2 text-[9px] font-bold text-orange-100 mt-0.5">TOTAL NOMINAL</p>
+              <p className="font-mono2 text-[9px] font-bold text-teal-100 mt-0.5">TOTAL NOMINAL</p>
             </div>
           </div>
           <div className="mt-3">
@@ -60,7 +60,7 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
               {stats.months.map((m) => (
                 <div key={m.key} className="flex-1 flex flex-col items-center justify-end h-full">
                   <span className="font-mono2 text-[9px] font-bold">{m.count || ""}</span>
-                  <div className="w-full rounded-t border border-ink bg-orange-500" style={{ height: `${Math.max(4, (m.count / stats.maxBar) * 100)}%`, opacity: m.count ? 1 : 0.25 }} />
+                  <div className="w-full rounded-t border border-ink bg-teal-500" style={{ height: `${Math.max(4, (m.count / stats.maxBar) * 100)}%`, opacity: m.count ? 1 : 0.25 }} />
                   <span className="font-mono2 text-[8px] text-neutral-500 mt-0.5">{m.label}</span>
                 </div>
               ))}
@@ -125,10 +125,10 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
         Penyimpanan terpakai: {(info.used / 1024).toFixed(1)} KB dari ~5 MB ({info.pct.toFixed(1)}%)
       </p>
       <div className="h-2 rounded-full border border-ink bg-white overflow-hidden mb-3">
-        <div className="h-full bg-orange-500" style={{ width: `${Math.max(2, info.pct)}%` }} />
+        <div className="h-full bg-teal-500" style={{ width: `${Math.max(2, info.pct)}%` }} />
       </div>
       <div className="flex gap-2">
-        <Btn onClick={doExport} color="bg-orange-500 text-white" className="flex-1 text-xs!">⬇️ Backup (JSON)</Btn>
+        <Btn onClick={doExport} color="bg-teal-500 text-white" className="flex-1 text-xs!">⬇️ Backup (JSON)</Btn>
         <Btn onClick={() => fileRef.current?.click()} color="bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" className="flex-1 text-xs!">⬆️ Restore</Btn>
         <input ref={fileRef} type="file" accept=".json,application/json" className="hidden" onChange={doImport} />
       </div>

@@ -28,7 +28,7 @@ export function Card({ title, sticker, children, className = "" }) {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-bold tracking-tight">{title}</h2>
           {sticker && (
-            <span className="rounded-md bg-orange-600 px-2 py-0.5 font-mono2 text-[10px] font-bold text-white dark:bg-orange-500">
+            <span className="rounded-md bg-teal-600 px-2 py-0.5 font-mono2 text-[10px] font-bold text-white dark:bg-teal-500">
               {sticker}
             </span>
           )}
@@ -41,7 +41,7 @@ export function Card({ title, sticker, children, className = "" }) {
 
 export function Btn({ children, onClick, color = "", primary = false, className = "", type = "button", disabled }) {
   const base = primary
-    ? "bg-orange-600 border-orange-600 text-white hover:bg-orange-500 dark:bg-orange-500 dark:border-orange-500 dark:hover:bg-orange-400"
+    ? "bg-teal-600 border-teal-600 text-white hover:bg-teal-500 dark:bg-teal-500 dark:border-teal-500 dark:hover:bg-teal-400"
     : color || "";
   return (
     <button

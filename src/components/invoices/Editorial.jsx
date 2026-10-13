@@ -6,7 +6,7 @@ import { fmtMoney, fmtDate, terbilang } from "../../lib/format.js";
 const lbl = { fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#78716c", fontWeight: 600 };
 
 export default function Editorial({ inv, profile, totals, bodyFont, accent, showSignature }) {
-  const a = accent || "#ea580c";
+  const a = accent || "#0d9488";
   const cur = inv.currency;
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);

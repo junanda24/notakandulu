@@ -39,7 +39,7 @@ export default function WelcomeModal() {
         </div>
         <button
           onClick={close}
-          className="mt-6 w-full rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 text-[15px] transition"
+          className="mt-6 w-full rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 text-[15px] transition"
         >
           Mulai bikin invoice →
         </button>

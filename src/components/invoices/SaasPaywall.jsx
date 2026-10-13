@@ -11,7 +11,7 @@ const PILL = {
 };
 
 export default function SaasPaywall({ inv, profile, totals, accent, showSignature }) {
-  const a = accent || "#ea580c";
+  const a = accent || "#0d9488";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
