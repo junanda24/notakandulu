@@ -7,7 +7,7 @@ export function invoiceText(inv, profile, settings) {
   const t = calcTotals(inv);
   const cur = inv.currency || "IDR";
   const lines = [];
-  lines.push(`*${inv.number || "NOTA"}* — ${profile.shopName || "NotakanDulu"}`);
+  lines.push(`*${inv.number || "NOTA"}* — ${profile.shopName || "Tagihkan"}`);
   lines.push(`Tanggal: ${fmtDate(inv.date)}`);
   if (inv.customerName) lines.push(`Pelanggan: ${inv.customerName}`);
   lines.push("------------------------");
@@ -40,7 +40,7 @@ export function invoiceText(inv, profile, settings) {
 export const waShareUrl = (text) => `https://wa.me/?text=${encodeURIComponent(text)}`;
 
 export function mailtoUrl(inv, profile, settings) {
-  const subject = `Nota ${inv.number || ""} dari ${profile.shopName || "NotakanDulu"}`.trim();
+  const subject = `Nota ${inv.number || ""} dari ${profile.shopName || "Tagihkan"}`.trim();
   const body = invoiceText(inv, profile, settings);
   return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }

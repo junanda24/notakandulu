@@ -129,10 +129,10 @@ export default function App() {
       <header className="sticky top-0 z-20 border-b border-line bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur">
         <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white text-base font-extrabold">N</span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white text-base font-extrabold">T</span>
             <div>
-              <h1 className="text-[15px] font-extrabold tracking-tight leading-none">NotakanDulu</h1>
-              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">Nota elegant, gratis</p>
+              <h1 className="text-[15px] font-extrabold tracking-tight leading-none">Tagihkan</h1>
+              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">Invoice elegant, gratis</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -198,7 +198,7 @@ export default function App() {
 
       <footer className="border-t border-line mt-8">
         <p className="mx-auto max-w-7xl px-4 py-4 text-[11px] text-neutral-500 dark:text-neutral-400 text-center">
-          NotakanDulu · tanpa login · tanpa iklan · data di perangkatmu
+          Tagihkan · tanpa login · tanpa iklan · data di perangkatmu
         </p>
       </footer>
 

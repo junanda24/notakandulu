@@ -1,6 +1,6 @@
 # NotaKandulu — Handover (Tahap 9)
 
-Ditulis: 2026-10-13. Status build: selesai, live di https://notakandulu.vercel.app.
+Ditulis: 2026-10-13. Diperbarui: 2026-10-13 14:52 WIB (batch-2: 9→18 template, Faktur Formal ringkas). Status build: selesai, live di https://notakandulu.vercel.app.
 
 ## Apa ini
 Aplikasi pembuat nota/kwitansi/struk untuk UMKM Indonesia. Bikin nota di HP, cetak / export PDF, backup JSON.
@@ -11,9 +11,11 @@ Aplikasi pembuat nota/kwitansi/struk untuk UMKM Indonesia. Bikin nota di HP, cet
 - Deploy: Vercel, project `notakandulu` (org `team_3Gdr7vRqaWyOKQ6k6mlCZR3X`), deploy via `vercel build` + `vercel deploy --prebuilt --prod`
 - `npm run build` → `dist/`, lalu deploy prebuilt (pola yang sama kayak one-piece-web & devil-archive)
 
-## Fitur (per 2026-10-13)
-- 4 tab: **Buat Nota** (form + item + hitungan) / **Toko** (profil usaha + upload logo) / **Gaya** (9 template) / **Riwayat** (nota tersimpan)
-- **9 template** (`src/data/options.js` → `TEMPLATES`): Minimal SaaS (default), Corporate Clean, Editorial Serif, Kwitansi Elegan (terbilang + zona materai ≥ Rp5jt + stempel LUNAS), Accent Header, Executive Dark, Monochrome Print, Struk 80mm, Struk 58mm
+## Fitur (per 2026-10-13 sore WIB)
+- 4 tab: **Buat Nota** (form + item + hitungan) / **Toko** (profil usaha + upload logo) / **Gaya** (18 template) / **Riwayat** (nota tersimpan)
+- **18 template** (`src/data/options.js` → `TEMPLATES`):
+  - Batch 1: Minimal SaaS (default), Corporate Clean, Editorial Serif, Kwitansi Elegan (terbilang + zona materai ≥ Rp5jt + stempel LUNAS), Accent Header, Executive Dark, Monochrome Print, Struk 80mm, Struk 58mm
+  - Batch 2 (dari bedah 25 invoice asli, 2026-10-13): Faktur Formal (blok total hitam ala Adobe; header ringkas: "Invoice No.", tanpa baris currency), SaaS Paywall (total hero + status pill ala Stripe), Receipt Minimal (tanpa tabel ala Spotify/Uber), Thermal 58 PLN (monospace kapital + barcode), Marketplace (kode unik ala Tokopedia/Shopee), Studio / Agency (note simple, tanpa kotak warning), Faktur Pajak (kolom DPP/PPN terpisah), Bold Statement (ungu ala Behance), Kwitansi Klasik (materai + cap LUNAS)
 - Logo usaha: upload di tab Toko, otomatis diresize ≤512px, tampil di semua template
 - Export: cetak/PDF via print, bagikan gambar via `navigator.share` (fallback unduh di desktop)
 - Backup/restore JSON: share sheet native di HP (Safari iOS ngabaikan atribut `download`), unduh file di desktop
