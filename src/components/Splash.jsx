@@ -5,12 +5,22 @@ import gsap from "gsap";
 const NAME = "TagihkanDulu";
 const TAGLINE = "Buat invoice gratis, tanpa iklan dan login itu nyata \u{1F525}";
 
-const DOTS = Array.from({ length: 16 }, (_, i) => ({
-  id: i,
-  left: `${(i * 61) % 100}%`,
-  size: 3 + ((i * 7) % 5),
-  teal: i % 3 === 0,
-}));
+// Partikel dokumen 3 lapis kedalaman (depth of field):
+// lapis 0 = jauh (besar + blur berat + redup, gerak lambat),
+// lapis 1 = tengah, lapis 2 = depan (tajam + cerah, gerak cepat).
+const DOCS = Array.from({ length: 18 }, (_, i) => {
+  const layer = i % 3;
+  return {
+    id: i,
+    left: `${(i * 53) % 100}%`,
+    layer,
+    emoji: i % 4 === 3 ? "🧾" : "📄",
+    size: [36, 24, 15][layer] + ((i * 7) % 7),
+    blur: [8, 3.5, 0][layer],
+    opacity: [0.3, 0.5, 0.8][layer],
+    duration: [6, 4.2, 2.8][layer],
+  };
+});
 
 export default function Splash({ onDone }) {
   const root = useRef(null);
@@ -37,21 +47,22 @@ export default function Splash({ onDone }) {
         const t = setTimeout(safeDone, 400);
         return () => clearTimeout(t);
       }
-      // Partikel ambient: melayang ke atas terus-menerus
-      gsap.utils.toArray(".sp-dot").forEach((d) => {
+      // Partikel dokumen: melayang ke atas terus-menerus (kecepatan per lapis = parallax DOF)
+      gsap.utils.toArray(".sp-doc").forEach((el, i) => {
+        const cfg = DOCS[i % DOCS.length];
         gsap.fromTo(
-          d,
+          el,
           { y: 40, opacity: 0 },
           {
             y: -window.innerHeight * 0.55,
             x: gsap.utils.random(-36, 36),
-            opacity: gsap.utils.random(0.25, 0.7),
-            duration: gsap.utils.random(2.4, 4),
+            opacity: cfg.opacity,
+            duration: gsap.utils.random(cfg.duration * 0.85, cfg.duration * 1.15),
             repeat: -1,
             delay: gsap.utils.random(0, 2.5),
             ease: "sine.in",
             onRepeat() {
-              gsap.set(d, { y: 40, opacity: 0 });
+              gsap.set(el, { y: 40, opacity: 0 });
             },
           }
         );
@@ -108,18 +119,21 @@ export default function Splash({ onDone }) {
         className="sp-glow pointer-events-none absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full"
         style={{ background: "radial-gradient(circle, rgba(13,148,136,0.28) 0%, rgba(13,148,136,0) 62%)" }}
       />
-      {/* Partikel */}
-      {DOTS.map((d) => (
+      {/* Partikel dokumen + depth of field */}
+      {DOCS.map((d) => (
         <span
           key={d.id}
-          className="sp-dot pointer-events-none absolute bottom-0 rounded-full"
+          className="sp-doc pointer-events-none absolute bottom-0 select-none"
           style={{
             left: d.left,
-            width: d.size,
-            height: d.size,
-            background: d.teal ? "#2dd4bf" : "#ffffff",
+            fontSize: d.size,
+            filter: d.blur ? `blur(${d.blur}px)` : undefined,
+            opacity: d.opacity,
+            willChange: "transform, opacity",
           }}
-        />
+        >
+          {d.emoji}
+        </span>
       ))}
 
       <div className="sp-inner relative flex flex-col items-center" style={{ perspective: 600 }}>
