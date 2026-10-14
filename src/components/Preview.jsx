@@ -27,6 +27,12 @@ import Studio from "./invoices/Studio.jsx";
 import FakturPajak from "./invoices/FakturPajak.jsx";
 import BoldStatement from "./invoices/BoldStatement.jsx";
 import KwitansiKlasik from "./invoices/KwitansiKlasik.jsx";
+import Clarity from "./invoices/Clarity.jsx";
+import Noir from "./invoices/Noir.jsx";
+import Ivory from "./invoices/Ivory.jsx";
+import Linea from "./invoices/Linea.jsx";
+import Porcelain from "./invoices/Porcelain.jsx";
+import Atelier from "./invoices/Atelier.jsx";
 
 const TPL_COMPONENTS = {
   "saas": SaasCard,
@@ -47,6 +53,12 @@ const TPL_COMPONENTS = {
   "faktur-pajak": FakturPajak,
   "bold-statement": BoldStatement,
   "kwitansi-klasik": KwitansiKlasik,
+  "clarity": Clarity,
+  "noir": Noir,
+  "ivory": Ivory,
+  "linea": Linea,
+  "porcelain": Porcelain,
+  "atelier": Atelier,
 };
 
 export function InvoiceSheet({ inv, profile, settings, id }) {  const Tpl = TPL_COMPONENTS[settings.template] || SaasCard;

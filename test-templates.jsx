@@ -1,4 +1,4 @@
-// SSR render test untuk 18 template nota (normal / edge / empty).
+// SSR render test untuk 24 template nota (normal / edge / empty).
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { calcTotals } from "./src/lib/calc.js";
@@ -20,8 +20,14 @@ import Studio from "./src/components/invoices/Studio.jsx";
 import FakturPajak from "./src/components/invoices/FakturPajak.jsx";
 import BoldStatement from "./src/components/invoices/BoldStatement.jsx";
 import KwitansiKlasik from "./src/components/invoices/KwitansiKlasik.jsx";
+import Clarity from "./src/components/invoices/Clarity.jsx";
+import Noir from "./src/components/invoices/Noir.jsx";
+import Ivory from "./src/components/invoices/Ivory.jsx";
+import Linea from "./src/components/invoices/Linea.jsx";
+import Porcelain from "./src/components/invoices/Porcelain.jsx";
+import Atelier from "./src/components/invoices/Atelier.jsx";
 
-const TPL = { saas: SaasCard, corporate: Corporate, editorial: Editorial, kwitansi: Kwitansi, accent: AccentBlock, dark: ExecutiveDark, mono: MonoPrint, "struk-58": Struk58, "struk-80": Struk80, "faktur-formal": FakturFormal, "saas-paywall": SaasPaywall, "receipt-minimal": ReceiptMinimal, "thermal-58": Thermal58, marketplace: Marketplace, studio: Studio, "faktur-pajak": FakturPajak, "bold-statement": BoldStatement, "kwitansi-klasik": KwitansiKlasik };
+const TPL = { saas: SaasCard, corporate: Corporate, editorial: Editorial, kwitansi: Kwitansi, accent: AccentBlock, dark: ExecutiveDark, mono: MonoPrint, "struk-58": Struk58, "struk-80": Struk80, "faktur-formal": FakturFormal, "saas-paywall": SaasPaywall, "receipt-minimal": ReceiptMinimal, "thermal-58": Thermal58, marketplace: Marketplace, studio: Studio, "faktur-pajak": FakturPajak, "bold-statement": BoldStatement, "kwitansi-klasik": KwitansiKlasik, clarity: Clarity, noir: Noir, ivory: Ivory, linea: Linea, porcelain: Porcelain, atelier: Atelier };
 
 const profile = {
   shopName: "Kopi Senja",
@@ -125,6 +131,6 @@ for (const [tid, Cmp] of Object.entries(TPL)) {
   }
 }
 
-console.log(`\nSSR render: ${pass} lolos, ${fail} gagal dari ${pass + fail} kasus (18 template × 3 kasus)`);
+console.log(`\nSSR render: ${pass} lolos, ${fail} gagal dari ${pass + fail} kasus (24 template × 3 kasus)`);
 if (failures.length) { console.log("GAGAL:"); failures.forEach((f) => console.log(" - " + f)); process.exit(1); }
 console.log("SEMUA LOLOS ✓");
