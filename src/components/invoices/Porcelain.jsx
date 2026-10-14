@@ -93,7 +93,7 @@ export default function Porcelain({ inv, profile, totals, accent, showSignature 
         )}
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px 20px", marginTop: 24 }}>
-          <div><div style={k}>PEMBAYARAN</div><div style={{ marginTop: 2 }}><PaymentBlock inv={inv} profile={profile} cur={cur} accent={a} /></div></div>
+          <div><PaymentBlock inv={inv} profile={profile} cur={cur} accent={a} /></div>
           <div><div style={k}>CATATAN</div><NotesBlock inv={inv} /></div>
         </div>
         {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}

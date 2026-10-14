@@ -91,8 +91,7 @@ export default function Atelier({ inv, profile, totals, accent, showSignature })
 
       <div style={{ marginTop: 36, paddingTop: 18, borderTop: "1px solid #f0eeeb", display: "flex", gap: 32 }}>
         <div style={{ flex: 1 }}>
-          <div style={k}>PEMBAYARAN</div>
-          <div style={{ marginTop: 2 }}><PaymentBlock inv={inv} profile={profile} cur={cur} accent={a} /></div>
+          <PaymentBlock inv={inv} profile={profile} cur={cur} accent={a} />
         </div>
         <div style={{ flex: 1 }}>
           <div style={k}>CATATAN</div>
