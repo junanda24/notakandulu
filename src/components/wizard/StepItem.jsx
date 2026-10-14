@@ -5,6 +5,10 @@ import { TERMS, UNITS, useInvSet } from "./shared.jsx";
 import { blankItem, calcTotals } from "../../lib/calc.js";
 import { fmtMoney } from "../../lib/format.js";
 
+// Angka tidak boleh negatif (min="0" cuma batasi spinner, ketikan manual lolos).
+// String kosong dipertahankan supaya field tetap bisa dikosongkan user.
+const clampNum = (v) => (v === "" || v == null ? "" : Math.max(0, Number(v) || 0));
+
 function ItemRow({ it, index, open, onToggle, setItem, onDelete, canDelete }) {
   const lineTotal = (Number(it.qty) || 0) * (Number(it.price) || 0);
   return (
@@ -41,7 +45,7 @@ function ItemRow({ it, index, open, onToggle, setItem, onDelete, canDelete }) {
           />
           <div className="grid grid-cols-3 gap-2">
             <Field label="Qty">
-              <TextInput type="number" min="0" value={it.qty} onChange={(e) => setItem(it.id, { qty: e.target.value })} />
+              <TextInput type="number" min="0" value={it.qty} onChange={(e) => setItem(it.id, { qty: clampNum(e.target.value) })} />
             </Field>
             <Field label="Satuan">
               <Select value={it.unit || "pcs"} onChange={(e) => setItem(it.id, { unit: e.target.value })}>
@@ -52,7 +56,7 @@ function ItemRow({ it, index, open, onToggle, setItem, onDelete, canDelete }) {
               </Select>
             </Field>
             <Field label="Harga">
-              <TextInput type="number" min="0" value={it.price} onChange={(e) => setItem(it.id, { price: e.target.value })} />
+              <TextInput type="number" min="0" value={it.price} onChange={(e) => setItem(it.id, { price: clampNum(e.target.value) })} />
             </Field>
           </div>
           {canDelete && (
@@ -146,7 +150,7 @@ export default function StepItem({ inv, setInv }) {
           <HitungRow title="Diskon" desc="Potongan dari subtotal">
             <TextInput
               type="number" min="0" value={inv.discount.value}
-              onChange={(e) => set({ discount: { ...inv.discount, value: e.target.value } })}
+              onChange={(e) => set({ discount: { ...inv.discount, value: clampNum(e.target.value) } })}
               className="w-[88px]! text-right tabular-nums"
             />
             <div className="flex rounded-lg border border-line overflow-hidden" role="group" aria-label="Jenis diskon">
@@ -157,7 +161,7 @@ export default function StepItem({ inv, setInv }) {
           <HitungRow title="Pajak" desc="PPN / pajak lain">
             <TextInput
               type="number" min="0" value={inv.tax}
-              onChange={(e) => set({ tax: e.target.value })}
+              onChange={(e) => set({ tax: clampNum(e.target.value) })}
               className="w-[88px]! text-right tabular-nums"
             />
             <span className="text-[13px] font-bold text-neutral-400 w-[18px] text-center">%</span>
@@ -166,15 +170,15 @@ export default function StepItem({ inv, setInv }) {
             <span className="text-[13px] font-bold text-neutral-400">Rp</span>
             <TextInput
               type="number" min="0" value={inv.shipping}
-              onChange={(e) => set({ shipping: e.target.value })}
+              onChange={(e) => set({ shipping: clampNum(e.target.value) })}
               className="w-[110px]! text-right tabular-nums"
             />
           </HitungRow>
           <HitungRow title="Uang muka (DP)" desc="Dibayar di depan">
             <span className="text-[13px] font-bold text-neutral-400">Rp</span>
             <TextInput
-              type="number" min="0" value={inv.dp || 0}
-              onChange={(e) => set({ dp: e.target.value })}
+              type="number" min="0" value={inv.dp ?? ""}
+              onChange={(e) => set({ dp: clampNum(e.target.value) })}
               className="w-[110px]! text-right tabular-nums"
             />
           </HitungRow>

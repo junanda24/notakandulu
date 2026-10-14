@@ -174,18 +174,25 @@ export default function App() {
     const items = Array.isArray(src.items) && src.items.length > 0
       ? src.items.map((it) => ({ ...blankItem(), ...(it || {}) }))
       : [blankItem()];
+    // Guard tanggal: <input type="date"> cuma terima YYYY-MM-DD; format lain bikin field kelihatan kosong.
+    const isoDate = /^\d{4}-\d{2}-\d{2}$/.test(src.date || "") ? src.date : undefined;
+    const isoDue = /^\d{4}-\d{2}-\d{2}$/.test(src.dueDate || "") ? src.dueDate : undefined;
     if (duplicate) {
+      const base = blankInvoice();
       const copy = {
-        ...blankInvoice(),
+        ...base,
         ...src,
         id: `${Date.now().toString(36)}-dup`,
         number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), todayIso()),
         items: items.map((it) => ({ ...it, id: uid() })),
+        date: isoDate || base.date,
+        dueDate: isoDue || "",
       };
       setInv(copy);
       showToast("Diduplikasi — simpan untuk mengunci nomor");
     } else {
-      setInv({ ...blankInvoice(), ...src, items });
+      const base = blankInvoice();
+      setInv({ ...base, ...src, items, date: isoDate || base.date, dueDate: isoDue || "" });
     }
     setTab("buat");
   };
