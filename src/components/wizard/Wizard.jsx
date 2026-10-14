@@ -65,7 +65,7 @@ export function Stepper({ steps, idx, onJump }) {
 
 export default function Wizard({
   inv, setInv, profile, persistProfile, settings, persistSettings,
-  stepId, setStepId, onSave, onNew, onClearInv, onGotoToko, onGotoRiwayat,
+  stepId, setStepId, onSave, onNew, onClearInv, onGotoToko, onGotoRiwayat, notify,
 }) {
   const topRef = useRef(null);
   const contentRef = useRef(null);
@@ -123,7 +123,7 @@ export default function Wizard({
         {cur.id === "item" && <StepItem inv={inv} setInv={setInv} />}
         {cur.id === "gaya" && <CustomizePanel settings={settings} setSettings={persistSettings} />}
         {cur.id === "kirim" && (
-          <StepKirim inv={inv} setInv={setInv} profile={profile} settings={settings} onSave={onSave} onNew={onNew} onGotoToko={onGotoToko} onGotoRiwayat={onGotoRiwayat} />
+          <StepKirim inv={inv} setInv={setInv} profile={profile} settings={settings} onSave={onSave} onNew={onNew} onGotoToko={onGotoToko} onGotoRiwayat={onGotoRiwayat} notify={notify} />
         )}
       </div>
 

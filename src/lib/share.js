@@ -39,10 +39,40 @@ export function invoiceText(inv, profile) {
 
 export const waShareUrl = (text) => `https://wa.me/?text=${encodeURIComponent(text)}`;
 
+// Batas aman panjang URL mailto (bervariasi antar browser; 1800 konservatif & umum).
+const MAX_MAILTO_LEN = 1800;
 export function mailtoUrl(inv, profile, settings) {
   const subject = `Nota ${inv.number || ""} dari ${profile.shopName || "TagihkanDulu"}`.trim();
-  const body = invoiceText(inv, profile);
-  return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const head = `mailto:?subject=${encodeURIComponent(subject)}&body=`;
+  let body = invoiceText(inv, profile);
+  if (head.length + encodeURIComponent(body).length > MAX_MAILTO_LEN) {
+    // Nota super panjang: rangkas daftar item di tengah, tapi baris Total ke bawah
+    // (total, pembayaran, catatan, terima kasih) SELALU dipertahankan utuh.
+    const lines = body.split("\n");
+    const totalIdx = lines.findIndex((l) => l.startsWith("*Total:"));
+    const headLines = totalIdx > 0 ? lines.slice(0, totalIdx) : lines.slice(0, 6);
+    const tailLines = totalIdx > 0 ? lines.slice(totalIdx) : [];
+    // headLines = header + "----" + item-item; simpan 8 baris pertama, rangkas sisanya
+    const itemStart = headLines.findIndex((l) => l.startsWith("• "));
+    let kept = headLines;
+    if (itemStart >= 0 && headLines.length > itemStart + 8) {
+      const hidden = headLines.length - itemStart - 8;
+      kept = [...headLines.slice(0, itemStart + 8), `…(${hidden} item lain disembunyikan)`];
+    }
+    body = [...kept, ...tailLines].join("\n");
+    // Masih kepanjangan (item super banyak)? Potong aman dari tengah, Total tetap utuh.
+    const note = "\n\n…(teks dipotong — kirim via WhatsApp atau PNG untuk versi lengkap)";
+    let guard = 2000;
+    while (head.length + encodeURIComponent(body).length > MAX_MAILTO_LEN - encodeURIComponent(note).length && guard-- > 0) {
+      const ls = body.split("\n");
+      const ti = ls.findIndex((l) => l.startsWith("…(") || l.startsWith("• "));
+      if (ti < 0 || ls.length - ti < 3) break;
+      ls.splice(ti, Math.max(1, Math.floor((ls.length - ti) / 2)));
+      body = ls.join("\n");
+    }
+    body += note;
+  }
+  return head + encodeURIComponent(body);
 }
 
 export const canNativeShareFile = () =>
@@ -63,7 +93,11 @@ export async function invoiceToPng(node) {
       await document.fonts.ready;
     } catch { /* abaikan */ }
   }
-  return toPng(node, { pixelRatio: 3, cacheBust: true });
+  // Nota super panjang di pixelRatio 3 bisa bikin HP kentang freeze/OOM:
+  // turunkan resolusi bertahap mengikuti tinggi konten.
+  const h = node?.getBoundingClientRect?.().height || 0;
+  const pixelRatio = h > 9000 ? 1 : h > 4500 ? 1.5 : h > 2200 ? 2 : 3;
+  return toPng(node, { pixelRatio, cacheBust: true });
 }
 
 export async function nativeSharePng(node, inv) {

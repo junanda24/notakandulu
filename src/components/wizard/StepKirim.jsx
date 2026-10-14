@@ -5,7 +5,7 @@ import { InvoiceSheet, ExportCard } from "../Preview.jsx";
 import { calcTotals } from "../../lib/calc.js";
 import { fmtMoney, fmtDate } from "../../lib/format.js";
 
-export default function StepKirim({ inv, setInv, profile, settings, onSave, onNew, onGotoToko, onGotoRiwayat }) {
+export default function StepKirim({ inv, setInv, profile, settings, onSave, onNew, onGotoToko, onGotoRiwayat, notify }) {
   const t = calcTotals(inv);
   const [saved, setSaved] = useState(false);
   // Nota baru (id beda) -> reset status tersimpan
@@ -124,7 +124,7 @@ export default function StepKirim({ inv, setInv, profile, settings, onSave, onNe
         </p>
       )}
 
-      <ExportCard inv={inv} profile={profile} settings={settings} sheetRef={hiddenSheetRef} />
+      <ExportCard inv={inv} profile={profile} settings={settings} sheetRef={hiddenSheetRef} notify={notify} />
 
       {/* Sheet off-screen untuk render PNG (tidak terlihat, tapi ter-layout untuk html-to-image) */}
       <div aria-hidden="true" style={{ position: "fixed", left: "-10000px", top: 0, pointerEvents: "none" }}>

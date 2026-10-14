@@ -143,18 +143,17 @@ export default function App() {
   }, [toast]);
 
   const handleSave = () => {
-    // kunci nomor: naikkan counter begitu nota disimpan
-    const finalInv = { ...(inv.number ? inv : { ...inv, number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", nextCounter(), inv.date) }) };
-    if (inv.number && !history.some((h) => h.id === inv.id)) {
-      // nomor manual pertama kali disimpan -> tetap majukan counter agar tak bentrok
-      nextCounter();
-    }
+    // nomor: intip counter TANPA menaikkannya; counter dikunci hanya kalau save sukses,
+    // supaya nomor tidak lompat saat penyimpanan gagal (memori browser penuh).
+    const finalInv = { ...(inv.number ? inv : { ...inv, number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), inv.date) }) };
+    const needsCounterBump = !inv.number || !history.some((h) => h.id === inv.id);
     finalInv.templateUsed = settings.template;
     finalInv.fontUsed = settings.font;
     finalInv.accentUsed = settings.accent;
     const { history: h, ok } = saveToHistory(finalInv);
     setHistory(h);
     setInv(finalInv);
+    if (ok && needsCounterBump) nextCounter(); // kunci nomor hanya kalau tersimpan beneran
     const dupNum = inv.number && h.some((x) => x.id !== finalInv.id && x.number === inv.number);
     showToast(!ok ? "Gagal menyimpan — memori browser penuh"
       : dupNum ? `Nota tersimpan ✓ (nomor ${inv.number} sudah dipakai nota lain!)`
@@ -234,6 +233,7 @@ export default function App() {
         onClearInv={handleClearInv}
         onGotoToko={() => { setTab("buat"); persistWstep("data"); }}
         onGotoRiwayat={() => setTab("riwayat")}
+        notify={showToast}
       />
     );
     if (tab === "saran") return <SaranPanel />;

@@ -83,7 +83,9 @@ export const InvoiceSheet = memo(function InvoiceSheet({ inv, profile, settings,
 
 // Kartu Ekspor & Bagikan — dipakai di Step 4 wizard (Langkah Kirim).
 // Butuh sheetRef (ref ke node InvoiceSheet yang ter-render) untuk ekspor PNG.
-export function ExportCard({ inv, profile, settings, sheetRef }) {
+export function ExportCard({ inv, profile, settings, sheetRef, notify }) {
+  // Error ekspor/bagikan tampil sebagai toast app (bukan alert bawaan browser).
+  const fail = notify || ((m) => alert(m));
   const [busy, setBusy] = useState("");
   const [copied, setCopied] = useState(false);
   const [nativeOk] = useState(() => canNativeShareFile());
@@ -111,7 +113,7 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
         downloadPng(url, `${inv.number || "nota"}.png`);
       }
     } catch (e) {
-      if (e?.name !== "AbortError") alert("Gagal: " + (e.message || e));
+      if (e?.name !== "AbortError") fail("Gagal: " + (e.message || e));
     } finally {
       setBusy("");
     }
@@ -125,7 +127,7 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);
     } catch (e) {
-      alert("Gagal menyalin: " + (e.message || e));
+      fail("Gagal menyalin: " + (e.message || e));
     } finally {
       setBusy("");
     }
@@ -288,7 +290,7 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
         downloadPng(url, `${inv.number || "nota"}.png`);
       }
     } catch (e) {
-      if (e?.name !== "AbortError") alert("Gagal: " + (e.message || e));
+      if (e?.name !== "AbortError") fail("Gagal: " + (e.message || e));
     } finally {
       setBusy("");
     }
