@@ -15,7 +15,7 @@ const DOCS = Array.from({ length: 18 }, (_, i) => {
     left: `${(i * 53) % 100}%`,
     layer,
     emoji: i % 4 === 3 ? "🧾" : "📄",
-    size: [36, 24, 15][layer] + ((i * 7) % 7),
+    size: [48, 32, 20][layer] + ((i * 7) % 8),
     blur: [8, 3.5, 0][layer],
     opacity: [0.3, 0.5, 0.8][layer],
     duration: [6, 4.2, 2.8][layer],
