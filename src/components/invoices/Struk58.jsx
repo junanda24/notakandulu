@@ -1,15 +1,14 @@
 // Style 8 — Struk 58mm (thermal). Konten 54mm, monospace, pemisah dashed,
 // jumlah rata kanan, TOTAL tebal dua kali lipat, logo kecil di atas.
 import { Money, ShopLogo, fmtD, dpInfo } from "./shared.jsx";
-import { fmtMoney } from "../../lib/format.js";
+import { fmtMoney, terbilang } from "../../lib/format.js";
 
 export default function Struk58({ inv, profile, totals, bodyFont }) {
-  const cur = inv.currency;
+  const cur = inv.currency || "IDR";
   const dpi = dpInfo(inv, totals);
   const dash = { borderTop: "1px dashed #a8a29e", margin: "8px 0" };
-  const mono = "'IBM Plex Mono', 'Courier New', monospace";
-  return (
-    <div style={{ fontFamily: mono, width: "54mm", margin: "0 auto", padding: "8px 2mm", fontSize: 10.5, color: "#111", lineHeight: 1.5 }}>
+    return (
+    <div style={{ fontFamily: bodyFont, width: "54mm", margin: "0 auto", padding: "8px 2mm", fontSize: 10.5, color: "#111", lineHeight: 1.5 }}>
       <div style={{ textAlign: "center" }}>
         <ShopLogo logo={profile.logo} size={38} radius={8} grayscale style={{ margin: "0 auto 6px" }} />
         <p style={{ fontWeight: 800, fontSize: 13, letterSpacing: "0.04em" }}>{profile.shopName || "TOKO"}</p>
@@ -61,10 +60,15 @@ export default function Struk58({ inv, profile, totals, bodyFont }) {
           </div>
         </>
       )}
+          {cur === "IDR" && (
+            <div style={{ fontStyle: "italic", color: "#444", textAlign: "center", fontSize: 11, marginTop: 6, textTransform: "capitalize" }}>
+              {terbilang(dpi ? dpi.sisa : totals.total)}
+            </div>
+          )}
       <div style={dash} />
       {inv.terms && <p style={{ fontSize: 9.5, marginBottom: 4 }}>Syarat: {inv.terms}</p>}
       {inv.notes && <p style={{ fontSize: 9.5, marginBottom: 6, whiteSpace: "pre-wrap", overflowWrap: "break-word" }}>{inv.notes}</p>}
-      <p style={{ textAlign: "center", fontSize: 9.5, color: "#444" }}>Terima kasih 🙏</p>
+      <p style={{ textAlign: "center", fontSize: 9.5, color: "#444" }}>Terima kasih.</p>
     </div>
   );
 }

@@ -1,15 +1,14 @@
 // Style 1 — Minimal SaaS Card (ala Stripe). Paling profesional: hairline,
 // label uppercase ber-spasi, angka tabular rata kanan, total sebagai destinasi.
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
-import { fmtMoney } from "../../lib/format.js";
-import { fmtDate } from "../../lib/format.js";
+import { fmtMoney, fmtDate, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
 const hair = { borderTop: "1px solid #e5e7eb" };
 
 export default function SaasCard({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#0d9488";
-  const cur = inv.currency;
+  const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
   return (
@@ -114,6 +113,11 @@ export default function SaasCard({ inv, profile, totals, bodyFont, accent, showS
                 </span>
               </div>
             </>
+          )}
+          {cur === "IDR" && (
+            <div style={{ fontStyle: "italic", color: "#78716c", textAlign: "right", fontSize: 11, marginTop: 6, textTransform: "capitalize" }}>
+              {terbilang(dpi ? dpi.sisa : totals.total)}
+            </div>
           )}
         </div>
       </div>

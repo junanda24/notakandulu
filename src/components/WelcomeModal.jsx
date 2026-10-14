@@ -1,12 +1,13 @@
 // Modal selamat datang — tampil sekali saat pertama kali buka.
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { TEMPLATES } from "../data/options.js";
 
 const WELCOME_KEY = "notakandulu:welcomed";
 
 const STEPS = [
   { icon: "📝", title: "Ikuti 4 langkah", desc: "Data, item, gaya, kirim — tinggal ikuti panduannya sampai nota jadi." },
-  { icon: "🎨", title: "Atur gayanya", desc: "18 template elegan di Langkah Gaya, dari formal sampai struk thermal." },
+  { icon: "🎨", title: "Atur gayanya", desc: `${TEMPLATES.length} template elegan di Langkah Gaya, dari formal sampai struk thermal.` },
   { icon: "📤", title: "Simpan & bagikan", desc: "Ekspor PNG/PDF atau kirim langsung via WhatsApp." },
 ];
 
@@ -14,9 +15,8 @@ export default function WelcomeModal() {
   const [show, setShow] = useState(() => {
     try { return localStorage.getItem(WELCOME_KEY) !== "1"; } catch { return true; }
   });
-  const root = useRef(null);
   useEffect(() => {
-    if (!show || !root.current) return;
+    if (!show) return;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
     gsap.fromTo(".wm-backdrop", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" });
     gsap.fromTo(
@@ -24,6 +24,7 @@ export default function WelcomeModal() {
       { scale: 0.9, y: 24, opacity: 0 },
       { scale: 1, y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.4)" }
     );
+    return () => { gsap.killTweensOf(".wm-backdrop"); gsap.killTweensOf(".wm-card"); };
   }, [show]);
   if (!show) return null;
   const close = () => {
@@ -33,7 +34,7 @@ export default function WelcomeModal() {
     gsap.to(".wm-backdrop", { opacity: 0, duration: 0.25, ease: "power1.in", onComplete: () => setShow(false) });
   };
   return (
-    <div ref={root} className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="wm-backdrop absolute inset-0" style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(3px)" }} />
       <div className="wm-card relative bg-white dark:bg-neutral-900 rounded-2xl border border-line shadow-2xl max-w-md w-full p-6 sm:p-8 text-center">
         <img src="/logo.jpg" alt="Logo TagihkanDulu" className="inline h-12 w-12 rounded-xl object-cover" />

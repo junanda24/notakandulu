@@ -2,17 +2,15 @@
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
-const serif = "'Georgia', 'Times New Roman', serif";
 const k = { fontSize: 9, letterSpacing: "0.22em", color: "#a8a29e", fontWeight: 700 };
 
-export default function Ivory({ inv, profile, totals, accent, showSignature }) {
+export default function Ivory({ inv, profile, totals, bodyFont, displayFont, accent, showSignature }) {
   const a = accent || "#b45309";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
-  const inter = "'Inter', system-ui, sans-serif";
-  return (
-    <div style={{ fontFamily: inter, fontSize: 12.5, lineHeight: 1.6, color: "#292524", background: "#faf7f1", padding: "52px 48px" }}>
+    return (
+    <div style={{ fontFamily: bodyFont, fontSize: 12.5, lineHeight: 1.6, color: "#292524", background: "#faf7f1", padding: "52px 48px" }}>
       <div style={{ textAlign: "center" }}>
         <ShopLogo logo={profile.logo} size={46} radius={10} style={{ margin: "0 auto 10px" }} />
         <div style={{ fontSize: 12, letterSpacing: "0.32em", textIndent: "0.32em", fontWeight: 600, color: "#78716c" }}>{(profile.shopName || "NAMA USAHA").toUpperCase()}</div>
@@ -26,7 +24,7 @@ export default function Ivory({ inv, profile, totals, accent, showSignature }) {
       <div style={{ textAlign: "center", fontSize: 10.5, letterSpacing: "0.16em", color: "#78716c", lineHeight: 2, fontVariantNumeric: "tabular-nums" }}>
         INVOICE · {inv.number || "—"}<br />{fmtDate(inv.date)} · JATUH TEMPO {inv.dueDate ? fmtDate(inv.dueDate) : "—"}{inv.poNumber ? ` · ${inv.poNumber}` : ""}
       </div>
-      <div className="num" style={{ fontFamily: serif, textAlign: "center", fontSize: 50, marginTop: 14, fontVariantNumeric: "tabular-nums" }}>
+      <div style={{ fontFamily: displayFont, textAlign: "center", fontSize: 50, marginTop: 14, fontVariantNumeric: "tabular-nums" }}>
         <Money v={totals.total} cur={cur} />
       </div>
 
@@ -90,7 +88,7 @@ export default function Ivory({ inv, profile, totals, accent, showSignature }) {
 
       <div style={{ textAlign: "center", marginTop: 26 }}>
         <div style={k}>TOTAL TAGIHAN</div>
-        <div className="num" style={{ fontFamily: serif, fontSize: 38, marginTop: 8, color: a, fontVariantNumeric: "tabular-nums" }}>
+        <div style={{ fontFamily: displayFont, fontSize: 38, marginTop: 8, color: a, fontVariantNumeric: "tabular-nums" }}>
           <Money v={totals.total} cur={cur} />
         </div>
         {dpi && (
@@ -100,7 +98,7 @@ export default function Ivory({ inv, profile, totals, accent, showSignature }) {
         )}
       </div>
       {cur === "IDR" && (
-        <div style={{ textAlign: "center", fontStyle: "italic", fontFamily: serif, color: "#a8a29e", fontSize: 11, marginTop: 8, textTransform: "capitalize" }}>
+        <div style={{ textAlign: "center", fontStyle: "italic", fontFamily: displayFont, color: "#a8a29e", fontSize: 11, marginTop: 8, textTransform: "capitalize" }}>
           {terbilang(dpi ? dpi.sisa : totals.total)}
         </div>
       )}

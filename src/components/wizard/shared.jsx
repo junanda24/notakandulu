@@ -8,13 +8,7 @@ export const UNITS = ["pcs", "box", "dus", "pak", "lusin", "kodi", "kg", "gram",
 export const TERMS = ["Net 7", "Net 14", "Net 30", "Dibayar saat terima"];
 
 export const STEP_IDS = ["data", "item", "gaya", "kirim"];
-const STEP_TITLES = {
-  data: "Isi Data",
-  item: "Atur Item",
-  gaya: "Pilih Gaya",
-  kirim: "Kirim Nota",
-};
-const STEP_SHORT = {
+const STEP_LABELS = {
   data: "Isi Data",
   item: "Atur Item",
   gaya: "Pilih Gaya",
@@ -23,7 +17,7 @@ const STEP_SHORT = {
 
 // Toko & Pelanggan digabung dalam satu step "Data" (dipisah section) — 4 step lebih lega.
 export function getSteps() {
-  return STEP_IDS.map((id) => ({ id, title: STEP_TITLES[id], short: STEP_SHORT[id] }));
+  return STEP_IDS.map((id) => ({ id, title: STEP_LABELS[id], short: STEP_LABELS[id] }));
 }
 
 // 4 persona data contoh — tiap klik tombol "Isi data contoh" bergilir ke persona
@@ -64,7 +58,7 @@ const SAMPLE_PERSONAS = [
     customerNpwp: "03.456.789.0-215.000",
     poNumber: "PO/LND-2026-011",
     tax: 0,
-    discount: { type: "flat", value: 10000 },
+    discount: { type: "fixed", value: 10000 },
     shipping: 20000,
     dp: 30000,
     terms: "Net 7",

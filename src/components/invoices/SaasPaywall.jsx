@@ -1,7 +1,7 @@
 // Template B — SaaS Paywall (nyontek Stripe + Paper.id).
 // Invoice = halaman bayar: total hero + info bayar statis + baris "Sisa Tagihan".
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
-import { fmtDate } from "../../lib/format.js";
+import { fmtDate, terbilang } from "../../lib/format.js";
 import { paymentStatus, STATUS_META } from "../../lib/calc.js";
 
 const PILL = {
@@ -10,7 +10,7 @@ const PILL = {
   lewat: { bg: "#fee2e2", fg: "#991b1b", dot: "#dc2626" },
 };
 
-export default function SaasPaywall({ inv, profile, totals, accent, showSignature }) {
+export default function SaasPaywall({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#0d9488";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
@@ -18,11 +18,10 @@ export default function SaasPaywall({ inv, profile, totals, accent, showSignatur
   const st = paymentStatus(inv) || "belum";
   const pill = PILL[st] || PILL.belum;
   const sm = STATUS_META[st] || STATUS_META.belum;
-  const jakarta = "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif";
-  const pays = (profile.payments || []).filter((p) => (inv.paymentIds || []).includes(p.id));
+    const pays = (profile.payments || []).filter((p) => (inv.paymentIds || []).includes(p.id));
   const tagih = dpi ? dpi.sisa : totals.total;
   return (
-    <div style={{ fontFamily: jakarta, fontSize: 12.5, lineHeight: 1.6, color: "#111827", background: "#fff" }}>
+    <div style={{ fontFamily: bodyFont, fontSize: 12.5, lineHeight: 1.6, color: "#111827", background: "#fff" }}>
       {/* Top bar */}
       <div style={{ height: 64, borderBottom: "1px solid #eef0f3", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 40px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -86,6 +85,11 @@ export default function SaasPaywall({ inv, profile, totals, accent, showSignatur
             Total <Money v={totals.total} cur={cur} /> − Uang muka (DP) <Money v={dpi.dp} cur={cur} />
           </div>
         )}
+          {cur === "IDR" && (
+            <div style={{ fontStyle: "italic", color: "#92400e", textAlign: "right", fontSize: 11, marginTop: 6, textTransform: "capitalize" }}>
+              {terbilang(dpi ? dpi.sisa : totals.total)}
+            </div>
+          )}
 
         {/* Info bayar statis (bukan tombol — invoice itu dokumen mati) */}
         {pays.length > 0 && (
@@ -93,12 +97,11 @@ export default function SaasPaywall({ inv, profile, totals, accent, showSignatur
             <div style={{ fontSize: 9, letterSpacing: "0.2em", fontWeight: 800, color: a }}>BAYAR KE</div>
             {pays.map((p) => (
               <div key={p.id} style={{ marginTop: 8, fontSize: 13 }}>
-                <b>{p.label}</b> · <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 600 }}>{p.number}</span>
+                <b>{p.label}</b> · <span style={{ fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>{p.number}</span>
                 {p.holder ? <span style={{ color: "#6b7280", fontSize: 11 }}> a.n. {p.holder}</span> : null}
               </div>
             ))}
-            <div style={{ fontSize: 10.5, color: "#9ca3af", marginTop: 8 }}>Transfer · QRIS · VA · Kartu</div>
-          </div>
+                      </div>
         )}
 
         <div style={{ marginTop: 20 }}>

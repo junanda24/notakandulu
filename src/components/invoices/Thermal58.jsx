@@ -5,13 +5,12 @@ import { terbilang, fmtDate } from "../../lib/format.js";
 
 const dash = { borderTop: "1px dashed #999", margin: "10px 0" };
 
-export default function Thermal58({ inv, profile, totals }) {
+export default function Thermal58({ inv, profile, totals, bodyFont }) {
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
-  const mono = "'IBM Plex Mono', monospace";
-  return (
-    <div style={{ fontFamily: mono, fontSize: 11, lineHeight: 1.55, color: "#111", background: "#fff", padding: "22px 16px", textTransform: "uppercase" }}>
+    return (
+    <div style={{ fontFamily: bodyFont, fontSize: 11, lineHeight: 1.55, color: "#111", background: "#fff", padding: "22px 16px", textTransform: "uppercase" }}>
       <div style={{ textAlign: "center", fontWeight: 700 }}>
         <ShopLogo logo={profile.logo} size={36} radius={6} grayscale style={{ margin: "0 auto 6px" }} />
         {profile.shopName || "TOKO"}

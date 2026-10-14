@@ -1,7 +1,7 @@
 // Style 5 — Accent Header Block. Pita aksen penuh di atas dengan judul INVOICE
 // putih, logo dalam chip putih, sisa halaman putih dengan hairline netral.
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, fmtD, dpInfo } from "./shared.jsx";
-import { fmtMoney } from "../../lib/format.js";
+import { fmtMoney, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
 
@@ -111,6 +111,11 @@ export default function AccentBlock({ inv, profile, totals, bodyFont, accent, sh
                   <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums" }}><Money v={dpi.sisa} cur={cur} /></span>
                 </div>
               </>
+            )}
+            {cur === "IDR" && (
+              <div style={{ fontStyle: "italic", color: "#6b7280", fontSize: 11, marginTop: 8, textAlign: "right", textTransform: "capitalize" }}>
+                {terbilang(dpi ? dpi.sisa : totals.total)}
+              </div>
             )}
           </div>
         </div>

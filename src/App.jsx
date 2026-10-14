@@ -34,12 +34,12 @@ function DrawerItem({ icon, label, active, onClick }) {
 export default function App() {
   const [tab, setTab] = useState("buat");
   const [splash, setSplash] = useState(true);
-  const [mobileView, setMobileView] = useState("form"); // form | preview (khusus HP)
   const [previewOpen, setPreviewOpen] = useState(false); // modal preview full-screen (HP)
   const [dark, setDark] = useState(() => {
     try {
       const saved = localStorage.getItem("notakandulu:theme");
       const isDark = saved ? saved === "dark" : window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+      // Disengaja di initializer (bukan useEffect): cegah flash tema salah sebelum paint pertama.
       if (isDark) document.documentElement.classList.add("dark");
       return !!isDark;
     } catch { return false; }
@@ -49,7 +49,7 @@ export default function App() {
   const [history, setHistory] = useState(getHistory);
   const [toast, setToast] = useState("");
   const [drawer, setDrawer] = useState(false); // side menu (burger)
-  const goTab = (id) => { setTab(id); setMobileView("form"); setDrawer(false); };
+  const goTab = (id) => { setTab(id); setDrawer(false); };
 
   const toggleDark = () => {
     const next = !dark;
@@ -93,18 +93,24 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const persistProfile = (updater) =>
+  const persistProfile = (updater) => {
+    let ok = true;
     setProfileState((p) => {
       const np = typeof updater === "function" ? updater(p) : updater;
-      setProfile(np);
+      ok = setProfile(np);
       return np;
     });
-  const persistSettings = (updater) =>
+    setTimeout(() => { if (!ok) showToast("Penyimpanan penuh — data toko mungkin tidak tersimpan"); }, 0);
+  };
+  const persistSettings = (updater) => {
+    let ok = true;
     setSettingsState((s) => {
       const ns = typeof updater === "function" ? updater(s) : updater;
-      setSettings(ns);
+      ok = setSettings(ns);
       return ns;
     });
+    setTimeout(() => { if (!ok) showToast("Penyimpanan penuh — pengaturan mungkin tidak tersimpan"); }, 0);
+  };
 
   // Sinkron mata uang settings -> nota baru
   useEffect(() => {
@@ -137,40 +143,39 @@ export default function App() {
 
   const handleSave = () => {
     // kunci nomor: naikkan counter begitu nota disimpan
-    const finalInv = inv.number ? inv : { ...inv, number: expandNumber(settings.numberPattern, nextCounter(), inv.date) };
+    const finalInv = { ...(inv.number ? inv : { ...inv, number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", nextCounter(), inv.date) }) };
     if (inv.number && !history.some((h) => h.id === inv.id)) {
       // nomor manual pertama kali disimpan -> tetap majukan counter agar tak bentrok
       nextCounter();
     }
     finalInv.templateUsed = settings.template;
-    setHistory(saveToHistory(finalInv));
+    const { history: h, ok } = saveToHistory(finalInv);
+    setHistory(h);
     setInv(finalInv);
-    showToast("Nota tersimpan ✓");
+    showToast(ok ? "Nota tersimpan ✓" : "Gagal menyimpan — memori browser penuh");
   };
 
   const handleNew = () => {
-    setInv(blankInvoice({ number: expandNumber(settings.numberPattern, peekCounter(), todayIso()), date: todayIso(), currency: settings.currency }));
+    setInv(blankInvoice({ number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), todayIso()), date: todayIso(), currency: settings.currency }));
     persistWstep("data");
     setTab("buat");
-    setMobileView("form");
     showToast("Nota baru ✓");
   };
 
   const handleClearInv = () => {
-    setInv(blankInvoice({ number: expandNumber(settings.numberPattern, peekCounter(), todayIso()), date: todayIso(), currency: settings.currency }));
+    setInv(blankInvoice({ number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), todayIso()), date: todayIso(), currency: settings.currency }));
     showToast("Data dikosongkan ✓");
   };
 
   const openHistory = (h, duplicate = false) => {
     if (duplicate) {
-      const copy = { ...h, id: `${Date.now().toString(36)}-dup`, number: expandNumber(settings.numberPattern, peekCounter(), todayIso()) };
+      const copy = { ...h, id: `${Date.now().toString(36)}-dup`, number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), todayIso()) };
       setInv({ ...copy, items: copy.items.map((it) => ({ ...it })) });
       showToast("Diduplikasi — simpan untuk mengunci nomor");
     } else {
       setInv({ ...h, items: h.items.map((it) => ({ ...it })) });
     }
     setTab("buat");
-    setMobileView("form");
   };
 
   const formPanel = useMemo(() => {
@@ -185,9 +190,8 @@ export default function App() {
         stepId={wstep}
         setStepId={persistWstep}
         onSave={handleSave}
-        onNew={handleNew}
         onClearInv={handleClearInv}
-        onGotoToko={() => { setTab("buat"); persistWstep("toko"); }}
+        onGotoToko={() => { setTab("buat"); persistWstep("data"); }}
         onGotoRiwayat={() => setTab("riwayat")}
       />
     );
@@ -196,13 +200,18 @@ export default function App() {
       <HistoryPanel
         history={history}
         onOpen={openHistory}
-        onDelete={(id) => setHistory(deleteHistory(id))}
+        onDelete={(id) => {
+          const { history: h, ok } = deleteHistory(id);
+          setHistory(h);
+          if (!ok) showToast("Gagal menghapus — memori browser penuh");
+        }}
         onToggleStatus={(id) => {
           const item = history.find((h) => h.id === id);
           if (!item) return;
-          setHistory(saveToHistory({ ...item, status: (item.status || "belum") === "lunas" ? "belum" : "lunas" }));
+          const { history: h, ok } = saveToHistory({ ...item, status: (item.status || "belum") === "lunas" ? "belum" : "lunas" });
+          setHistory(h);
+          if (!ok) showToast("Gagal menyimpan — memori browser penuh");
         }}
-        onNew={handleNew}
         settings={settings}
         onRestored={() => {
           setProfileState(getProfile());
@@ -236,7 +245,7 @@ export default function App() {
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <button
+            <button aria-label="Buka menu"
               onClick={() => setDrawer(true)}
               title="Menu"
               className="brutal-btn h-9 w-9 rounded-lg text-lg leading-none lg:hidden"
@@ -258,12 +267,12 @@ export default function App() {
           <div className="mx-auto max-w-2xl">{formPanel}</div>
         ) : (
         <div className="grid gap-5 lg:grid-cols-[1fr_440px]">
-          <div className={mobileView === "preview" ? "block" : "hidden lg:block"}>
+          <div className="hidden lg:block">
             <div className={`lg:sticky lg:top-[76px] transition-opacity duration-300 ${dimPreview ? "lg:opacity-40" : ""}`}>
               <Preview inv={inv} profile={profile} settings={settings} />
             </div>
           </div>
-          <div className={mobileView === "form" ? "block" : "hidden lg:block"}>
+          <div>
             {formPanel}
           </div>
         </div>
@@ -283,12 +292,12 @@ export default function App() {
       </footer>
 
       {toast && (
-        <div ref={toastRef} className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-lg border border-line bg-white dark:bg-neutral-900 px-5 py-3 text-sm font-semibold shadow-lg">
+        <div ref={toastRef} role="status" className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-lg border border-line bg-white dark:bg-neutral-900 px-5 py-3 text-sm font-semibold shadow-lg">
           {toast}
         </div>
       )}
 
-      {/* Floating action bar — khusus HP: Simpan + Preview */}
+      {/* Floating action bar — khusus HP: Preview saja */}
       {tab !== "saran" && (
         <>
           <div className="h-24 lg:hidden" />
@@ -324,10 +333,10 @@ export default function App() {
     {drawer && (
       <>
         <div className="drawer-backdrop no-print fixed inset-0 z-40 bg-black/40" onClick={() => setDrawer(false)} />
-        <aside className="drawer-panel no-print fixed inset-y-0 right-0 z-50 w-72 max-w-[85vw] bg-white dark:bg-neutral-900 shadow-2xl flex flex-col">
+        <aside role="dialog" aria-modal="true" aria-label="Menu" className="drawer-panel no-print fixed inset-y-0 right-0 z-50 w-72 max-w-[85vw] bg-white dark:bg-neutral-900 shadow-2xl flex flex-col">
           <div className="flex items-center justify-between px-4 py-3.5 border-b border-line">
             <p className="font-extrabold text-[15px] tracking-tight">Menu</p>
-            <button
+            <button aria-label="Tutup menu"
               onClick={() => setDrawer(false)}
               title="Tutup"
               className="brutal-btn h-9 w-9 rounded-lg text-base leading-none"

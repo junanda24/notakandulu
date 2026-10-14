@@ -3,7 +3,7 @@ import { toPng } from "html-to-image";
 import { fmtMoney, terbilang, fmtDate } from "./format.js";
 import { calcTotals } from "./calc.js";
 
-export function invoiceText(inv, profile, settings) {
+export function invoiceText(inv, profile) {
   const t = calcTotals(inv);
   const cur = inv.currency || "IDR";
   const lines = [];
@@ -41,7 +41,7 @@ export const waShareUrl = (text) => `https://wa.me/?text=${encodeURIComponent(te
 
 export function mailtoUrl(inv, profile, settings) {
   const subject = `Nota ${inv.number || ""} dari ${profile.shopName || "TagihkanDulu"}`.trim();
-  const body = invoiceText(inv, profile, settings);
+  const body = invoiceText(inv, profile);
   return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 

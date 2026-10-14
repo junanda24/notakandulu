@@ -2,12 +2,11 @@
 import { useRef, useState } from "react";
 import { Card, Btn } from "./ui.jsx";
 import { fmtMoney, fmtDate } from "../lib/format.js";
-import { paymentStatus, STATUS_META } from "../lib/calc.js";
-import { calcTotals } from "../lib/calc.js";
+import { paymentStatus, STATUS_META, calcTotals } from "../lib/calc.js";
 import { exportData, importData, storageInfo } from "../lib/storage.js";
 import { computeStats } from "../lib/stats.js";
 
-export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus, onNew, onRestored, settings }) {
+export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus, onRestored, settings }) {
   const fileRef = useRef(null);
   const [msg, setMsg] = useState("");
   const info = storageInfo();

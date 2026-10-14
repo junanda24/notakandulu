@@ -19,7 +19,7 @@ export function fmtMoney(n, code = "IDR") {
   return v.toLocaleString(m.locale, {
     style: "currency",
     currency: code,
-    maximumFractionDigits: code === "IDR" ? 0 : 2,
+    maximumFractionDigits: 2,
     minimumFractionDigits: 0,
   });
 }

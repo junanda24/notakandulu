@@ -1,17 +1,16 @@
 // Template I — Bold Statement (budaya Behance).
 // Background ungu full, angka hero, kartu putih overlap. Tanpa tombol.
 import { Money, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
-import { fmtDate } from "../../lib/format.js";
+import { fmtDate, terbilang } from "../../lib/format.js";
 
-export default function BoldStatement({ inv, profile, totals, accent, showSignature }) {
+export default function BoldStatement({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#7c3aed";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
-  const inter = "'Inter', system-ui, sans-serif";
-  const pays = (profile.payments || []).filter((p) => (inv.paymentIds || []).includes(p.id));
+    const pays = (profile.payments || []).filter((p) => (inv.paymentIds || []).includes(p.id));
   return (
-    <div style={{ fontFamily: inter, fontSize: 12, lineHeight: 1.6, color: "#fff", background: a }}>
+    <div style={{ fontFamily: bodyFont, fontSize: 12, lineHeight: 1.6, color: "#fff", background: a }}>
       <div style={{ padding: "40px 36px 0" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <ShopLogo logo={profile.logo} size={34} radius={10} />
@@ -19,13 +18,18 @@ export default function BoldStatement({ inv, profile, totals, accent, showSignat
         </div>
         <div style={{ fontSize: 11, letterSpacing: 10, fontWeight: 700, opacity: 0.85, marginTop: 26 }}>INVOICE</div>
         <div style={{ fontWeight: 800, fontSize: 64, letterSpacing: "-0.03em", lineHeight: 1.05, marginTop: 10, fontVariantNumeric: "tabular-nums" }}>
-          <Money v={dpi ? dpi.sisa : totals.total} cur={cur} />
+          <Money v={totals.total} cur={cur} />
         </div>
         {dpi && (
           <div style={{ fontSize: 11, opacity: 0.85, marginTop: 6, fontVariantNumeric: "tabular-nums" }}>
             Total <Money v={totals.total} cur={cur} /> − Uang muka (DP) <Money v={dpi.dp} cur={cur} /> = sisa
           </div>
         )}
+          {cur === "IDR" && (
+            <div style={{ fontStyle: "italic", color: "rgba(255,255,255,0.75)", fontSize: 11, marginTop: 6, textTransform: "capitalize" }}>
+              {terbilang(dpi ? dpi.sisa : totals.total)}
+            </div>
+          )}
         <div style={{ fontSize: 10.5, opacity: 0.8, marginTop: 8, fontVariantNumeric: "tabular-nums" }}>
           {inv.number || "—"} · {inv.customerName || "—"}{inv.customerNpwp ? ` · NPWP ${inv.customerNpwp}` : ""} · jatuh tempo {inv.dueDate ? fmtDate(inv.dueDate) : "—"}{inv.poNumber ? ` · PO ${inv.poNumber}` : ""}
         </div>
@@ -47,10 +51,10 @@ export default function BoldStatement({ inv, profile, totals, accent, showSignat
 
         {pays.length > 0 && (
           <div style={{ marginTop: 20, textAlign: "center" }}>
-            <div style={{ fontWeight: 800, fontSize: 14 }}>Bayar ke sini 👇</div>
+            <div style={{ fontWeight: 800, fontSize: 14 }}>Bayar ke sini:</div>
             {pays.map((p) => (
               <div key={p.id} style={{ marginTop: 8, fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
-                <b>{p.label}</b> · <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700 }}>{p.number}</span>
+                <b>{p.label}</b> · <span style={{ fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{p.number}</span>
                 {p.holder ? <span style={{ color: "#6b7280", fontSize: 11 }}> a.n. {p.holder}</span> : null}
               </div>
             ))}
@@ -58,7 +62,6 @@ export default function BoldStatement({ inv, profile, totals, accent, showSignat
         )}
         {inv.terms && <div style={{ marginTop: 14, fontSize: 11.5, color: "#57534e" }}><b>Syarat:</b> {inv.terms}</div>}
         {inv.notes && <div style={{ marginTop: 6, fontSize: 11.5, color: "#57534e", whiteSpace: "pre-wrap" }}>{inv.notes}</div>}
-        <div style={{ textAlign: "center", fontSize: 10.5, color: "#a1a1aa", marginTop: 18 }}>Dibuat dengan ☕ dan begadang.</div>
         {showSignature && (
           <div style={{ marginTop: 16, color: "#18181b" }}>
             <SignatureBlock left={profile.shopName || "Hormat kami,"} />

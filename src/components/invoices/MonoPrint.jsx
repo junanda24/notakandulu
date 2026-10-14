@@ -1,12 +1,12 @@
 // Style 7 — Monochrome Print. Murni hitam-putih untuk cetak hemat tinta.
 // Semua aksen diabaikan (force hitam), logo di-grayscale, hairline abu-abu.
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, fmtD, dpInfo } from "./shared.jsx";
-import { fmtMoney } from "../../lib/format.js";
+import { fmtMoney, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
 
 export default function MonoPrint({ inv, profile, totals, bodyFont, showSignature }) {
-  const cur = inv.currency;
+  const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
   return (
@@ -101,6 +101,11 @@ export default function MonoPrint({ inv, profile, totals, bodyFont, showSignatur
                 </span>
               </div>
             </>
+          )}
+          {cur === "IDR" && (
+            <div style={{ fontStyle: "italic", color: "#333", textAlign: "right", fontSize: 11, marginTop: 6, textTransform: "capitalize" }}>
+              {terbilang(dpi ? dpi.sisa : totals.total)}
+            </div>
           )}
         </div>
       </div>

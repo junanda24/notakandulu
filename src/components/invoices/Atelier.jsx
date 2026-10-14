@@ -2,23 +2,21 @@
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
-const serif = "'Georgia', 'Times New Roman', serif";
 const k = { fontSize: 9, letterSpacing: "0.22em", color: "#a8a29e", fontWeight: 700 };
 
-export default function Atelier({ inv, profile, totals, accent, showSignature }) {
+export default function Atelier({ inv, profile, totals, bodyFont, displayFont, accent, showSignature }) {
   const a = accent || "#0d9488";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
-  const inter = "'Inter', system-ui, sans-serif";
-  return (
-    <div style={{ fontFamily: inter, fontSize: 12.5, lineHeight: 1.6, color: "#1c1917", background: "#fff", padding: "52px 48px" }}>
+    return (
+    <div style={{ fontFamily: bodyFont, fontSize: 12.5, lineHeight: 1.6, color: "#1c1917", background: "#fff", padding: "52px 48px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9.5, letterSpacing: "0.24em", color: "#a8a29e", fontWeight: 600 }}>
         <span>{(profile.shopName || "NAMA USAHA").toUpperCase()}{profile.npwp ? ` · NPWP ${profile.npwp}` : ""}</span>
         <span>Nº {inv.number || "—"}</span>
       </div>
 
-      <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: 40, marginTop: 30 }}>
+      <h2 style={{ fontFamily: displayFont, fontWeight: 400, fontSize: 40, marginTop: 30 }}>
         Invoice <i style={{ color: a, fontStyle: "normal" }}>№{(inv.number || "").replace(/\D/g, "").slice(-3) || "—"}</i>
       </h2>
       <p style={{ fontSize: 12.5, color: "#78716c", marginTop: 10, lineHeight: 1.75, maxWidth: 440 }}>
@@ -76,7 +74,7 @@ export default function Atelier({ inv, profile, totals, accent, showSignature })
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 22, paddingTop: 18, borderTop: "1px solid #1c1917" }}>
         <span style={k}>TOTAL TAGIHAN</span>
-        <span className="num" style={{ fontFamily: serif, fontSize: 42, color: a, fontVariantNumeric: "tabular-nums" }}><Money v={totals.total} cur={cur} /></span>
+        <span style={{ fontFamily: displayFont, fontSize: 42, color: a, fontVariantNumeric: "tabular-nums" }}><Money v={totals.total} cur={cur} /></span>
       </div>
       {dpi && (
         <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8, color: "#57534e", fontVariantNumeric: "tabular-nums" }}>
@@ -84,7 +82,7 @@ export default function Atelier({ inv, profile, totals, accent, showSignature })
         </div>
       )}
       {cur === "IDR" && (
-        <div style={{ fontStyle: "italic", fontFamily: serif, color: "#a8a29e", fontSize: 11, textAlign: "right", marginTop: 8, textTransform: "capitalize" }}>
+        <div style={{ fontStyle: "italic", fontFamily: displayFont, color: "#a8a29e", fontSize: 11, textAlign: "right", marginTop: 8, textTransform: "capitalize" }}>
           {terbilang(dpi ? dpi.sisa : totals.total)}
         </div>
       )}
@@ -93,14 +91,18 @@ export default function Atelier({ inv, profile, totals, accent, showSignature })
         <div style={{ flex: 1 }}>
           <PaymentBlock inv={inv} profile={profile} cur={cur} accent={a} />
         </div>
-        <div style={{ flex: 1 }}>
-          <div style={k}>CATATAN</div>
-          <NotesBlock inv={inv} />
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <div style={k}>HORMAT KAMI</div>
-          {showSignature ? <SignatureBlock left={profile.shopName || "Hormat kami,"} /> : <div style={{ fontSize: 12, marginTop: 6 }}>{profile.shopName || "—"}</div>}
-        </div>
+        {(inv.notes || inv.terms) && (
+          <div style={{ flex: 1 }}>
+            <div style={k}>CATATAN</div>
+            <NotesBlock inv={inv} />
+          </div>
+        )}
+        {showSignature && (
+          <div style={{ textAlign: "right" }}>
+            <div style={k}>HORMAT KAMI</div>
+            <SignatureBlock left={profile.shopName || "Hormat kami,"} />
+          </div>
+        )}
       </div>
     </div>
   );

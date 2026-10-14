@@ -1,5 +1,5 @@
 // Preview live + ekspor (cetak/PDF/PNG) + bagikan (WA/email/native).
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import gsap from "gsap";
 import { Card, Btn } from "./ui.jsx";
 import { TEMPLATES, FONTS, PAPER_WIDTH } from "../data/options.js";
@@ -61,7 +61,7 @@ const TPL_COMPONENTS = {
   "atelier": Atelier,
 };
 
-export function InvoiceSheet({ inv, profile, settings, id }) {  const Tpl = TPL_COMPONENTS[settings.template] || SaasCard;
+export const InvoiceSheet = memo(function InvoiceSheet({ inv, profile, settings, id }) {  const Tpl = TPL_COMPONENTS[settings.template] || SaasCard;
   const totals = calcTotals(inv);
   const f = FONTS.find((x) => x.id === settings.font) || FONTS[0];
   const meta = TEMPLATES.find((x) => x.id === settings.template);
@@ -79,7 +79,7 @@ export function InvoiceSheet({ inv, profile, settings, id }) {  const Tpl = TPL_
       <Tpl inv={inv} profile={profile} totals={totals} bodyFont={f.body} displayFont={f.display} accent={settings.accent} showSignature={settings.showSignature} />
     </div>
   );
-}
+});
 
 // Kartu Ekspor & Bagikan — dipakai di Step 4 wizard (Langkah Kirim).
 // Butuh sheetRef (ref ke node InvoiceSheet yang ter-render) untuk ekspor PNG.
@@ -131,7 +131,7 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
     }
   };
 
-  const text = invoiceText(inv, profile, settings);
+  const text = invoiceText(inv, profile);
 
   return (
     <Card title="Ekspor & Bagikan" sticker="gratis">
@@ -172,7 +172,6 @@ export function ExportCard({ inv, profile, settings, sheetRef }) {
 }
 
 export default function Preview({ inv, profile, settings }) {
-  const sheetRef = useRef(null);
 
   // @page tanpa margin — ukuran halaman dikunci saat tombol Cetak ditekan
   // (setPrintPageSize), mengikuti tinggi konten aktual.
@@ -201,7 +200,7 @@ export default function Preview({ inv, profile, settings }) {
           </div>
         )}
         <div className="invoice-stage -m-4 sm:-m-5 rounded-b-xl p-4 sm:p-8 overflow-x-auto">
-          <div ref={sheetRef} style={{ width: "fit-content", margin: "0 auto", maxWidth: "100%" }}>
+          <div style={{ width: "fit-content", margin: "0 auto", maxWidth: "100%" }}>
             <InvoiceSheet inv={inv} profile={profile} settings={settings} />
           </div>
         </div>
@@ -224,6 +223,7 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
   useEffect(() => {
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
     gsap.fromTo(panelRef.current, { y: "100%" }, { y: 0, duration: 0.45, ease: "power3.out" });
+    return () => gsap.killTweensOf(panelRef.current);
   }, []);
   const handleClose = () => {
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) { onClose(); return; }
@@ -246,15 +246,22 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
   }, [paperPx]);
 
   useEffect(() => {
-    if (sheetRef.current) setSheetH(sheetRef.current.offsetHeight || 1100);
-  });
+    const node = sheetRef.current;
+    if (!node) return;
+    setSheetH(node.offsetHeight || 1100);
+    const ro = new ResizeObserver(() => setSheetH(node.offsetHeight || 1100));
+    ro.observe(node);
+    return () => ro.disconnect();
+  }, [paperPx]);
 
-  // Kunci scroll body saat modal terbuka.
+  // Kunci scroll body + Escape saat modal terbuka.
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
-  }, []);
+    const onKey = (e) => { if (e.key === "Escape") handleClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
+  });
 
   const z = zoom ?? fitZoom;
   const stepIn = () => setZoom((p) => Math.min(3, +( ((p ?? fitZoom) + 0.25).toFixed(2) )));
@@ -287,10 +294,10 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
     }
   };
 
-  const text = invoiceText(inv, profile, settings);
+  const text = invoiceText(inv, profile);
 
   return (
-    <div ref={panelRef} className="no-print fixed inset-0 z-[80] bg-neutral-950 flex flex-col lg:hidden">
+    <div ref={panelRef} role="dialog" aria-modal="true" aria-label="Pratinjau nota" className="no-print fixed inset-0 z-[80] bg-neutral-950 flex flex-col lg:hidden">
       {/* Header */}
       <div className="flex items-center justify-between gap-2 px-3 py-2.5 shrink-0 border-b border-white/10">
         <button onClick={handleClose} className="text-white text-sm font-bold px-2 py-1.5">✕ Tutup</button>

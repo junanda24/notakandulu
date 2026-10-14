@@ -1,15 +1,16 @@
 // Style 4 — Elegant Kwitansi (A5). Formal Indonesia: "Sudah diterima dari",
 // terbilang serif italic, jumlah dalam bingkai, zona materai ≥ Rp5jt (UU 10/2020),
 // stempel LUNAS, logo kecil di atas, signature tempat & tanggal.
-import { Money, ShopLogo, fmtD } from "./shared.jsx";
+import { Money, ShopLogo, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
-export default function Kwitansi({ inv, profile, totals, bodyFont, accent }) {
+export default function Kwitansi({ inv, profile, totals, bodyFont, displayFont, accent, showSignature }) {
   const a = accent || "#0d9488";
   const cur = inv.currency || "IDR";
+  const dpi = dpInfo(inv, totals);
+  const nominal = dpi ? dpi.sisa : totals.total;
   const needsMaterai = cur === "IDR" && totals.total >= 5000000;
-  const serif = "'Fraunces', Georgia, serif";
-  return (
+    return (
     <div style={{ fontFamily: bodyFont, width: "100%", padding: "28px 32px", color: "#1c1917", background: "#fff", fontSize: 12, lineHeight: 1.7 }}>
       {/* Kop */}
       <div style={{ textAlign: "center", marginBottom: 6 }}>
@@ -37,8 +38,8 @@ export default function Kwitansi({ inv, profile, totals, bodyFont, accent }) {
         </p>
         <p style={{ marginTop: 12 }}><span style={{ color: "#78716c" }}>Uang sejumlah</span></p>
         <div style={{ border: "1px solid #d6d3d1", borderRadius: 8, background: "#fafaf9", padding: "10px 16px", marginTop: 4 }}>
-          <p style={{ fontFamily: serif, fontStyle: "italic", fontSize: 14, textTransform: "capitalize" }}>
-            “{terbilang(totals.total, cur)}”
+          <p style={{ fontFamily: displayFont, fontStyle: "italic", fontSize: 14, textTransform: "capitalize" }}>
+            “{terbilang(nominal, cur)}”
           </p>
         </div>
         <p style={{ marginTop: 12 }}>
@@ -54,7 +55,12 @@ export default function Kwitansi({ inv, profile, totals, bodyFont, accent }) {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginTop: 22, gap: 16 }}>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#78716c", fontWeight: 600 }}>Jumlah</div>
-          <Money v={totals.total} cur={cur} style={{ fontSize: 26, fontWeight: 800, fontVariantNumeric: "tabular-nums" }} />
+          <Money v={nominal} cur={cur} style={{ fontSize: 26, fontWeight: 800, fontVariantNumeric: "tabular-nums" }} />
+          {dpi && (
+            <div style={{ marginTop: 4, fontSize: 11, color: "#57534e", fontVariantNumeric: "tabular-nums" }}>
+              (Total <Money v={totals.total} cur={cur} /> − DP <Money v={dpi.dp} cur={cur} />)
+            </div>
+          )}
           {needsMaterai && (
             <div style={{ marginTop: 10, border: "1px dashed #a8a29e", borderRadius: 8, padding: "8px 10px", maxWidth: 190, textAlign: "center" }}>
               <div style={{ fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "#78716c", fontWeight: 600 }}>Zona materai</div>
@@ -80,12 +86,14 @@ export default function Kwitansi({ inv, profile, totals, bodyFont, accent }) {
             LUNAS
           </div>
         </div>
-        <div style={{ textAlign: "center", fontSize: 11.5, color: "#57534e", minWidth: 130 }}>
-          <p>{fmtDate(inv.date)}</p>
-          <p style={{ marginTop: 4 }}>{profile.shopName || "Hormat kami,"}</p>
-          <div style={{ height: 60 }} />
-          <p style={{ borderTop: "1px solid #a8a29e", paddingTop: 4 }}>( ………………………… )</p>
-        </div>
+        {showSignature && (
+          <div style={{ textAlign: "center", fontSize: 11.5, color: "#57534e", minWidth: 130 }}>
+            <p>{fmtDate(inv.date)}</p>
+            <p style={{ marginTop: 4 }}>{profile.shopName || "Hormat kami,"}</p>
+            <div style={{ height: 60 }} />
+            <p style={{ borderTop: "1px solid #a8a29e", paddingTop: 4 }}>( ………………………… )</p>
+          </div>
+        )}
       </div>
 
       <p style={{ fontSize: 10, color: "#a8a29e", marginTop: 20, fontStyle: "italic", textAlign: "center" }}>

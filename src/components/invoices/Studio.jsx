@@ -1,41 +1,39 @@
 // Template G — Studio / Agency (nyontek invoice studio asli).
 // Total di header, meta 3 kolom, kolom jam, diskon terbuka. Tanpa kotak warning.
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
-import { fmtDate } from "../../lib/format.js";
+import { fmtDate, terbilang } from "../../lib/format.js";
 
-const grotesk = "'Space Grotesk', 'Inter', system-ui, sans-serif";
-const inter = "'Inter', system-ui, sans-serif";
 
-export default function Studio({ inv, profile, totals, accent, showSignature }) {
+export default function Studio({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#0d9488";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
   return (
-    <div style={{ fontFamily: grotesk, fontSize: 12, lineHeight: 1.6, color: "#111827", background: "#fff", padding: "48px 44px" }}>
+    <div style={{ fontFamily: bodyFont, fontSize: 12, lineHeight: 1.6, color: "#111827", background: "#fff", padding: "48px 44px" }}>
       {/* Header: brand kiri, total kanan */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 20 }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <ShopLogo logo={profile.logo} size={44} radius={10} />
             <div>
-              <div style={{ fontWeight: 700, fontSize: 19 }}>{profile.shopName || "Nama Usaha"}<sup style={{ fontSize: 9 }}>®</sup></div>
+              <div style={{ fontWeight: 700, fontSize: 19 }}>{profile.shopName || "Nama Usaha"}</div>
             </div>
           </div>
           {(profile.address || profile.contact) && (
-            <div style={{ fontSize: 10.5, color: "#6b7280", marginTop: 8, fontFamily: inter, whiteSpace: "pre-line" }}>
+            <div style={{ fontSize: 10.5, color: "#6b7280", marginTop: 8, fontFamily: bodyFont, whiteSpace: "pre-line" }}>
               {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join(" · ")}
             </div>
           )}
         </div>
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: 10, color: "#6b7280", fontFamily: inter }}>TOTAL DUE</div>
+          <div style={{ fontSize: 10, color: "#6b7280", fontFamily: bodyFont }}>TOTAL DUE</div>
           <div style={{ fontWeight: 700, fontSize: 22, fontVariantNumeric: "tabular-nums", color: a }}><Money v={totals.total} cur={cur} /></div>
         </div>
       </div>
 
       {/* Meta 3 kolom */}
-      <div style={{ display: "flex", gap: 14, marginTop: 22, fontSize: 10.5, fontFamily: inter }}>
+      <div style={{ display: "flex", gap: 14, marginTop: 22, fontSize: 10.5, fontFamily: bodyFont }}>
         {[
           ["INVOICE #", inv.number || "—"],
           ["NO. PO", inv.poNumber || "—"],
@@ -48,7 +46,7 @@ export default function Studio({ inv, profile, totals, accent, showSignature }) 
         ))}
       </div>
 
-      <div style={{ marginTop: 16, fontFamily: inter }}>
+      <div style={{ marginTop: 16, fontFamily: bodyFont }}>
         Kepada: <b>{inv.customerName || "—"}</b>
         {inv.customerInfo && <span style={{ color: "#6b7280" }}> · {String(inv.customerInfo).split("\n")[0]}</span>}
         {inv.customerNpwp && <div style={{ fontSize: 10.5, color: "#6b7280", marginTop: 2 }}>NPWP {inv.customerNpwp}</div>}
@@ -108,20 +106,25 @@ export default function Studio({ inv, profile, totals, accent, showSignature }) 
             Uang muka (DP) <Money v={dpi.dp} cur={cur} /> · Sisa dibayar <b style={{ color: "#111827" }}><Money v={dpi.sisa} cur={cur} /></b>
           </div>
         )}
+          {cur === "IDR" && (
+            <div style={{ fontStyle: "italic", color: "#4b5563", textAlign: "right", fontSize: 11, marginTop: 6, textTransform: "capitalize" }}>
+              {terbilang(dpi ? dpi.sisa : totals.total)}
+            </div>
+          )}
       </div>
 
       {/* Note simple, tanpa warning */}
-      <div style={{ marginTop: 18, fontFamily: inter }}>
+      <div style={{ marginTop: 18, fontFamily: bodyFont }}>
         <NotesBlock inv={inv} />
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 26, fontSize: 10.5, color: "#6b7280", fontFamily: inter }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 26, fontSize: 10.5, color: "#6b7280", fontFamily: bodyFont }}>
         <div>Hormat kami,<br /><br /><br /><b style={{ color: "#111827" }}>{profile.shopName || "Nama Usaha"}</b></div>
         <div style={{ textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
           <PaymentBlock inv={inv} profile={profile} cur={cur} />
         </div>
       </div>
-      <div style={{ marginTop: 18, fontSize: 10.5, color: "#9ca3af", fontStyle: "italic", fontFamily: inter }}>
+      <div style={{ marginTop: 18, fontSize: 10.5, color: "#9ca3af", fontStyle: "italic", fontFamily: bodyFont }}>
         Thank you for the creative partnership.
       </div>
       {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}

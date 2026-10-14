@@ -3,14 +3,13 @@
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
-export default function FakturPajak({ inv, profile, totals, accent, showSignature }) {
+export default function FakturPajak({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#1e3a8a";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
   const taxRate = Number(inv.tax) || 0;
-  const inter = "'Inter', system-ui, sans-serif";
-  let sumDpp = 0, sumPpn = 0;
+    let sumDpp = 0, sumPpn = 0;
   const lines = items.map((it) => {
     const amt = (Number(it.qty) || 0) * (Number(it.price) || 0);
     const dpp = taxRate > 0 ? amt / (1 + taxRate / 100) : amt;
@@ -19,7 +18,7 @@ export default function FakturPajak({ inv, profile, totals, accent, showSignatur
     return { it, amt, dpp, ppn };
   });
   return (
-    <div style={{ fontFamily: inter, fontSize: 12, lineHeight: 1.6, color: "#1e293b", background: "#fff", padding: "48px 44px" }}>
+    <div style={{ fontFamily: bodyFont, fontSize: 12, lineHeight: 1.6, color: "#1e293b", background: "#fff", padding: "48px 44px" }}>
       {/* Kop */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 20 }}>
         <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
@@ -31,7 +30,7 @@ export default function FakturPajak({ inv, profile, totals, accent, showSignatur
                 {[profile.address, profile.contact].filter(Boolean).join("\n")}
               </div>
             )}
-            <div style={{ fontSize: 10.5, color: "#64748b" }}>NPWP: {profile.npwp || "—"} · PKP</div>
+            <div style={{ fontSize: 10.5, color: "#64748b" }}>NPWP: {profile.npwp || "—"}</div>
           </div>
         </div>
         <div style={{ textAlign: "center" }}>
@@ -55,7 +54,7 @@ export default function FakturPajak({ inv, profile, totals, accent, showSignatur
       <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 16 }}>
         <thead>
           <tr style={{ background: a, color: "#fff" }}>
-            {["Uraian", "DPP", `PPN ${taxRate || 11}%`, "Jumlah"].map((h, i) => (
+            {["Uraian", "DPP", `PPN ${taxRate}%`, "Jumlah"].map((h, i) => (
               <th key={h} style={{ textAlign: i === 0 ? "left" : "right", padding: "9px 12px", fontSize: 9.5, letterSpacing: "0.08em", fontWeight: 700 }}>{h.toUpperCase()}</th>
             ))}
           </tr>

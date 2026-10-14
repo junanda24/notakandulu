@@ -4,15 +4,14 @@ import { terbilang, fmtDate } from "../../lib/format.js";
 
 const k = { fontSize: 8.5, letterSpacing: "0.18em", color: "#94a3b8", fontWeight: 700 };
 
-export default function Porcelain({ inv, profile, totals, accent, showSignature }) {
+export default function Porcelain({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#0d9488";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
-  const inter = "'Inter', system-ui, sans-serif";
-  const ink = "#0f1f33";
+    const ink = "#0f1f33";
   return (
-    <div style={{ fontFamily: inter, fontSize: 12.5, lineHeight: 1.6, color: ink, background: "#eef2f7", padding: "26px 22px" }}>
+    <div style={{ fontFamily: bodyFont, fontSize: 12.5, lineHeight: 1.6, color: ink, background: "#eef2f7", padding: "26px 22px" }}>
       <div style={{ background: "#fff", borderRadius: 20, padding: "38px 36px", boxShadow: "0 4px 24px rgba(30,58,90,0.06)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -94,7 +93,7 @@ export default function Porcelain({ inv, profile, totals, accent, showSignature 
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px 20px", marginTop: 24 }}>
           <div><PaymentBlock inv={inv} profile={profile} cur={cur} accent={a} /></div>
-          <div><div style={k}>CATATAN</div><NotesBlock inv={inv} /></div>
+          {(inv.notes || inv.terms) && (<div><div style={k}>CATATAN</div><NotesBlock inv={inv} /></div>)}
         </div>
         {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}
       </div>

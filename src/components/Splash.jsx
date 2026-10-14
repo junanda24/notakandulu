@@ -95,7 +95,11 @@ export default function Splash({ onDone }) {
   return (
     <div
       ref={root}
+      role="button"
+      tabIndex={0}
+      aria-label="Lewati intro"
       onClick={skip}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " " || e.key === "Escape") skip(); }}
       className="fixed inset-0 z-[70] flex flex-col items-center justify-center overflow-hidden cursor-pointer"
       style={{ background: "#1c1917" }}
     >

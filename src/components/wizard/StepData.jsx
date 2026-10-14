@@ -2,9 +2,8 @@
 import { useState } from "react";
 import ShopPanel from "../ShopPanel.jsx";
 import StepPelanggan from "./StepPelanggan.jsx";
-import { Btn } from "../ui.jsx";
+import { Btn, Collapse } from "../ui.jsx";
 import { sampleAll } from "./shared.jsx";
-import { Collapse } from "../ui.jsx";
 
 function Section({ title, subtitle, defaultOpen, children }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -33,7 +32,7 @@ export default function StepData({ inv, setInv, profile, persistProfile, onClear
   const shopFilled = !!profile?.shopName?.trim();
   const fillSample = () => {
     const { inv: sample, profilePatch } = sampleAll(profile);
-    setInv((p) => ({ ...p, ...sample }));
+    setInv((p) => ({ ...p, ...sample, number: p.number })); // nomor auto tetap milik user, jangan ditimpa contoh
     if (Object.keys(profilePatch).length) persistProfile((p) => ({ ...p, ...profilePatch }));
   };
   return (

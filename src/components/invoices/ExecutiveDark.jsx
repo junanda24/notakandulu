@@ -5,10 +5,9 @@ import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } fro
 import { fmtMoney, fmtDate, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "#8a8a8a", fontWeight: 600 };
-const gold = "#c9a227";
-
-export default function ExecutiveDark({ inv, profile, totals, bodyFont, showSignature }) {
-  const cur = inv.currency;
+export default function ExecutiveDark({ inv, profile, totals, bodyFont, accent, showSignature }) {
+  const gold = accent || "#c9a227";
+  const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
   const bg = "#141414";

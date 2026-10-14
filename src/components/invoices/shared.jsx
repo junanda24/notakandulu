@@ -19,7 +19,7 @@ export function PaymentBlock({ inv, profile, cur, dark = false, accent = "#1e3a5
       <div style={{ marginTop: 6, display: "grid", gap: 4 }}>
         {pays.map((p) => (
           <p key={p.id} style={{ fontSize: 12, color: dark ? "#e7e5e4" : "#292524" }}>
-            <b>{p.label}</b> · <span style={{ fontFamily: "monospace" }}>{p.number}</span>
+            <b>{p.label}</b> · <span style={{ fontVariantNumeric: "tabular-nums" }}>{p.number}</span>
             {p.holder ? <span style={{ color: sub }}> a.n. {p.holder}</span> : null}
           </p>
         ))}

@@ -1,17 +1,19 @@
 // Template — Noir: hitam pekat, tipografi dramatis tapi rapi.
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
+import { paymentStatus, STATUS_META } from "../../lib/calc.js";
 
 const micro = { fontSize: 9, letterSpacing: "0.22em", fontWeight: 700, color: "#636366" };
 
-export default function Noir({ inv, profile, totals, accent, showSignature }) {
+export default function Noir({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#2dd4bf";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
-  const inter = "'Inter', system-ui, sans-serif";
-  return (
-    <div style={{ fontFamily: inter, fontSize: 12.5, lineHeight: 1.6, color: "#f5f5f4", background: "#0b0b0c", padding: "52px 48px" }}>
+  const st = paymentStatus(inv) || "belum";
+  const sm = STATUS_META[st] || STATUS_META.belum;
+    return (
+    <div style={{ fontFamily: bodyFont, fontSize: 12.5, lineHeight: 1.6, color: "#f5f5f4", background: "#0b0b0c", padding: "52px 48px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 20, alignItems: "flex-start" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -37,9 +39,9 @@ export default function Noir({ inv, profile, totals, accent, showSignature }) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px 24px", marginTop: 28 }}>
         {[
           ["UNTUK", <>{inv.customerName || "—"}<span style={{ display: "block", color: "#8e8e93", fontWeight: 400, fontSize: 11, whiteSpace: "pre-line" }}>{[inv.customerInfo, inv.customerNpwp ? `NPWP ${inv.customerNpwp}` : null].filter(Boolean).join("\n")}</span></>],
-          ["TANGGAL / TEMPO / PO", <span style={{ fontVariantNumeric: "tabular-nums" }}>{fmtDate(inv.date)}<br />{inv.dueDate ? fmtDate(inv.dueDate) : "—"}<br />{inv.poNumber || "—"}</span>],
+          ["TANGGAL / TEMPO / PO", <span style={{ fontVariantNumeric: "tabular-nums" }}>{fmtDate(inv.date)}<br />{inv.dueDate ? fmtDate(inv.dueDate) : "—"}{inv.poNumber ? <><br />{inv.poNumber}</> : null}</span>],
           ["SYARAT", inv.terms || "—"],
-          ["STATUS", "Belum bayar"],
+          ["STATUS", sm.label],
         ].map(([k, v]) => (
           <div key={k}><div style={micro}>{k}</div><div style={{ fontSize: 12.5, marginTop: 6, lineHeight: 1.65 }}>{v}</div></div>
         ))}

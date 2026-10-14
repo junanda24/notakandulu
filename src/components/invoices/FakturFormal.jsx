@@ -5,20 +5,19 @@ import { terbilang, fmtDate } from "../../lib/format.js";
 
 const lbl = { fontSize: 9.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
 
-export default function FakturFormal({ inv, profile, totals, accent, showSignature }) {
+export default function FakturFormal({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#111827";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
-  const inter = "'Inter', system-ui, sans-serif";
-  const meta = [
+    const meta = [
     ["No. Invoice", inv.number || "—"],
     ["Tanggal", fmtDate(inv.date)],
     inv.dueDate ? ["Jatuh Tempo", fmtDate(inv.dueDate)] : null,
     inv.poNumber ? ["No. PO", inv.poNumber] : null,
   ].filter(Boolean);
   return (
-    <div style={{ fontFamily: inter, fontSize: 12, lineHeight: 1.6, color: "#111827", padding: 52, background: "#fff" }}>
+    <div style={{ fontFamily: bodyFont, fontSize: 12, lineHeight: 1.6, color: "#111827", padding: 52, background: "#fff" }}>
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 24 }}>
         <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
@@ -130,7 +129,7 @@ export default function FakturFormal({ inv, profile, totals, accent, showSignatu
         <div style={{ flex: 1, minWidth: 220 }}><NotesBlock inv={inv} /></div>
       </div>
       <div style={{ marginTop: 20, fontSize: 9.5, color: "#9ca3af", display: "flex", justifyContent: "space-between" }}>
-        <span>Issued by {profile.shopName || "Nama Usaha"}.</span>
+        <span>Diterbitkan oleh {profile.shopName || "Nama Usaha"}.</span>
         <span>Halaman 1 dari 1</span>
       </div>
       {showSignature && <SignatureBlock left={profile.shopName || "Hormat kami,"} />}

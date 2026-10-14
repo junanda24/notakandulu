@@ -4,14 +4,13 @@ import { terbilang, fmtDate } from "../../lib/format.js";
 
 const micro = { fontSize: 9, letterSpacing: "0.22em", fontWeight: 700, color: "#a8a29e" };
 
-export default function Clarity({ inv, profile, totals, accent, showSignature }) {
+export default function Clarity({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#0d9488";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
-  const inter = "'Inter', system-ui, sans-serif";
-  return (
-    <div style={{ fontFamily: inter, fontSize: 12.5, lineHeight: 1.6, color: "#1c1917", background: "#fff", padding: "52px 48px" }}>
+    return (
+    <div style={{ fontFamily: bodyFont, fontSize: 12.5, lineHeight: 1.6, color: "#1c1917", background: "#fff", padding: "52px 48px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 20, alignItems: "flex-start" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>

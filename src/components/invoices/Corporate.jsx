@@ -1,13 +1,13 @@
 // Style 2 — Corporate Clean (ala Wave/FreshBooks). Format yang diharapkan
 // perusahaan Indonesia: logo kiri, meta kanan, band total aksen, baris PPN.
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
-import { fmtMoney, fmtDate } from "../../lib/format.js";
+import { fmtMoney, fmtDate, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
 
 export default function Corporate({ inv, profile, totals, bodyFont, displayFont, accent, showSignature }) {
   const a = accent || "#1e3a5f";
-  const cur = inv.currency;
+  const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
   return (
@@ -106,6 +106,11 @@ export default function Corporate({ inv, profile, totals, bodyFont, displayFont,
                 </span>
               </div>
             </>
+          )}
+          {cur === "IDR" && (
+            <div style={{ fontStyle: "italic", color: "#78716c", textAlign: "right", fontSize: 11, marginTop: 6, textTransform: "capitalize" }}>
+              {terbilang(dpi ? dpi.sisa : totals.total)}
+            </div>
           )}
         </div>
       </div>

@@ -120,15 +120,15 @@ export function getProfile() {
 export function setProfile(p) {
   const d = load();
   d.profile = p;
-  save(d);
+  return save(d);
 }
 export function getSettings() {
   return { ...defaultSettings(), ...(load().settings || {}) };
 }
 export function setSettings(s) {
   const d = load();
-  d.settings = { ...getSettings(), ...s };
-  save(d);
+  d.settings = { ...defaultSettings(), ...(d.settings || {}), ...s };
+  return save(d);
 }
 export function getHistory() {
   return load().history || [];
@@ -139,14 +139,14 @@ export function saveToHistory(inv) {
   const h = (d.history || []).filter((x) => x.id !== inv.id);
   h.unshift({ ...inv, savedAt: new Date().toISOString() });
   d.history = h.slice(0, MAX_HISTORY);
-  save(d);
-  return d.history;
+  const ok = save(d);
+  return { history: d.history, ok };
 }
 export function deleteHistory(id) {
   const d = load();
   d.history = (d.history || []).filter((x) => x.id !== id);
-  save(d);
-  return d.history;
+  const ok = save(d);
+  return { history: d.history, ok };
 }
 /** Counter nomor nota global (1-based next). */
 export function nextCounter() {

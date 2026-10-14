@@ -1,5 +1,5 @@
 // Primitif UI netral minimalis (gaya visual didefinisikan di index.css).
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useId, Children, cloneElement, isValidElement } from "react";
 import gsap from "gsap";
 
 // Collapse/expand halus pakai GSAP — pengganti {open && <div>} yang pop instan.
@@ -43,6 +43,7 @@ export function Collapse({ open, children, className = "", duration = 0.38 }) {
         onComplete: () => { el.style.display = "none"; },
       });
     }
+    return () => gsap.killTweensOf(el);
   }, [open, duration]);
 
   return (
@@ -53,10 +54,13 @@ export function Collapse({ open, children, className = "", duration = 0.38 }) {
 }
 
 export function Field({ label, children, className = "" }) {
+  const id = useId();
   return (
     <div className={className}>
-      <label className="brutal-label">{label}</label>
-      {children}
+      <label htmlFor={id} className="brutal-label">{label}</label>
+      {Children.map(children, (child, i) =>
+        i === 0 && isValidElement(child) ? cloneElement(child, { id: child.props.id || id }) : child
+      )}
     </div>
   );
 }

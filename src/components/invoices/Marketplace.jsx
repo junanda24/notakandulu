@@ -1,17 +1,15 @@
 // Template E — Marketplace (nyontek Tokopedia + Shopee).
 // Rincian biaya berlapis + total tagihan + "diproses oleh komputer".
 import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
-import { fmtDate } from "../../lib/format.js";
+import { fmtDate, terbilang } from "../../lib/format.js";
 
-export default function Marketplace({ inv, profile, totals, accent, showSignature }) {
+export default function Marketplace({ inv, profile, totals, bodyFont, accent, showSignature }) {
   const a = accent || "#0d9488";
   const cur = inv.currency || "IDR";
   const items = inv.items || [];
   const dpi = dpInfo(inv, totals);
-  const tagihan = totals.total;
-  const inter = "'Inter', system-ui, sans-serif";
-  return (
-    <div style={{ fontFamily: inter, fontSize: 12, lineHeight: 1.6, color: "#111827", background: "#fff", padding: "44px 40px" }}>
+    return (
+    <div style={{ fontFamily: bodyFont, fontSize: 12, lineHeight: 1.6, color: "#111827", background: "#fff", padding: "44px 40px" }}>
       <div style={{ textAlign: "center", fontWeight: 800, fontSize: 20, letterSpacing: 8, marginRight: -8 }}>INVOICE</div>
       <div style={{ textAlign: "center", fontSize: 10.5, color: "#6b7280", marginTop: 8, fontVariantNumeric: "tabular-nums" }}>
         {inv.number || "—"} · {fmtDate(inv.date)}
@@ -54,16 +52,21 @@ export default function Marketplace({ inv, profile, totals, accent, showSignatur
       {/* Total tagihan */}
       <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, marginTop: 12, padding: "14px 18px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ fontWeight: 800, fontSize: 13, color: "#065f46" }}>TOTAL TAGIHAN</span>
-        <span style={{ fontWeight: 800, fontSize: 22, color: "#065f46", fontVariantNumeric: "tabular-nums" }}><Money v={tagihan} cur={cur} /></span>
+        <span style={{ fontWeight: 800, fontSize: 22, color: "#065f46", fontVariantNumeric: "tabular-nums" }}><Money v={totals.total} cur={cur} /></span>
       </div>
       {dpi && (
         <div style={{ fontSize: 11, color: "#065f46", marginTop: 6, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
           Uang muka (DP) <Money v={dpi.dp} cur={cur} /> · Sisa <Money v={dpi.sisa} cur={cur} />
         </div>
       )}
-      {inv.dueDate && (
+          {cur === "IDR" && (
+            <div style={{ fontStyle: "italic", color: "#065f46", textAlign: "right", fontSize: 11, marginTop: 6, textTransform: "capitalize" }}>
+              {terbilang(dpi ? dpi.sisa : totals.total)}
+            </div>
+          )}
+      {(inv.dueDate || inv.poNumber) && (
         <div style={{ fontSize: 11, color: "#6b7280", marginTop: 8, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
-          Jatuh tempo {fmtDate(inv.dueDate)}{inv.poNumber ? ` · PO ${inv.poNumber}` : ""}
+          {[inv.dueDate ? `Jatuh tempo ${fmtDate(inv.dueDate)}` : null, inv.poNumber ? `PO ${inv.poNumber}` : null].filter(Boolean).join(" · ")}
         </div>
       )}
 

@@ -2,15 +2,14 @@
 // jumlah rata kanan, TOTAL tebal besar, footer singkat. Direkomendasikan saat
 // ada QR / detail pajak.
 import { Money, ShopLogo, fmtD, dpInfo } from "./shared.jsx";
-import { fmtMoney } from "../../lib/format.js";
+import { fmtMoney, terbilang } from "../../lib/format.js";
 
 export default function Struk80({ inv, profile, totals, bodyFont }) {
-  const cur = inv.currency;
+  const cur = inv.currency || "IDR";
   const dpi = dpInfo(inv, totals);
   const dash = { borderTop: "1px dashed #a8a29e", margin: "10px 0" };
-  const mono = "'IBM Plex Mono', 'Courier New', monospace";
-  return (
-    <div style={{ fontFamily: mono, width: "76mm", margin: "0 auto", padding: "10px 2mm", fontSize: 11.5, color: "#111", lineHeight: 1.55 }}>
+    return (
+    <div style={{ fontFamily: bodyFont, width: "76mm", margin: "0 auto", padding: "10px 2mm", fontSize: 11.5, color: "#111", lineHeight: 1.55 }}>
       <div style={{ textAlign: "center" }}>
         <ShopLogo logo={profile.logo} size={44} radius={10} grayscale style={{ margin: "0 auto 8px" }} />
         <p style={{ fontWeight: 800, fontSize: 16, letterSpacing: "0.06em" }}>{profile.shopName || "TOKO"}</p>
@@ -71,6 +70,11 @@ export default function Struk80({ inv, profile, totals, bodyFont }) {
           </div>
         </>
       )}
+          {cur === "IDR" && (
+            <div style={{ fontStyle: "italic", color: "#444", textAlign: "center", fontSize: 11, marginTop: 6, textTransform: "capitalize" }}>
+              {terbilang(dpi ? dpi.sisa : totals.total)}
+            </div>
+          )}
       <div style={dash} />
       {inv.terms && <p style={{ fontSize: 10.5, marginBottom: 4 }}><b>Syarat:</b> {inv.terms}</p>}
       {inv.notes && <p style={{ fontSize: 10.5, marginBottom: 8, whiteSpace: "pre-wrap", overflowWrap: "break-word" }}>{inv.notes}</p>}

@@ -71,7 +71,7 @@ export default function Wizard({
   const contentRef = useRef(null);
   const stepDir = useRef(1);
   const firstStep = useRef(true);
-  const steps = getSteps(profile);
+  const steps = getSteps();
   let idx = steps.findIndex((s) => s.id === stepId);
   if (idx < 0) idx = 0; // step tersimpan tak lagi valid (mis. toko sudah diisi) -> ke awal
   const cur = steps[idx];
@@ -81,7 +81,6 @@ export default function Wizard({
     if (ni >= 0) stepDir.current = ni >= idx ? 1 : -1;
     setStepId(id);
     requestAnimationFrame(() => {
-      topRef.current?.scrollIntoView({ block: "start" });
       window.scrollTo({ top: 0 });
     });
   };
@@ -97,6 +96,7 @@ export default function Wizard({
       { x: 44 * stepDir.current, opacity: 0 },
       { x: 0, opacity: 1, duration: 0.38, ease: "power3.out", overwrite: true, clearProps: "transform" }
     );
+    return () => gsap.killTweensOf(el);
   }, [cur.id]);
   const next = () => idx < steps.length - 1 && go(steps[idx + 1].id);
   const back = () => idx > 0 && go(steps[idx - 1].id);

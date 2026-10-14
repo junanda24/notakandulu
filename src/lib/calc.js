@@ -20,7 +20,7 @@ export function calcTotals(inv) {
 }
 
 export const blankItem = () => ({
-  id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
+  id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`,
   name: "",
   qty: 1,
   unit: "pcs",
@@ -44,7 +44,7 @@ export const STATUS_META = {
 
 export function blankInvoice(overrides = {}) {
   return {
-    id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
+    id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`,
     number: "",
     date: new Date().toISOString().slice(0, 10),
     dueDate: "",
