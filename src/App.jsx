@@ -6,6 +6,7 @@ import HistoryPanel from "./components/HistoryPanel.jsx";
 import Preview, { InvoiceSheet, MobilePreviewModal } from "./components/Preview.jsx";
 import { blankInvoice, blankItem } from "./lib/calc.js";
 import { expandNumber, todayIso, uid } from "./lib/format.js";
+import { TEMPLATES, FONTS } from "./data/options.js";
 import {
   getProfile, setProfile, getSettings, setSettings,
   getHistory, saveToHistory, deleteHistory, nextCounter, peekCounter, migrate,
@@ -149,6 +150,8 @@ export default function App() {
       nextCounter();
     }
     finalInv.templateUsed = settings.template;
+    finalInv.fontUsed = settings.font;
+    finalInv.accentUsed = settings.accent;
     const { history: h, ok } = saveToHistory(finalInv);
     setHistory(h);
     setInv(finalInv);
@@ -198,6 +201,21 @@ export default function App() {
       const base = blankInvoice();
       setInv({ ...base, ...src, items, date: isoDate || base.date, dueDate: isoDue || "" });
     }
+    // Kembalikan style persis seperti saat nota disimpan (template + font + aksen).
+    // Tanpa ini, nota kebuka dengan style yang sedang aktif — bukan style tersimpannya.
+    const stylePatch = {};
+    if (src.templateUsed && TEMPLATES.some((t) => t.id === src.templateUsed)) {
+      stylePatch.template = src.templateUsed;
+    }
+    if (src.fontUsed && FONTS.some((f) => f.id === src.fontUsed)) {
+      stylePatch.font = src.fontUsed;
+    }
+    if (src.accentUsed && /^#[0-9a-fA-F]{6}$/.test(src.accentUsed)) {
+      stylePatch.accent = src.accentUsed;
+    }
+    if (Object.keys(stylePatch).length > 0) persistSettings(stylePatch);
+    // Selalu mulai dari langkah 1 biar user lihat datanya dari awal.
+    persistWstep("data");
     setTab("buat");
   };
 
