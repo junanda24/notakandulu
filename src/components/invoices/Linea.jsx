@@ -1,5 +1,5 @@
 // Template — Linea: satu garis aksen, minimal berkarakter.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
 const micro = { fontSize: 9, letterSpacing: "0.22em", fontWeight: 700, color: "#a8a29e" };
@@ -17,7 +17,10 @@ export default function Linea({ inv, profile, totals, bodyFont, accent, showSign
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <ShopLogo logo={profile.logo} size={40} radius={10} />
-              <span style={{ fontSize: 16, fontWeight: 800 }}>{profile.shopName || "Nama Usaha"}</span>
+              <div>
+                <span style={{ fontSize: 16, fontWeight: 800 }}>{profile.shopName || "Nama Usaha"}</span>
+                <ShopTagline profile={profile} />
+              </div>
             </div>
             {(profile.address || profile.contact || profile.npwp) && (
               <div style={{ fontSize: 10.5, color: "#78716c", marginTop: 8, lineHeight: 1.7, whiteSpace: "pre-line" }}>

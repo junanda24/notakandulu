@@ -1,6 +1,6 @@
 // Template A — Faktur Formal (nyontek Adobe + GitHub).
 // Hierarki dari kapitalisasi & bold, tanpa warna. GRAND TOTAL di blok hitam.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
 const lbl = { fontSize: 9.5, letterSpacing: "0.14em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
@@ -24,6 +24,7 @@ export default function FakturFormal({ inv, profile, totals, bodyFont, accent, s
           <ShopLogo logo={profile.logo} size={52} radius={8} />
           <div>
             <div style={{ fontSize: 17, fontWeight: 800 }}>{profile.shopName || "Nama Usaha"}</div>
+            <ShopTagline profile={profile} />
             {(profile.address || profile.contact) && (
               <div style={{ color: "#6b7280", fontSize: 11, marginTop: 4, whiteSpace: "pre-line" }}>
                 {[profile.address, profile.contact].filter(Boolean).join("\n")}

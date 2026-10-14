@@ -1,6 +1,6 @@
 // Style 7 — Monochrome Print. Murni hitam-putih untuk cetak hemat tinta.
 // Semua aksen diabaikan (force hitam), logo di-grayscale, hairline abu-abu.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, fmtD, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, fmtD, dpInfo } from "./shared.jsx";
 import { fmtMoney, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
@@ -16,6 +16,7 @@ export default function MonoPrint({ inv, profile, totals, bodyFont, showSignatur
           <ShopLogo logo={profile.logo} size={52} radius={10} grayscale />
           <div>
             <div style={{ fontSize: 20, fontWeight: 800 }}>{profile.shopName || "Nama Usaha"}</div>
+            <ShopTagline profile={profile} />
             {(profile.address || profile.contact || profile.npwp) && (
               <div style={{ fontSize: 11, color: "#444", marginTop: 4, whiteSpace: "pre-line" }}>
                 {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join(" · ")}

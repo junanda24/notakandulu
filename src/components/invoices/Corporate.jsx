@@ -1,6 +1,6 @@
 // Style 2 — Corporate Clean (ala Wave/FreshBooks). Format yang diharapkan
 // perusahaan Indonesia: logo kiri, meta kanan, band total aksen, baris PPN.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtMoney, fmtDate, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "#6b7280", fontWeight: 600 };
@@ -18,6 +18,7 @@ export default function Corporate({ inv, profile, totals, bodyFont, displayFont,
           <ShopLogo logo={profile.logo} size={56} radius={10} />
           <div>
             <div style={{ fontFamily: displayFont, fontSize: 24, fontWeight: 700 }}>{profile.shopName || "Nama Usaha"}</div>
+            <ShopTagline profile={profile} />
             <div style={{ color: "#6b7280", fontSize: 11, marginTop: 4, whiteSpace: "pre-line" }}>
               {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join("\n")}
             </div>

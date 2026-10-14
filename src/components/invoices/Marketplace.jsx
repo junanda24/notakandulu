@@ -1,6 +1,6 @@
 // Template E — Marketplace (nyontek Tokopedia + Shopee).
 // Rincian biaya berlapis + total tagihan + "diproses oleh komputer".
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtDate, terbilang } from "../../lib/format.js";
 
 export default function Marketplace({ inv, profile, totals, bodyFont, accent, showSignature }) {
@@ -19,7 +19,11 @@ export default function Marketplace({ inv, profile, totals, bodyFont, accent, sh
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 9, letterSpacing: "0.12em", color: "#6b7280" }}>DITERBITKAN ATAS NAMA</div>
           <div style={{ fontWeight: 700, marginTop: 4, display: "flex", gap: 8, alignItems: "center" }}>
-            <ShopLogo logo={profile.logo} size={28} radius={8} />{profile.shopName || "Nama Usaha"}
+            <ShopLogo logo={profile.logo} size={28} radius={8} />
+            <div>
+              <div>{profile.shopName || "Nama Usaha"}</div>
+              <ShopTagline profile={profile} />
+            </div>
           </div>
           {(profile.address || profile.contact) && (
             <div style={{ fontSize: 10.5, color: "#6b7280", marginTop: 4, whiteSpace: "pre-line" }}>

@@ -1,6 +1,6 @@
 // Style 8 — Struk 58mm (thermal). Konten 54mm, monospace, pemisah dashed,
 // jumlah rata kanan, TOTAL tebal dua kali lipat, logo kecil di atas.
-import { Money, ShopLogo, fmtD, dpInfo } from "./shared.jsx";
+import { Money, ShopLogo, ShopTagline, fmtD, dpInfo } from "./shared.jsx";
 import { fmtMoney, terbilang } from "../../lib/format.js";
 
 export default function Struk58({ inv, profile, totals, bodyFont }) {
@@ -12,6 +12,7 @@ export default function Struk58({ inv, profile, totals, bodyFont }) {
       <div style={{ textAlign: "center" }}>
         <ShopLogo logo={profile.logo} size={38} radius={8} grayscale style={{ margin: "0 auto 6px" }} />
         <p style={{ fontWeight: 800, fontSize: 13, letterSpacing: "0.04em" }}>{profile.shopName || "TOKO"}</p>
+        <ShopTagline profile={profile} />
         {(profile.address || profile.contact) && (
           <p style={{ fontSize: 9, color: "#444", whiteSpace: "pre-line" }}>{[profile.address, profile.contact].filter(Boolean).join(" · ")}</p>
         )}

@@ -1,5 +1,5 @@
 // Template — Ivory: kertas hangat, serif, quiet luxury.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
 const k = { fontSize: 9, letterSpacing: "0.22em", color: "#a8a29e", fontWeight: 700 };
@@ -14,6 +14,7 @@ export default function Ivory({ inv, profile, totals, bodyFont, displayFont, acc
       <div style={{ textAlign: "center" }}>
         <ShopLogo logo={profile.logo} size={46} radius={10} style={{ margin: "0 auto 10px" }} />
         <div style={{ fontSize: 12, letterSpacing: "0.32em", textIndent: "0.32em", fontWeight: 600, color: "#78716c" }}>{(profile.shopName || "NAMA USAHA").toUpperCase()}</div>
+        <ShopTagline profile={profile} />
         {(profile.address || profile.contact || profile.npwp) && (
           <div style={{ fontSize: 10.5, color: "#a8a29e", marginTop: 8, lineHeight: 1.7, whiteSpace: "pre-line" }}>
             {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join("\n")}

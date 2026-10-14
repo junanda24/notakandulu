@@ -1,6 +1,6 @@
 // Template C — Receipt Minimal (nyontek Spotify + Uber).
 // Tanpa tabel: maks 10 baris label:nilai, total di tengah.
-import { Money, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtDate, terbilang } from "../../lib/format.js";
 
 export default function ReceiptMinimal({ inv, profile, totals, bodyFont, accent, showSignature }) {
@@ -26,6 +26,7 @@ export default function ReceiptMinimal({ inv, profile, totals, bodyFont, accent,
       <div style={{ textAlign: "center" }}>
         <ShopLogo logo={profile.logo} size={44} radius={10} style={{ margin: "0 auto 10px" }} />
         <div style={{ fontWeight: 800, fontSize: 17 }}>{profile.shopName || "Nama Usaha"}</div>
+        <ShopTagline profile={profile} />
         <div style={{ fontWeight: 800, fontSize: 40, marginTop: 16, letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums", color: a }}>
           <Money v={totals.total} cur={cur} />
         </div>

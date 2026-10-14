@@ -1,7 +1,7 @@
 // Style 6 — Executive Dark. Charcoal (#141414, bukan hitam pekat), satu aksen
 // metalik emas, padding lebih lega, tabel di atas panel terang. Opt-in untuk
 // usaha premium — jangan dipakai untuk cetak hitam-putih.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtMoney, fmtDate, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "#8a8a8a", fontWeight: 600 };
@@ -23,6 +23,7 @@ export default function ExecutiveDark({ inv, profile, totals, bodyFont, accent, 
           <ShopLogo logo={profile.logo} size={56} radius={14} chip />
           <div>
             <div style={{ fontSize: 21, fontWeight: 700, letterSpacing: "-0.01em" }}>{profile.shopName || "Nama Usaha"}</div>
+            <ShopTagline profile={profile} />
             {(profile.address || profile.contact || profile.npwp) && (
               <div style={{ color: muted, fontSize: 11, marginTop: 4, whiteSpace: "pre-line" }}>
                 {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join(" · ")}

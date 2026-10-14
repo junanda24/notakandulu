@@ -101,6 +101,17 @@ export function SignatureBlock({ dark = false, left = "Hormat kami,", right = "P
 
 export const fmtD = fmtDate;
 
+// Tagline/slogan toko — hidden total kalau kosong (tanpa dash/placeholder).
+// Muncul kecil italic di bawah nama toko; fontSize relatif (em) mengikuti konteks.
+export function ShopTagline({ profile, style }) {
+  if (!profile?.tagline?.trim()) return null;
+  return (
+    <div style={{ fontSize: "0.78em", opacity: 0.65, fontStyle: "italic", marginTop: 1, ...style }}>
+      {profile.tagline}
+    </div>
+  );
+}
+
 // Logo toko — data URL dari localStorage (diresize ≤512px saat upload).
 // chip: bungkus putih (untuk template gelap / aksen penuh); grayscale: cetak hitam-putih.
 export function ShopLogo({ logo, size = 56, radius = 12, chip = false, grayscale = false, style }) {

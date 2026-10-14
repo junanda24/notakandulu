@@ -1,6 +1,6 @@
 // Template G — Studio / Agency (nyontek invoice studio asli).
 // Total di header, meta 3 kolom, kolom jam, diskon terbuka. Tanpa kotak warning.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtDate, terbilang } from "../../lib/format.js";
 
 
@@ -18,6 +18,7 @@ export default function Studio({ inv, profile, totals, bodyFont, accent, showSig
             <ShopLogo logo={profile.logo} size={44} radius={10} />
             <div>
               <div style={{ fontWeight: 700, fontSize: 19 }}>{profile.shopName || "Nama Usaha"}</div>
+              <ShopTagline profile={profile} />
             </div>
           </div>
           {(profile.address || profile.contact) && (

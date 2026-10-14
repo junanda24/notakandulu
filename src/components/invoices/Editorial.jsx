@@ -1,6 +1,6 @@
 // Style 3 — Elegant Editorial Serif (ala HoneyBook). Serif untuk nama usaha &
 // total + sans untuk data. Small caps ber-spasi, hairline saja, tanpa fill.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtMoney, fmtDate, terbilang } from "../../lib/format.js";
 
 const lbl = { fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase", color: "#78716c", fontWeight: 600 };
@@ -18,6 +18,7 @@ export default function Editorial({ inv, profile, totals, bodyFont, displayFont,
         <div style={{ fontFamily: displayFont, fontSize: 34, fontWeight: 600, letterSpacing: "0.01em" }}>
           {profile.shopName || "Nama Usaha"}
         </div>
+        <ShopTagline profile={profile} />
         {(profile.address || profile.contact || profile.npwp) && (
           <div style={{ color: "#78716c", fontSize: 11, marginTop: 6, whiteSpace: "pre-line" }}>
             {[profile.address, profile.contact, profile.npwp ? `NPWP ${profile.npwp}` : null].filter(Boolean).join("  ·  ")}

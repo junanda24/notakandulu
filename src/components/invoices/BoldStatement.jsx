@@ -1,6 +1,6 @@
 // Template I — Bold Statement (budaya Behance).
 // Background ungu full, angka hero, kartu putih overlap. Tanpa tombol.
-import { Money, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtDate, terbilang } from "../../lib/format.js";
 
 export default function BoldStatement({ inv, profile, totals, bodyFont, accent, showSignature }) {
@@ -14,7 +14,10 @@ export default function BoldStatement({ inv, profile, totals, bodyFont, accent, 
       <div style={{ padding: "40px 36px 0" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <ShopLogo logo={profile.logo} size={34} radius={10} />
-          <span style={{ fontWeight: 800, fontSize: 14 }}>{profile.shopName || "Nama Usaha"}</span>
+          <div>
+            <span style={{ fontWeight: 800, fontSize: 14 }}>{profile.shopName || "Nama Usaha"}</span>
+            <ShopTagline profile={profile} />
+          </div>
         </div>
         <div style={{ fontSize: 11, letterSpacing: 10, fontWeight: 700, opacity: 0.85, marginTop: 26 }}>INVOICE</div>
         <div style={{ fontWeight: 800, fontSize: 64, letterSpacing: "-0.03em", lineHeight: 1.05, marginTop: 10, fontVariantNumeric: "tabular-nums" }}>

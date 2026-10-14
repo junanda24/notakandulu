@@ -1,6 +1,6 @@
 // Template D — Struk Thermal 58mm gaya PLN/BCA.
 // Monospace full kapital, dot leaders, barcode, "bukti pembayaran yang sah".
-import { Money, ShopLogo, dpInfo } from "./shared.jsx";
+import { Money, ShopLogo, ShopTagline, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
 const dash = { borderTop: "1px dashed #999", margin: "10px 0" };
@@ -14,6 +14,7 @@ export default function Thermal58({ inv, profile, totals, bodyFont }) {
       <div style={{ textAlign: "center", fontWeight: 700 }}>
         <ShopLogo logo={profile.logo} size={36} radius={6} grayscale style={{ margin: "0 auto 6px" }} />
         {profile.shopName || "TOKO"}
+        <ShopTagline profile={profile} />
         {profile.address && <div style={{ fontWeight: 400, fontSize: 9, whiteSpace: "pre-line" }}>{profile.address}</div>}
         {profile.contact && <div style={{ fontWeight: 400, fontSize: 9 }}>{profile.contact}</div>}
       </div>

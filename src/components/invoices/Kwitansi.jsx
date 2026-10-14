@@ -1,7 +1,7 @@
 // Style 4 — Elegant Kwitansi (A5). Formal Indonesia: "Sudah diterima dari",
 // terbilang serif italic, jumlah dalam bingkai, zona materai ≥ Rp5jt (UU 10/2020),
 // stempel LUNAS, logo kecil di atas, signature tempat & tanggal.
-import { Money, ShopLogo, dpInfo } from "./shared.jsx";
+import { Money, ShopLogo, ShopTagline, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
 export default function Kwitansi({ inv, profile, totals, bodyFont, displayFont, accent, showSignature }) {
@@ -16,6 +16,7 @@ export default function Kwitansi({ inv, profile, totals, bodyFont, displayFont, 
       <div style={{ textAlign: "center", marginBottom: 6 }}>
         <ShopLogo logo={profile.logo} size={54} radius={12} style={{ margin: "0 auto 10px" }} />
         <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: "0.02em" }}>{profile.shopName || "Nama Usaha"}</div>
+        <ShopTagline profile={profile} />
         {(profile.address || profile.contact) && (
           <div style={{ color: "#78716c", fontSize: 10.5, marginTop: 3, whiteSpace: "pre-line" }}>
             {[profile.address, profile.contact].filter(Boolean).join("  ·  ")}

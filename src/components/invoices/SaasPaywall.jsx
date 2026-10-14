@@ -1,6 +1,6 @@
 // Template B — SaaS Paywall (nyontek Stripe + Paper.id).
 // Invoice = halaman bayar: total hero + info bayar statis + baris "Sisa Tagihan".
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtDate, terbilang } from "../../lib/format.js";
 import { paymentStatus, STATUS_META } from "../../lib/calc.js";
 
@@ -26,7 +26,10 @@ export default function SaasPaywall({ inv, profile, totals, bodyFont, accent, sh
       <div style={{ height: 64, borderBottom: "1px solid #eef0f3", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 40px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <ShopLogo logo={profile.logo} size={30} radius={8} />
-          <span style={{ fontWeight: 800, fontSize: 14 }}>{profile.shopName || "Nama Usaha"}</span>
+          <div>
+            <span style={{ fontWeight: 800, fontSize: 14 }}>{profile.shopName || "Nama Usaha"}</span>
+            <ShopTagline profile={profile} />
+          </div>
         </div>
         <span style={{ background: pill.bg, color: pill.fg, fontWeight: 700, fontSize: 10.5, padding: "6px 14px", borderRadius: 999 }}>
           <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", background: pill.dot, marginRight: 7, verticalAlign: "1px" }} />

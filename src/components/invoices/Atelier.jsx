@@ -1,5 +1,5 @@
 // Template — Atelier: editorial, margin lega, serif.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
 const k = { fontSize: 9, letterSpacing: "0.22em", color: "#a8a29e", fontWeight: 700 };
@@ -15,6 +15,7 @@ export default function Atelier({ inv, profile, totals, bodyFont, displayFont, a
         <span>{(profile.shopName || "NAMA USAHA").toUpperCase()}{profile.npwp ? ` · NPWP ${profile.npwp}` : ""}</span>
         <span>Nº {inv.number || "—"}</span>
       </div>
+      <ShopTagline profile={profile} />
 
       <h2 style={{ fontFamily: displayFont, fontWeight: 400, fontSize: 40, marginTop: 30 }}>
         Invoice <i style={{ color: a, fontStyle: "normal" }}>№{(inv.number || "").replace(/\D/g, "").slice(-3) || "—"}</i>

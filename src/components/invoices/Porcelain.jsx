@@ -1,5 +1,5 @@
 // Template — Porcelain: kartu lembut di atas abu, rasa Apple.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
 const k = { fontSize: 8.5, letterSpacing: "0.18em", color: "#94a3b8", fontWeight: 700 };
@@ -18,6 +18,7 @@ export default function Porcelain({ inv, profile, totals, bodyFont, accent, show
             <ShopLogo logo={profile.logo} size={38} radius={10} />
             <div>
               <div style={{ fontSize: 15, fontWeight: 800 }}>{profile.shopName || "Nama Usaha"}</div>
+              <ShopTagline profile={profile} />
               <div style={{ ...k, marginTop: 3 }}>INVOICE · {inv.number || "—"}</div>
             </div>
           </div>

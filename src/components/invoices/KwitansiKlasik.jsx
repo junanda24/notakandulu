@@ -1,6 +1,6 @@
 // Template J — Kwitansi Klasik Indonesia.
 // "Sudah terima dari", terbilang gaya #…#, kotak materai, cap LUNAS.
-import { Money, ShopLogo, dpInfo } from "./shared.jsx";
+import { Money, ShopLogo, ShopTagline, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 import { paymentStatus } from "../../lib/calc.js";
 
@@ -17,6 +17,7 @@ export default function KwitansiKlasik({ inv, profile, totals, bodyFont, display
         <div style={{ textAlign: "center" }}>
           <ShopLogo logo={profile.logo} size={46} radius={10} style={{ margin: "0 auto 8px" }} />
           <div style={{ fontWeight: 800, fontSize: 15 }}>{profile.shopName || "Nama Usaha"}</div>
+        <ShopTagline profile={profile} />
           {(profile.address || profile.contact) && (
             <div style={{ fontSize: 10, color: "#57534e", marginTop: 2, whiteSpace: "pre-line", fontFamily: bodyFont }}>
               {[profile.address, profile.contact].filter(Boolean).join(" · ")}
