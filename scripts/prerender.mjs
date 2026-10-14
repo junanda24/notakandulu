@@ -44,6 +44,6 @@ console.log(`prerender: injected ${ssrHtml.length} chars of static HTML into dis
 try {
   const sm = "dist/sitemap.xml";
   const today = new Date().toISOString().slice(0, 10);
-  writeFileSync(sm, readFileSync(sm, "utf8").replace(/<lastmod>[^<]*<\/lastmod>/, `<lastmod>${today}</lastmod>`));
+  writeFileSync(sm, readFileSync(sm, "utf8").replace(/<lastmod>[^<]*<\/lastmod>/g, `<lastmod>${today}</lastmod>`));
 } catch {}
 
