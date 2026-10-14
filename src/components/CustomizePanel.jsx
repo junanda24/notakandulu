@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { Field, Select, TextInput, Card, Collapse } from "./ui.jsx";
 import { TEMPLATES, FONTS, ACCENT_PRESETS, PAPER_WIDTH } from "../data/options.js";
-import { NUMBER_PATTERNS } from "../lib/format.js";
+import { NUMBER_PATTERNS, expandNumber, todayIso } from "../lib/format.js";
+import { peekCounter } from "../lib/storage.js";
 
 function Accordion({ title, sticker, summary, summaryStyle, children, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -107,6 +108,13 @@ export default function CustomizePanel({ settings, setSettings }) {
       </Card>
 
       <Card title="Pola Nomor Nota">
+        <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mb-3">
+          Pola untuk <b>nomor otomatis</b>: tiap bikin nota baru, kolom "Nomor nota" langsung terisi
+          mengikuti pola ini. Kamu tetap bisa ubah manual di langkah Isi Data.
+        </p>
+        <p className="mb-3 rounded-lg bg-cream dark:bg-neutral-800 px-3 py-2 font-mono2 text-[12px] font-bold">
+          Nota berikutnya: <span className="text-teal-700 dark:text-teal-300">{expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), todayIso())}</span>
+        </p>
         <Field label="Pilih pola">
           <Select value={settings.numberPattern} onChange={(e) => set({ numberPattern: e.target.value })}>
             {NUMBER_PATTERNS.map((p) => (

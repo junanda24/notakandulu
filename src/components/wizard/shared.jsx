@@ -185,12 +185,13 @@ export function useInvSet(setInv) {
   return { set, setItem, addItem, delItem };
 }
 
-export function Advanced({ title, children, defaultOpen = false }) {
+export function Advanced({ title, hint, children, defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <div className="mt-3">
       <button onClick={() => setOpen(!open)} className="text-[12px] font-bold text-teal-600 dark:text-teal-400 hover:underline">
         {open ? "▾" : "▸"} {title}
+        {hint && !open && <span className="font-semibold text-neutral-400 dark:text-neutral-500"> ({hint})</span>}
       </button>
       <Collapse open={open}>
         <div className="mt-2">{children}</div>

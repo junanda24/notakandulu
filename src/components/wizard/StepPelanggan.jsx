@@ -35,7 +35,7 @@ export default function StepPelanggan({ inv, setInv }) {
         <Field label="Info pelanggan (opsional)" className="mt-3">
           <TextArea rows={2} value={inv.customerInfo} onChange={(e) => set({ customerInfo: e.target.value })} placeholder="Alamat, no. HP, dsb." />
         </Field>
-        <Advanced title="Opsi lanjutan">
+        <Advanced title="Opsi lanjutan" hint="jatuh tempo, no. PO, NPWP">
           <div className="grid grid-cols-2 gap-3">
             <Field label="Jatuh tempo (opsional)">
               <TextInput type="date" value={inv.dueDate || ""} onChange={(e) => set({ dueDate: e.target.value })} />
