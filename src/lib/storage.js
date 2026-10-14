@@ -87,7 +87,10 @@ export function importData(json) {
     // Validasi ringan bentuk data
     if (d.history && !Array.isArray(d.history)) return { ok: false, error: "Riwayat rusak." };
     if (d.profile && typeof d.profile !== "object") return { ok: false, error: "Profil rusak." };
-    const okSave = save({ ...d, schemaVersion: SCHEMA_VERSION });
+    if (d.settings && typeof d.settings !== "object") return { ok: false, error: "Pengaturan rusak." };
+    // Normalisasi counter: string "5" + 1 = "51" (bug nomor duplikat) — paksa jadi angka.
+    const counter = Math.max(0, parseInt(d.counter, 10) || 0);
+    const okSave = save({ ...d, counter, schemaVersion: SCHEMA_VERSION });
     if (!okSave) return { ok: false, error: "Penyimpanan penuh — backup gagal dimuat." };
     return { ok: true };
   } catch {

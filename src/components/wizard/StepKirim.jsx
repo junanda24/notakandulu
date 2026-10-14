@@ -10,7 +10,7 @@ export default function StepKirim({ inv, setInv, profile, settings, onSave, onNe
   const [saved, setSaved] = useState(false);
   // Nota baru (id beda) -> reset status tersimpan
   useEffect(() => { setSaved(false); }, [inv.id]);
-  const doSave = () => { onSave(); setSaved(true); };
+  const doSave = () => { if (onSave()) setSaved(true); };
   // Sheet tersembunyi (off-screen) khusus untuk render PNG — html-to-image butuh node ter-layout
   const hiddenSheetRef = useRef(null);
   const hasPayments = (profile.payments || []).length > 0;

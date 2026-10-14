@@ -65,7 +65,8 @@ export const NUMBER_PATTERNS = [
 ];
 /** Expand {YYYY},{YY},{MM},{DD},{N...} — N run length = zero padding. counter is 1-based. */
 export function expandNumber(pattern, counter, dateIso) {
-  const d = dateIso ? new Date(dateIso + "T00:00:00") : new Date();
+  let d = dateIso ? new Date(dateIso + "T00:00:00") : new Date();
+  if (isNaN(d)) d = new Date(); // tanggal kosong/rusak -> pakai hari ini, jangan "NaN"
   const pad = (v, l) => String(v).padStart(l, "0");
   return pattern
     .replace("{YYYY}", d.getFullYear())

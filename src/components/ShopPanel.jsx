@@ -18,6 +18,10 @@ export default function ShopPanel({ profile, setProfile }) {
       setLogoErr("File harus gambar (PNG/JPG).");
       return;
     }
+    if (file.size > 10 * 1024 * 1024) {
+      setLogoErr("File terlalu besar (maks 10 MB).");
+      return;
+    }
     const url = URL.createObjectURL(file);
     const img = new Image();
     img.onload = () => {

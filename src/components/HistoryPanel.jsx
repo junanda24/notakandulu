@@ -24,6 +24,19 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
   const doImport = async (e) => {
     const f = e.target.files?.[0];
     if (!f) return;
+    if (f.size > 10 * 1024 * 1024) {
+      setMsg("Gagal: file terlalu besar (maks 10 MB).");
+      e.target.value = "";
+      setTimeout(() => setMsg(""), 3500);
+      return;
+    }
+    // Restore MENGGANTI seluruh data — minta konfirmasi dulu biar tak kepencet.
+    if (history.length > 0 && !window.confirm(
+      `Restore akan MENGGANTI ${history.length} nota tersimpan dengan data dari backup.\nLanjutkan?`
+    )) {
+      e.target.value = "";
+      return;
+    }
     const text = await f.text();
     const r = importData(text);
     setMsg(r.ok ? "Backup dimuat ✓" : "Gagal: " + r.error);

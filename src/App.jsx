@@ -152,7 +152,11 @@ export default function App() {
     const { history: h, ok } = saveToHistory(finalInv);
     setHistory(h);
     setInv(finalInv);
-    showToast(ok ? "Nota tersimpan ✓" : "Gagal menyimpan — memori browser penuh");
+    const dupNum = inv.number && h.some((x) => x.id !== finalInv.id && x.number === inv.number);
+    showToast(!ok ? "Gagal menyimpan — memori browser penuh"
+      : dupNum ? `Nota tersimpan ✓ (nomor ${inv.number} sudah dipakai nota lain!)`
+      : "Nota tersimpan ✓");
+    return ok;
   };
 
   const handleNew = () => {
