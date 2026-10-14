@@ -1,5 +1,5 @@
 // Wizard step 2: item barang/jasa (baris kompak, ketuk untuk edit) + hitungan (baris setelan + total live).
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Field, TextInput, TextArea, Select, Card, Collapse } from "../ui.jsx";
 import { TERMS, UNITS, useInvSet } from "./shared.jsx";
 import { blankItem, calcTotals } from "../../lib/calc.js";
@@ -85,6 +85,13 @@ function HitungRow({ title, desc, children }) {
 export default function StepItem({ inv, setInv }) {
   const { set, setItem, delItem } = useInvSet(setInv);
   const [openId, setOpenId] = useState(() => inv.items[0]?.id || null);
+  // Invoice yang dibuka berganti (mis. klik riwayat / nota baru) -> reset baris terbuka ke item pertama,
+  // supaya data riwayat langsung kelihatan & bisa diedit tanpa harus ketuk tiap baris dulu.
+  const invIdRef = useRef(inv.id);
+  if (invIdRef.current !== inv.id) {
+    invIdRef.current = inv.id;
+    setOpenId(inv.items[0]?.id || null);
+  }
   const t = calcTotals(inv);
   const cur = inv.currency || "IDR";
 

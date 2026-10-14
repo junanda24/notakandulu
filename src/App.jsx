@@ -4,8 +4,8 @@ import Wizard from "./components/wizard/Wizard.jsx";
 import { getSteps, STEP_IDS } from "./components/wizard/shared.jsx";
 import HistoryPanel from "./components/HistoryPanel.jsx";
 import Preview, { InvoiceSheet, MobilePreviewModal } from "./components/Preview.jsx";
-import { blankInvoice } from "./lib/calc.js";
-import { expandNumber, todayIso } from "./lib/format.js";
+import { blankInvoice, blankItem } from "./lib/calc.js";
+import { expandNumber, todayIso, uid } from "./lib/format.js";
 import {
   getProfile, setProfile, getSettings, setSettings,
   getHistory, saveToHistory, deleteHistory, nextCounter, peekCounter, migrate,
@@ -168,12 +168,24 @@ export default function App() {
   };
 
   const openHistory = (h, duplicate = false) => {
+    const src = h && typeof h === "object" ? h : {};
+    // Guard: entry riwayat korup/format lama tanpa items -> jangan crash; fallback ke 1 baris kosong.
+    // Merge dengan blankInvoice agar field yang hilang tetap punya default.
+    const items = Array.isArray(src.items) && src.items.length > 0
+      ? src.items.map((it) => ({ ...blankItem(), ...(it || {}) }))
+      : [blankItem()];
     if (duplicate) {
-      const copy = { ...h, id: `${Date.now().toString(36)}-dup`, number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), todayIso()) };
-      setInv({ ...copy, items: copy.items.map((it) => ({ ...it })) });
+      const copy = {
+        ...blankInvoice(),
+        ...src,
+        id: `${Date.now().toString(36)}-dup`,
+        number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), todayIso()),
+        items: items.map((it) => ({ ...it, id: uid() })),
+      };
+      setInv(copy);
       showToast("Diduplikasi — simpan untuk mengunci nomor");
     } else {
-      setInv({ ...h, items: h.items.map((it) => ({ ...it })) });
+      setInv({ ...blankInvoice(), ...src, items });
     }
     setTab("buat");
   };
