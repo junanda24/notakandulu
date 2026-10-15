@@ -86,7 +86,7 @@ export default function KwitansiLuhur({ inv, profile, totals, bodyFont, displayF
           ) : <div style={{ width: 124 }} />}
           <div style={{
             border: `3px double ${stamp.color}`, color: stamp.color, borderRadius: "50%",
-            width: 128, height: 128, display: "inline-flex", alignItems: "center", justifyContent: "center",
+            width: 128, height: 128, flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center",
             fontWeight: 800, letterSpacing: "0.14em", fontSize: st === "lunas" ? 17 : 12,
             transform: "rotate(-8deg)", textAlign: "center", lineHeight: 1.4, padding: 8,
           }}>
