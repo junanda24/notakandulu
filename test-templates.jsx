@@ -1,4 +1,4 @@
-// SSR render test untuk 24 template nota (normal / edge / empty).
+// SSR render test untuk 29 template nota (normal / edge / empty).
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { calcTotals } from "./src/lib/calc.js";
@@ -26,8 +26,13 @@ import Ivory from "./src/components/invoices/Ivory.jsx";
 import Linea from "./src/components/invoices/Linea.jsx";
 import Porcelain from "./src/components/invoices/Porcelain.jsx";
 import Atelier from "./src/components/invoices/Atelier.jsx";
+import NoirGold from "./src/components/invoices/NoirGold.jsx";
+import EmeraldLedger from "./src/components/invoices/EmeraldLedger.jsx";
+import WarmClay from "./src/components/invoices/WarmClay.jsx";
+import KwitansiLuhur from "./src/components/invoices/KwitansiLuhur.jsx";
+import KwitansiKontemporer from "./src/components/invoices/KwitansiKontemporer.jsx";
 
-const TPL = { saas: SaasCard, corporate: Corporate, editorial: Editorial, kwitansi: Kwitansi, accent: AccentBlock, dark: ExecutiveDark, mono: MonoPrint, "struk-58": Struk58, "struk-80": Struk80, "faktur-formal": FakturFormal, "saas-paywall": SaasPaywall, "receipt-minimal": ReceiptMinimal, "thermal-58": Thermal58, marketplace: Marketplace, studio: Studio, "faktur-pajak": FakturPajak, "bold-statement": BoldStatement, "kwitansi-klasik": KwitansiKlasik, clarity: Clarity, noir: Noir, ivory: Ivory, linea: Linea, porcelain: Porcelain, atelier: Atelier };
+const TPL = { saas: SaasCard, corporate: Corporate, editorial: Editorial, kwitansi: Kwitansi, accent: AccentBlock, dark: ExecutiveDark, mono: MonoPrint, "struk-58": Struk58, "struk-80": Struk80, "faktur-formal": FakturFormal, "saas-paywall": SaasPaywall, "receipt-minimal": ReceiptMinimal, "thermal-58": Thermal58, marketplace: Marketplace, studio: Studio, "faktur-pajak": FakturPajak, "bold-statement": BoldStatement, "kwitansi-klasik": KwitansiKlasik, clarity: Clarity, noir: Noir, ivory: Ivory, linea: Linea, porcelain: Porcelain, atelier: Atelier, "noir-gold": NoirGold, "emerald-ledger": EmeraldLedger, "warm-clay": WarmClay, "kwitansi-luhur": KwitansiLuhur, "kwitansi-kontemporer": KwitansiKontemporer };
 
 const profile = {
   shopName: "Kopi Senja",
@@ -89,7 +94,7 @@ for (const [tid, Cmp] of Object.entries(TPL)) {
       const checks = [];
       if (cname === "normal") {
         const lc = html.toLowerCase();
-        const isKwitansi = tid === "kwitansi" || tid === "kwitansi-klasik";
+        const isKwitansi = tid === "kwitansi" || tid === "kwitansi-klasik" || tid === "kwitansi-luhur" || tid === "kwitansi-kontemporer";
         const isThermal58 = tid === "thermal-58";
         checks.push(["total muncul", html.includes("Rp") || html.includes("total") || html.includes("TOTAL")]);
         checks.push(["nama toko muncul", html.includes("Kopi Senja")]);
@@ -131,6 +136,6 @@ for (const [tid, Cmp] of Object.entries(TPL)) {
   }
 }
 
-console.log(`\nSSR render: ${pass} lolos, ${fail} gagal dari ${pass + fail} kasus (24 template × 3 kasus)`);
+console.log(`\nSSR render: ${pass} lolos, ${fail} gagal dari ${pass + fail} kasus (29 template × 3 kasus)`);
 if (failures.length) { console.log("GAGAL:"); failures.forEach((f) => console.log(" - " + f)); process.exit(1); }
 console.log("SEMUA LOLOS ✓");

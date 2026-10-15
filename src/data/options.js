@@ -19,12 +19,17 @@ export const TEMPLATES = [
   { id: "linea", name: "Linea", desc: "Satu garis aksen, minimal", paper: "A4", dark: false, kind: "invoice" },
   { id: "porcelain", name: "Porcelain", desc: "Kartu lembut ala Apple", paper: "A4", dark: false, kind: "invoice" },
   { id: "atelier", name: "Atelier", desc: "Editorial, margin lega", paper: "A4", dark: false, kind: "invoice" },
+  { id: "noir-gold", name: "Noir & Gold", desc: "Charcoal + emas mewah", paper: "A4", dark: false, kind: "invoice" },
+  { id: "emerald-ledger", name: "Emerald Ledger", desc: "Hijau hutan + krem tenang", paper: "A4", dark: false, kind: "invoice" },
+  { id: "warm-clay", name: "Warm Clay", desc: "Kertas hangat + terakota", paper: "A4", dark: false, kind: "invoice" },
   { id: "kwitansi", name: "Kwitansi Elegan", desc: "Formal + terbilang + materai", paper: "A5", dark: false, kind: "nota" },
   { id: "struk-80", name: "Struk 80mm", desc: "Thermal lebar, +detail", paper: "80mm", dark: false, kind: "nota" },
   { id: "struk-58", name: "Struk 58mm", desc: "Thermal kecil", paper: "58mm", dark: false, kind: "nota" },
   { id: "receipt-minimal", name: "Receipt Minimal", desc: "Ala Spotify/Uber, tanpa tabel", paper: "A4", dark: false, kind: "nota" },
   { id: "thermal-58", name: "Thermal 58 PLN", desc: "Gaya PLN/BCA + barcode", paper: "58mm", dark: false, kind: "nota" },
   { id: "kwitansi-klasik", name: "Kwitansi Klasik", desc: "Materai + cap LUNAS", paper: "A5", dark: false, kind: "nota" },
+  { id: "kwitansi-luhur", name: "Kwitansi Luhur", desc: "Bingkai sertifikat heritage", paper: "A5", dark: false, kind: "nota" },
+  { id: "kwitansi-kontemporer", name: "Kwitansi Kontemporer", desc: "Minimal emerald modern", paper: "A5", dark: false, kind: "nota" },
 ];
 
 export const PAPER_WIDTH = {
@@ -46,6 +51,10 @@ export const FONTS = [
   { id: "baskerville", name: "Baskerville", body: '"Libre Baskerville", Georgia, serif', display: '"Libre Baskerville", Georgia, serif' },
   { id: "ketik", name: "Mesin Ketik", body: '"IBM Plex Mono", monospace', display: '"IBM Plex Mono", monospace' },
   { id: "tangan", name: "Tulis Tangan", body: '"Caveat", cursive', display: '"Caveat", cursive' },
+  { id: "playfair", name: "Playfair Mewah", body: '"Inter", system-ui, sans-serif', display: '"Playfair Display", Georgia, serif' },
+  { id: "cormorant", name: "Cormorant Anggun", body: '"Inter", system-ui, sans-serif', display: '"Cormorant Garamond", Georgia, serif' },
+  { id: "marcellus", name: "Marcellus Klasik", body: '"Work Sans", system-ui, sans-serif', display: '"Marcellus", Georgia, serif' },
+  { id: "montserrat", name: "Montserrat Tegas", body: '"Inter", system-ui, sans-serif', display: '"Montserrat", system-ui, sans-serif' },
 ];
 
 export const ACCENT_PRESETS = [

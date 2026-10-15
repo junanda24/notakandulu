@@ -33,6 +33,11 @@ import Ivory from "./invoices/Ivory.jsx";
 import Linea from "./invoices/Linea.jsx";
 import Porcelain from "./invoices/Porcelain.jsx";
 import Atelier from "./invoices/Atelier.jsx";
+import NoirGold from "./invoices/NoirGold.jsx";
+import EmeraldLedger from "./invoices/EmeraldLedger.jsx";
+import WarmClay from "./invoices/WarmClay.jsx";
+import KwitansiLuhur from "./invoices/KwitansiLuhur.jsx";
+import KwitansiKontemporer from "./invoices/KwitansiKontemporer.jsx";
 
 const TPL_COMPONENTS = {
   "saas": SaasCard,
@@ -59,6 +64,11 @@ const TPL_COMPONENTS = {
   "linea": Linea,
   "porcelain": Porcelain,
   "atelier": Atelier,
+  "noir-gold": NoirGold,
+  "emerald-ledger": EmeraldLedger,
+  "warm-clay": WarmClay,
+  "kwitansi-luhur": KwitansiLuhur,
+  "kwitansi-kontemporer": KwitansiKontemporer,
 };
 
 export const InvoiceSheet = memo(function InvoiceSheet({ inv, profile, settings, id }) {  const Tpl = TPL_COMPONENTS[settings.template] || SaasCard;
