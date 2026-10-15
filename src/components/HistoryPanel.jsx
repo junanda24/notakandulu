@@ -16,7 +16,7 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
     const r = await exportData();
     if (r.cancelled) return;
     setMsg(r.ok
-      ? (r.via === "share" ? "Backup dibagikan ✓ — simpan ke Files" : "Backup diunduh ✓ — cek folder Download")
+      ? (r.via === "share" ? "Salinan dibagikan ✓ — simpan ke Files" : "Salinan diunduh ✓ — cek folder Download")
       : "Gagal: " + r.error);
     setTimeout(() => setMsg(""), 4000);
   };
@@ -30,18 +30,18 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
       setTimeout(() => setMsg(""), 3500);
       return;
     }
-    // Restore MENGGANTI seluruh data — minta konfirmasi dulu biar tak kepencet.
+    // Kembalikan salinan MENGGANTI seluruh data — minta konfirmasi dulu biar tak kepencet.
     // Juga saat riwayat kosong: profil/pengaturan/counter ikut tertimpa.
     const confirmMsg = history.length > 0
-      ? `Restore akan MENGGANTI ${history.length} nota tersimpan dengan data dari backup.\nLanjutkan?`
-      : "Restore akan MENGGANTI data toko, pengaturan, dan penghitung nomor dengan data dari backup.\nLanjutkan?";
+      ? `File salinan akan MENGGANTI ${history.length} nota tersimpan dengan data dari file.\nLanjutkan?`
+      : "File salinan akan MENGGANTI data toko, pengaturan, dan penghitung nomor dengan data dari file.\nLanjutkan?";
     if (!window.confirm(confirmMsg)) {
       e.target.value = "";
       return;
     }
     const text = await f.text();
     const r = importData(text);
-    setMsg(r.ok ? "Backup dimuat ✓" : "Gagal: " + r.error);
+    setMsg(r.ok ? "Data dipulihkan dari salinan ✓" : "Gagal: " + r.error);
     if (r.ok && onRestored) onRestored();
     e.target.value = "";
     setTimeout(() => setMsg(""), 3500);
@@ -132,7 +132,11 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
       )}
     </Card>
 
-    <Card title="Backup & Restore" sticker="lokal">
+    <Card title="Simpan & Kembalikan Data" sticker="penting">
+      <p className="text-[12px] text-neutral-600 dark:text-neutral-400 mb-3">
+        Semua nota dan data tokomu cuma tersimpan di browser HP/laptop ini — <b>tidak ada di internet</b>.
+        Kalau ganti HP atau data browser kehapus, semuanya hilang. Amankan datamu di sini.
+      </p>
       <p className="font-mono2 text-[10px] text-neutral-500 mb-1">
         Penyimpanan terpakai: {(info.used / 1024).toFixed(1)} KB dari ~5 MB ({info.pct.toFixed(1)}%)
       </p>
@@ -140,16 +144,17 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
         <div className="h-full bg-teal-500" style={{ width: `${Math.max(2, info.pct)}%` }} />
       </div>
       <div className="flex gap-2">
-        <Btn onClick={doExport} color="bg-teal-500 text-white" className="flex-1 text-xs!">⬇️ Backup (JSON)</Btn>
-        <Btn onClick={() => fileRef.current?.click()} color="bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" className="flex-1 text-xs!">⬆️ Restore</Btn>
+        <Btn onClick={doExport} color="bg-teal-500 text-white" className="flex-1 text-xs!">⬇️ Simpan salinan</Btn>
+        <Btn onClick={() => fileRef.current?.click()} color="bg-white text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100" className="flex-1 text-xs!">⬆️ Kembalikan salinan</Btn>
         <input ref={fileRef} type="file" accept=".json,application/json" className="hidden" onChange={doImport} />
       </div>
       {msg && <p className="mt-2 text-xs font-bold">{msg}</p>}
-      <p className="mt-2 font-mono2 text-[10px] text-neutral-500">
-        Pindah HP/laptop? Backup di sini, restore di perangkat baru.
-      </p>
-      <p className="mt-1 font-mono2 text-[10px] text-amber-600 dark:text-amber-400 font-bold">
-        ⚠️ Data cuma ada di browser ini. Kalau data browser dihapus, invoice hilang permanen. Backup rutin ya.
+      <div className="mt-3 space-y-1.5 font-mono2 text-[10px] text-neutral-500">
+        <p><b className="text-neutral-700 dark:text-neutral-300">Simpan salinan:</b> unduh file berisi semua nota, data toko, dan pengaturan. Simpan di tempat aman (Google Drive, email sendiri, dll).</p>
+        <p><b className="text-neutral-700 dark:text-neutral-300">Kembalikan salinan:</b> pilih file salinan untuk memulihkan data — misal setelah ganti HP. <b>Data yang ada sekarang akan diganti</b> dengan isi file.</p>
+      </div>
+      <p className="mt-2 font-mono2 text-[10px] text-amber-600 dark:text-amber-400 font-bold">
+        ⚠️ Kalau data browser dihapus tanpa salinan, invoice hilang permanen. Simpan salinan rutin ya.
       </p>
     </Card>
     </div>
