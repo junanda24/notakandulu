@@ -71,7 +71,7 @@ export default function CustomizePanel({ settings, setSettings }) {
                 className={`rounded-lg border-2 p-3 text-left text-sm transition ${active ? "border-teal-600 ring-2 ring-teal-600/20 bg-teal-50 dark:bg-teal-950" : "border-line hover:border-neutral-400"}`}
               >
                 {f.name}
-                <span className="block text-lg font-bold">Ag</span>
+                <span className="block text-lg font-bold" style={{ fontFamily: f.display }}>Ag</span>
               </button>
             );
           })}
