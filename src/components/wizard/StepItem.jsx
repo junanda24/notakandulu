@@ -7,7 +7,8 @@ import { fmtMoney } from "../../lib/format.js";
 
 // Angka tidak boleh negatif (min="0" cuma batasi spinner, ketikan manual lolos).
 // String kosong dipertahankan supaya field tetap bisa dikosongkan user.
-const clampNum = (v) => (v === "" || v == null ? "" : Math.max(0, Number(v) || 0));
+// Ceiling 1e12 cegah Infinity (1e308 × 1e308 → terbilang stack overflow).
+const clampNum = (v) => (v === "" || v == null ? "" : Math.min(1e12, Math.max(0, Number(v) || 0)));
 
 function ItemRow({ it, index, open, onToggle, setItem, onDelete, canDelete }) {
   const lineTotal = (Number(it.qty) || 0) * (Number(it.price) || 0);
@@ -41,6 +42,7 @@ function ItemRow({ it, index, open, onToggle, setItem, onDelete, canDelete }) {
             value={it.name}
             onChange={(e) => setItem(it.id, { name: e.target.value })}
             placeholder="Nama barang / jasa"
+            aria-label="Nama barang / jasa"
             className="mb-2.5"
           />
           <div className="grid grid-cols-3 gap-2">
@@ -81,7 +83,7 @@ function HitungRow({ title, desc, children }) {
         <p className="text-[13.5px] font-bold">{title}</p>
         {desc && <p className="text-[11px] text-neutral-400 mt-0.5">{desc}</p>}
       </div>
-      <div className="flex items-center gap-1.5 shrink-0">{children}</div>
+      <div className="flex items-center gap-1.5 shrink-0" role="group" aria-label={title}>{children}</div>
     </div>
   );
 }

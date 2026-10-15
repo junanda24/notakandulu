@@ -28,38 +28,11 @@ export function PaymentBlock({ inv, profile, cur, dark = false, accent = "#1e3a5
   );
 }
 
-/** Info DP: { dp, sisa } atau null bila tidak ada uang muka. */
+/** Info DP: { dp, sisa } atau null bila tidak ada uang muka. Pakai totals.dp yang sudah di-clamp 0–total. */
 export function dpInfo(inv, totals) {
-  const dp = Math.max(0, Number(inv?.dp) || 0);
+  const dp = totals?.dp ?? Math.max(0, Number(inv?.dp) || 0);
   if (dp <= 0 || !totals) return null;
   return { dp, sisa: Math.max(0, totals.total - dp) };
-}
-
-export function TotalsTable({ inv, totals, cur, dark = false, accent = "#1e3a5f", minimal = false }) {
-  const row = { display: "flex", justifyContent: "space-between", fontSize: 12, padding: "3px 0" };
-  const label = { color: dark ? "#a8a29e" : "#78716c" };
-  const border = minimal ? {} : { borderTop: `1px solid ${dark ? "#292524" : "#e7e5e4"}` };
-  return (
-    <div style={{ marginTop: 12, ...border, paddingTop: minimal ? 0 : 8 }}>
-      <div style={row}><span style={label}>Subtotal</span><Money v={totals.subtotal} cur={cur} /></div>
-      {totals.discountAmt > 0 && (
-        <div style={row}><span style={label}>Diskon</span><Money v={-totals.discountAmt} cur={cur} /></div>
-      )}
-      {totals.taxAmt > 0 && (
-        <div style={row}><span style={label}>Pajak ({inv.tax}%)</span><Money v={totals.taxAmt} cur={cur} /></div>
-      )}
-      {totals.shipping > 0 && (
-        <div style={row}><span style={label}>Ongkir</span><Money v={totals.shipping} cur={cur} /></div>
-      )}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginTop: 8, paddingTop: 8, borderTop: `2px solid ${accent}` }}>
-        <span style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 700, color: label.color }}>Total</span>
-        <Money v={totals.total} cur={cur} style={{ fontSize: 22, fontWeight: 800, color: dark ? "#fafaf9" : "#1c1917" }} />
-      </div>
-      <p style={{ fontSize: 11, fontStyle: "italic", color: label.color, marginTop: 4 }}>
-        {terbilang(totals.total, cur)}
-      </p>
-    </div>
-  );
 }
 
 export function NotesBlock({ inv, dark = false }) {
@@ -101,13 +74,14 @@ export function SignatureBlock({ dark = false, left = "Hormat kami,", right = "P
 
 export const fmtD = fmtDate;
 
-// Tagline/slogan toko — hidden total kalau kosong (tanpa dash/placeholder).
+// Tagline/slogan toko — hidden total kalau kosong/spasi saja (tanpa dash/placeholder).
 // Muncul kecil italic di bawah nama toko; fontSize relatif (em) mengikuti konteks.
+// Reset textTransform & fontWeight agar tidak mewarisi gaya header (mis. Thermal58: uppercase+bold).
 export function ShopTagline({ profile, style }) {
   if (!profile?.tagline?.trim()) return null;
   return (
-    <div style={{ fontSize: "0.78em", opacity: 0.65, fontStyle: "italic", marginTop: 1, ...style }}>
-      {profile.tagline}
+    <div style={{ fontSize: "0.78em", opacity: 0.65, fontStyle: "italic", marginTop: 1, textTransform: "none", fontWeight: 400, ...style }}>
+      {profile.tagline.trim()}
     </div>
   );
 }

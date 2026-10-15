@@ -13,7 +13,7 @@ export default function Struk80({ inv, profile, totals, bodyFont }) {
       <div style={{ textAlign: "center" }}>
         <ShopLogo logo={profile.logo} size={44} radius={10} grayscale style={{ margin: "0 auto 8px" }} />
         <p style={{ fontWeight: 800, fontSize: 16, letterSpacing: "0.06em" }}>{profile.shopName || "TOKO"}</p>
-        {profile.tagline && <p style={{ fontSize: 10.5, color: "#444", fontStyle: "italic" }}>{profile.tagline}</p>}
+        {profile.tagline?.trim() && <p style={{ fontSize: 10.5, color: "#444", fontStyle: "italic" }}>{profile.tagline.trim()}</p>}
         {(profile.address || profile.contact) && (
           <p style={{ fontSize: 10, color: "#444", whiteSpace: "pre-line" }}>{[profile.address, profile.contact].filter(Boolean).join(" · ")}</p>
         )}

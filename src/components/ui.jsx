@@ -99,8 +99,9 @@ export function Card({ title, sticker, action, children, className = "" }) {
 }
 
 export function Btn({ children, onClick, color = "", primary = false, className = "", type = "button", disabled }) {
+  // Kontras WCAG AA: putih di teal-700 = 5.47:1; dark mode teks gelap di teal-500 = 7.99:1.
   const base = primary
-    ? "bg-teal-600 border-teal-600 text-white hover:bg-teal-500 dark:bg-teal-500 dark:border-teal-500 dark:hover:bg-teal-400"
+    ? "bg-teal-700 border-teal-700 text-white hover:bg-teal-600 dark:bg-teal-500 dark:border-teal-500 dark:text-neutral-950 dark:hover:bg-teal-400"
     : color || "";
   return (
     <button

@@ -1,9 +1,10 @@
 // Wizard step 4 (terakhir): ringkasan nota, pilih pembayaran, simpan, ekspor & bagikan.
 import { useEffect, useRef, useState } from "react";
 import { Card, Btn, Collapse } from "../ui.jsx";
-import { InvoiceSheet, ExportCard } from "../Preview.jsx";
+import { InvoiceSheet, ExportCard, PAPER_PX } from "../Preview.jsx";
 import { calcTotals } from "../../lib/calc.js";
 import { fmtMoney, fmtDate } from "../../lib/format.js";
+import { TEMPLATES } from "../../data/options.js";
 
 export default function StepKirim({ inv, setInv, profile, settings, onSave, onNew, onGotoToko, onGotoRiwayat, notify }) {
   const t = calcTotals(inv);
@@ -57,10 +58,22 @@ export default function StepKirim({ inv, setInv, profile, settings, onSave, onNe
               <dd className="font-semibold">{fmtMoney(t.taxAmt, inv.currency)}</dd>
             </div>
           )}
+          {t.dp > 0 && (
+            <div className="flex justify-between gap-3">
+              <dt className="text-neutral-500">Uang muka (DP)</dt>
+              <dd className="font-semibold">{fmtMoney(t.dp, inv.currency)}</dd>
+            </div>
+          )}
           <div className="flex justify-between gap-3 border-t border-line pt-2">
             <dt className="font-bold">Total tagihan</dt>
             <dd className="font-extrabold text-teal-700 dark:text-teal-400 tabular-nums">{fmtMoney(t.total, inv.currency)}</dd>
           </div>
+          {t.dp > 0 && (
+            <div className="flex justify-between gap-3">
+              <dt className="text-neutral-500">Sisa dibayar</dt>
+              <dd className="font-semibold tabular-nums">{fmtMoney(t.total - t.dp, inv.currency)}</dd>
+            </div>
+          )}
         </dl>
       </Card>
 
@@ -126,9 +139,10 @@ export default function StepKirim({ inv, setInv, profile, settings, onSave, onNe
 
       <ExportCard inv={inv} profile={profile} settings={settings} sheetRef={hiddenSheetRef} notify={notify} />
 
-      {/* Sheet off-screen untuk render PNG (tidak terlihat, tapi ter-layout untuk html-to-image) */}
+      {/* Sheet off-screen untuk render PNG (tidak terlihat, tapi ter-layout untuk html-to-image).
+          Width eksplisit = lebar kertas agar tidak shrink-to-fit selebar viewport di HP. */}
       <div aria-hidden="true" style={{ position: "fixed", left: "-10000px", top: 0, pointerEvents: "none" }}>
-        <div ref={hiddenSheetRef}>
+        <div ref={hiddenSheetRef} style={{ width: PAPER_PX[TEMPLATES.find((x) => x.id === settings.template)?.paper || "A4"] || 794 }}>
           <InvoiceSheet inv={inv} profile={profile} settings={settings} />
         </div>
       </div>

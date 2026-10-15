@@ -1,6 +1,6 @@
 // Template B — SaaS Paywall (nyontek Stripe + Paper.id).
 // Invoice = halaman bayar: total hero + info bayar statis + baris "Sisa Tagihan".
-import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { fmtDate, terbilang } from "../../lib/format.js";
 import { paymentStatus, STATUS_META } from "../../lib/calc.js";
 

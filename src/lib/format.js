@@ -40,7 +40,10 @@ function _terbilang(n) {
 }
 /** Indonesian amount-in-words, e.g. "Seratus lima puluh ribu rupiah" */
 export function terbilang(n, currency = "IDR") {
-  const v = Math.round(Number(n) || 0);
+  const raw = Number(n);
+  // Guard: non-finite (Infinity dari 1e308 × 1e308) → jangan rekursi sampai stack overflow.
+  if (!Number.isFinite(raw)) return "—";
+  const v = Math.round(raw || 0);
   if (v === 0) return "Nol " + (currency === "IDR" ? "rupiah" : currencyMeta(currency).label);
   const words = _terbilang(v).replace(/\s+/g, " ").trim();
   const cap = words.charAt(0).toUpperCase() + words.slice(1);

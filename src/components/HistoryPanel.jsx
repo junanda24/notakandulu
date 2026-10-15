@@ -31,9 +31,11 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
       return;
     }
     // Restore MENGGANTI seluruh data — minta konfirmasi dulu biar tak kepencet.
-    if (history.length > 0 && !window.confirm(
-      `Restore akan MENGGANTI ${history.length} nota tersimpan dengan data dari backup.\nLanjutkan?`
-    )) {
+    // Juga saat riwayat kosong: profil/pengaturan/counter ikut tertimpa.
+    const confirmMsg = history.length > 0
+      ? `Restore akan MENGGANTI ${history.length} nota tersimpan dengan data dari backup.\nLanjutkan?`
+      : "Restore akan MENGGANTI data toko, pengaturan, dan penghitung nomor dengan data dari backup.\nLanjutkan?";
+    if (!window.confirm(confirmMsg)) {
       e.target.value = "";
       return;
     }
@@ -93,8 +95,9 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
         <div className="space-y-2">
           {history.map((h) => {
             const t = calcTotals(h);
-            const st = paymentStatus(h);
-            const sm = st ? STATUS_META[st] : null;
+            // Nota lama tanpa field status → anggap "belum" biar badge tetap bisa di-toggle.
+            const st = paymentStatus(h) || "belum";
+            const sm = STATUS_META[st];
             return (
               <div key={h.id} className="brutal-sm rounded-lg bg-cream px-3 py-2.5 flex items-center justify-between gap-2">
                 <div className="flex-1 min-w-0">
@@ -102,15 +105,13 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
                     <button onClick={() => onOpen(h)} className="font-mono2 text-xs font-bold truncate text-left">
                       {h.number || "(tanpa nomor)"}
                     </button>
-                    {sm && (
-                      <button
+                    <button
                         onClick={() => onToggleStatus(h.id)}
                         title="Klik untuk ubah status"
                         className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold cursor-pointer transition hover:opacity-75 active:scale-95 ${sm.badge}`}
                       >
                         {sm.label}
                       </button>
-                    )}
                   </p>
                   <button onClick={() => onOpen(h)} className="text-xs text-neutral-500 truncate block w-full text-left">
                     {fmtDate(h.date)} · {h.customerName || "—"} · <b className="text-ink">{fmtMoney(t.total, h.currency)}</b>
@@ -120,7 +121,7 @@ export default function HistoryPanel({ history, onOpen, onDelete, onToggleStatus
                   <button onClick={() => onOpen(h, true)} className="font-mono2 text-[10px] font-bold text-blue-700 hover:underline">
                     duplikat
                   </button>
-                  <button onClick={() => onDelete(h.id)} className="font-mono2 text-[10px] font-bold text-red-600 hover:underline">
+                  <button onClick={() => { if (window.confirm(`Hapus nota ${h.number || ""}? Tidak bisa dibatalkan.`)) onDelete(h.id); }} className="font-mono2 text-[10px] font-bold text-red-600 hover:underline">
                     hapus
                   </button>
                 </div>

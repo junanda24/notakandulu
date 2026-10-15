@@ -100,8 +100,8 @@ try {
 
 // 7. data contoh: semua field terisi + variatif; tombol Kosongkan ada
 try {
-  const { sampleInvoice, sampleAll } = require("./src/components/wizard/shared.jsx");
-  const s = sampleInvoice();
+  const { sampleAll } = require("./src/components/wizard/shared.jsx");
+  const s = sampleAll().inv;
   const fields = ["number","date","dueDate","status","currency","customerName","customerInfo","customerNpwp","poNumber","tax","discount","shipping","dp","terms","notes","paymentIds","items"];
   const allFilled = fields.every((f) => {
     const v = s[f];

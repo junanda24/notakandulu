@@ -87,10 +87,24 @@ export function importData(json) {
     // Validasi ringan bentuk data
     if (d.history && !Array.isArray(d.history)) return { ok: false, error: "Riwayat rusak." };
     if (d.profile && typeof d.profile !== "object") return { ok: false, error: "Profil rusak." };
+    if (d.profile?.payments && !Array.isArray(d.profile.payments)) return { ok: false, error: "Data pembayaran rusak." };
     if (d.settings && typeof d.settings !== "object") return { ok: false, error: "Pengaturan rusak." };
+    // Validasi accent hex (konsisten dengan validasi accentUsed di openHistory).
+    if (d.settings?.accent && !/^#[0-9a-fA-F]{6}$/.test(d.settings.accent)) d.settings.accent = "#0d9488";
     // Normalisasi counter: string "5" + 1 = "51" (bug nomor duplikat) — paksa jadi angka.
-    const counter = Math.max(0, parseInt(d.counter, 10) || 0);
-    const okSave = save({ ...d, counter, schemaVersion: SCHEMA_VERSION });
+    // Ambil max dengan counter saat ini biar restore backup lama tidak menurunkan nomor (risiko duplikat).
+    const backupCounter = Math.max(0, parseInt(d.counter, 10) || 0);
+    const counter = Math.max(backupCounter, load().counter || 0);
+    // Normalisasi tiap entri riwayat: angka negatif → 0, tanggal invalid → fallback.
+    const history = (d.history || []).map((h) => {
+      const hh = { ...h };
+      for (const k of ["discount", "tax", "shipping", "dp"]) hh[k] = Math.max(0, Number(hh[k]) || 0);
+      if (hh.items) hh.items = hh.items.map((it) => ({ ...it, qty: Math.max(0, Number(it.qty) || 0), price: Math.max(0, Number(it.price) || 0) }));
+      if (hh.date && !/^\d{4}-\d{2}-\d{2}$/.test(hh.date)) hh.date = new Date().toISOString().slice(0, 10);
+      if (hh.dueDate && !/^\d{4}-\d{2}-\d{2}$/.test(hh.dueDate)) hh.dueDate = "";
+      return hh;
+    });
+    const okSave = save({ ...d, history, counter, schemaVersion: SCHEMA_VERSION });
     if (!okSave) return { ok: false, error: "Penyimpanan penuh — backup gagal dimuat." };
     return { ok: true };
   } catch {

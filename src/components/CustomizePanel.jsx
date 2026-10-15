@@ -9,7 +9,7 @@ function Accordion({ title, sticker, summary, summaryStyle, children, defaultOpe
   const [open, setOpen] = useState(defaultOpen);
   return (
     <section className="brutal">
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between gap-2 p-4 sm:p-5 text-left">
+      <button onClick={() => setOpen(!open)} aria-expanded={open} className="w-full flex items-center justify-between gap-2 p-4 sm:p-5 text-left">
         <h2 className="text-sm font-bold tracking-tight shrink-0">{title}</h2>
         <span className="flex items-center gap-2 min-w-0">
           {!open && summary && (

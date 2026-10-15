@@ -1,5 +1,5 @@
 // Template — Atelier: editorial, margin lega, serif.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, NotesBlock, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
 const k = { fontSize: 9, letterSpacing: "0.22em", color: "#a8a29e", fontWeight: 700 };

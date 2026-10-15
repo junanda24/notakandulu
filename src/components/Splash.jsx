@@ -111,7 +111,7 @@ export default function Splash({ onDone }) {
       aria-label="Lewati intro"
       onClick={skip}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " " || e.key === "Escape") skip(); }}
-      className="fixed inset-0 z-[70] flex flex-col items-center justify-center overflow-hidden cursor-pointer"
+      className="no-print fixed inset-0 z-[70] flex flex-col items-center justify-center overflow-hidden cursor-pointer"
       style={{ background: "#1c1917" }}
     >
       {/* Glow ambient */}

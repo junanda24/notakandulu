@@ -59,16 +59,30 @@ export default function App() {
     try { localStorage.setItem("notakandulu:theme", next ? "dark" : "light"); } catch {}
   };
 
-  // Kunci scroll + Escape saat drawer terbuka
+  // Kunci scroll + Escape + focus trap saat drawer terbuka
+  const drawerRef = useRef(null);
   useEffect(() => {
     if (!drawer) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onKey = (e) => { if (e.key === "Escape") setDrawer(false); };
+    const onKey = (e) => {
+      if (e.key === "Escape") { setDrawer(false); return; }
+      // Focus trap sederhana: Tab tidak boleh keluar drawer.
+      if (e.key === "Tab" && drawerRef.current) {
+        const els = drawerRef.current.querySelectorAll("button, a[href]");
+        if (!els.length) return;
+        const first = els[0], last = els[els.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
     window.addEventListener("keydown", onKey);
+    // Pindahkan fokus ke tombol tutup saat drawer dibuka.
+    const t = setTimeout(() => drawerRef.current?.querySelector("button")?.focus(), 50);
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
+      clearTimeout(t);
     };
   }, [drawer]);
   // Posisi wizard (disimpan biar refresh tidak mengulang dari awal)
@@ -94,23 +108,29 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Debounce tulis localStorage (400ms): tiap ketikan di tab Toko tidak perlu serialize seluruh store.
+  // State React tetap update seketika; yang ditunda hanya tulis ke disk. Timer terpisah per fungsi.
+  const persistProfileTimer = useRef(null);
+  const persistSettingsTimer = useRef(null);
   const persistProfile = (updater) => {
-    let ok = true;
     setProfileState((p) => {
       const np = typeof updater === "function" ? updater(p) : updater;
-      ok = setProfile(np);
+      clearTimeout(persistProfileTimer.current);
+      persistProfileTimer.current = setTimeout(() => {
+        if (!setProfile(np)) showToast("Penyimpanan penuh — data toko mungkin tidak tersimpan");
+      }, 400);
       return np;
     });
-    setTimeout(() => { if (!ok) showToast("Penyimpanan penuh — data toko mungkin tidak tersimpan"); }, 0);
   };
   const persistSettings = (updater) => {
-    let ok = true;
     setSettingsState((s) => {
       const ns = typeof updater === "function" ? updater(s) : updater;
-      ok = setSettings(ns);
+      clearTimeout(persistSettingsTimer.current);
+      persistSettingsTimer.current = setTimeout(() => {
+        if (!setSettings(ns)) showToast("Penyimpanan penuh — pengaturan mungkin tidak tersimpan");
+      }, 400);
       return ns;
     });
-    setTimeout(() => { if (!ok) showToast("Penyimpanan penuh — pengaturan mungkin tidak tersimpan"); }, 0);
   };
 
   // Sinkron mata uang settings -> nota baru
@@ -154,9 +174,9 @@ export default function App() {
     setHistory(h);
     setInv(finalInv);
     if (ok && needsCounterBump) nextCounter(); // kunci nomor hanya kalau tersimpan beneran
-    const dupNum = inv.number && h.some((x) => x.id !== finalInv.id && x.number === inv.number);
+    const dupNum = finalInv.number && h.some((x) => x.id !== finalInv.id && x.number === finalInv.number);
     showToast(!ok ? "Gagal menyimpan — memori browser penuh"
-      : dupNum ? `Nota tersimpan ✓ (nomor ${inv.number} sudah dipakai nota lain!)`
+      : dupNum ? `Nota tersimpan ✓ (nomor ${finalInv.number} sudah dipakai nota lain!)`
       : "Nota tersimpan ✓");
     return ok;
   };
@@ -188,7 +208,7 @@ export default function App() {
       const copy = {
         ...base,
         ...src,
-        id: `${Date.now().toString(36)}-dup`,
+        id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}-dup`,
         number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), todayIso()),
         items: items.map((it) => ({ ...it, id: uid() })),
         date: isoDate || base.date,
@@ -230,6 +250,7 @@ export default function App() {
         stepId={wstep}
         setStepId={persistWstep}
         onSave={handleSave}
+        onNew={handleNew}
         onClearInv={handleClearInv}
         onGotoToko={() => { setTab("buat"); persistWstep("data"); }}
         onGotoRiwayat={() => setTab("riwayat")}
@@ -244,13 +265,20 @@ export default function App() {
         onDelete={(id) => {
           const { history: h, ok } = deleteHistory(id);
           setHistory(h);
-          if (!ok) showToast("Gagal menghapus — memori browser penuh");
+          // Kalau nota yang dihapus sedang dibuka sebagai draft → reset draft biar save berikutnya tidak "menghidupkan" lagi.
+          if (inv.id === id) {
+            setInv(blankInvoice({ number: expandNumber(settings.numberPattern || "INV-{YYYY}-{NNN}", peekCounter(), todayIso()), date: todayIso(), currency: settings.currency }));
+            showToast("Nota dihapus ✓");
+          } else if (!ok) showToast("Gagal menghapus — memori browser penuh");
         }}
         onToggleStatus={(id) => {
           const item = history.find((h) => h.id === id);
           if (!item) return;
-          const { history: h, ok } = saveToHistory({ ...item, status: (item.status || "belum") === "lunas" ? "belum" : "lunas" });
+          const next = (item.status || "belum") === "lunas" ? "belum" : "lunas";
+          const { history: h, ok } = saveToHistory({ ...item, status: next });
           setHistory(h);
+          // Sinkronkan draft yang sedang dibuka biar save berikutnya tidak menimpa balik status.
+          if (inv.id === id) setInv({ ...inv, status: next });
           if (!ok) showToast("Gagal menyimpan — memori browser penuh");
         }}
         settings={settings}
@@ -370,14 +398,14 @@ export default function App() {
 
     {/* Modal preview full-screen khusus HP */}
     {previewOpen && (
-      <MobilePreviewModal inv={inv} profile={profile} settings={settings} onClose={() => setPreviewOpen(false)} />
+      <MobilePreviewModal inv={inv} profile={profile} settings={settings} onClose={() => setPreviewOpen(false)} notify={showToast} />
     )}
 
     {/* Side drawer (burger menu) */}
     {drawer && (
       <>
         <div className="drawer-backdrop no-print fixed inset-0 z-40 bg-black/40" onClick={() => setDrawer(false)} />
-        <aside role="dialog" aria-modal="true" aria-label="Menu" className="drawer-panel no-print fixed inset-y-0 right-0 z-50 w-72 max-w-[85vw] bg-white dark:bg-neutral-900 shadow-2xl flex flex-col">
+        <aside ref={drawerRef} role="dialog" aria-modal="true" aria-label="Menu" className="drawer-panel no-print fixed inset-y-0 right-0 z-50 w-72 max-w-[85vw] bg-white dark:bg-neutral-900 shadow-2xl flex flex-col">
           <div className="flex items-center justify-between px-4 py-3.5 border-b border-line">
             <p className="font-extrabold text-[15px] tracking-tight">Menu</p>
             <button aria-label="Tutup menu"

@@ -4,18 +4,24 @@ export function calcTotals(inv) {
   const items = inv.items || [];
   const subtotal = items.reduce((s, it) => s + (Number(it.qty) || 0) * (Number(it.price) || 0), 0);
   const d = inv.discount || { type: "percent", value: 0 };
+  // Clamp diskon persen 0–100 biar baris "Diskon −RpX" tidak melebihi subtotal.
+  const discVal = d.type === "percent" ? Math.min(100, Math.max(0, Number(d.value) || 0)) : Math.max(0, Number(d.value) || 0);
   const discountAmt =
-    d.type === "percent" ? (subtotal * (Number(d.value) || 0)) / 100 : Number(d.value) || 0;
+    d.type === "percent" ? (subtotal * discVal) / 100 : discVal;
   const afterDiscount = Math.max(0, subtotal - discountAmt);
   const taxAmt = (afterDiscount * (Number(inv.tax) || 0)) / 100;
   const shipping = Number(inv.shipping) || 0;
   const total = Math.max(0, Math.round(afterDiscount + taxAmt + shipping));
+  // Clamp DP 0–total biar tidak tampil "Uang muka −RpX" negatif.
+  const dpRaw = Math.max(0, Number(inv.dp) || 0);
+  const dp = Math.min(dpRaw, total);
   return {
     subtotal: Math.round(subtotal),
     discountAmt: Math.round(discountAmt),
     taxAmt: Math.round(taxAmt),
     shipping: Math.round(shipping),
     total,
+    dp,
   };
 }
 

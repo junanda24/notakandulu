@@ -1,5 +1,5 @@
 // Template — Linea: satu garis aksen, minimal berkarakter.
-import { Money, PaymentBlock, NotesBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
+import { Money, PaymentBlock, ShopLogo, ShopTagline, SignatureBlock, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
 
 const micro = { fontSize: 9, letterSpacing: "0.22em", fontWeight: 700, color: "#a8a29e" };

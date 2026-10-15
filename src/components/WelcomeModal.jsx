@@ -15,6 +15,7 @@ export default function WelcomeModal() {
   const [show, setShow] = useState(() => {
     try { return localStorage.getItem(WELCOME_KEY) !== "1"; } catch { return true; }
   });
+  const closeRef = useRef(null);
   useEffect(() => {
     if (!show) return;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
@@ -26,6 +27,13 @@ export default function WelcomeModal() {
     );
     return () => { gsap.killTweensOf(".wm-backdrop"); gsap.killTweensOf(".wm-card"); };
   }, [show]);
+  // ESC menutup modal.
+  useEffect(() => {
+    if (!show) return;
+    const onKey = (e) => { if (e.key === "Escape") closeRef.current?.(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [show]);
   if (!show) return null;
   const close = () => {
     try { localStorage.setItem(WELCOME_KEY, "1"); } catch {}
@@ -33,9 +41,10 @@ export default function WelcomeModal() {
     gsap.to(".wm-card", { scale: 0.94, y: 10, opacity: 0, duration: 0.22, ease: "power2.in" });
     gsap.to(".wm-backdrop", { opacity: 0, duration: 0.25, ease: "power1.in", onComplete: () => setShow(false) });
   };
+  closeRef.current = close;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="wm-backdrop absolute inset-0" style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(3px)" }} />
+    <div className="no-print fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Selamat datang di TagihkanDulu">
+      <div className="wm-backdrop absolute inset-0" style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(3px)" }} onClick={close} />
       <div className="wm-card relative bg-white dark:bg-neutral-900 rounded-2xl border border-line shadow-2xl max-w-md w-full p-6 sm:p-8 text-center">
         <img src="/logo.jpg" alt="Logo TagihkanDulu" className="inline h-12 w-12 rounded-xl object-cover" />
         <h2 className="text-xl font-extrabold tracking-tight mt-4">Selamat datang di TagihkanDulu</h2>

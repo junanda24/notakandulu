@@ -82,6 +82,9 @@ export default function Wizard({
     setStepId(id);
     requestAnimationFrame(() => {
       window.scrollTo({ top: 0 });
+      // Fokus ke heading langkah baru biar user keyboard tidak kehilangan orientasi.
+      const h = contentRef.current?.querySelector("h1, h2, [data-step-title]");
+      if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
     });
   };
 

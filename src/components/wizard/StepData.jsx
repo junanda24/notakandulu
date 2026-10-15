@@ -11,6 +11,7 @@ function Section({ title, subtitle, defaultOpen, children }) {
     <section className="brutal">
       <button
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
         className="w-full flex items-center justify-between gap-2 p-4 sm:p-5 text-left"
       >
         <span>

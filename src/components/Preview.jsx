@@ -213,10 +213,11 @@ export default function Preview({ inv, profile, settings }) {
 }
 
 // Lebar kertas dalam px (96dpi) untuk preview zoomable.
-const PAPER_PX = { "58mm": 219, "80mm": 302, "A5": 559, "A4": 794 };
+export const PAPER_PX = { "58mm": 219, "80mm": 302, "A5": 559, "A4": 794 };
 
 // Preview full-screen ala PDF reader — khusus mobile: zoom + geser + ekspor.
-export function MobilePreviewModal({ inv, profile, settings, onClose }) {
+export function MobilePreviewModal({ inv, profile, settings, onClose, notify }) {
+  // Error ekspor tampil sebagai toast app (fallback alert) — dulu ReferenceError: fail undefined.
   const wrapRef = useRef(null);
   const sheetRef = useRef(null);
   const panelRef = useRef(null);
@@ -269,12 +270,14 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
   const stepIn = () => setZoom((p) => Math.min(3, +( ((p ?? fitZoom) + 0.25).toFixed(2) )));
   const stepOut = () => setZoom((p) => Math.max(0.25, +( ((p ?? fitZoom) - 0.25).toFixed(2) )));
 
+  const fail = notify || ((m) => alert(m));
   const doPrintModal = async () => {
     const node = sheetRef.current;
     await waitForPrintReady(node);
     const meta2 = TEMPLATES.find((x) => x.id === settings.template);
     const w2 = PAPER_WIDTH[meta2?.paper || "A4"];
-    const h2 = node ? node.getBoundingClientRect().height : 0;
+    // offsetHeight = tinggi TANPA transform scale (getBoundingClientRect ikut ke-zoom → nota terpotong).
+    const h2 = node ? node.offsetHeight : 0;
     if (h2 > 0) setPrintPageSize(w2, h2);
     window.print();
   };
@@ -282,16 +285,21 @@ export function MobilePreviewModal({ inv, profile, settings, onClose }) {
   const doPng = async (share) => {
     if (!sheetRef.current) return;
     setBusy(share ? "share" : "png");
+    // Sheet di-zoom via transform scale — lepas dulu biar PNG full-res, lalu kembalikan.
+    const node = sheetRef.current;
+    const prevTransform = node.style.transform;
     try {
+      node.style.transform = "none";
       if (share) {
-        await nativeSharePng(sheetRef.current, inv);
+        await nativeSharePng(node, inv);
       } else {
-        const url = await invoiceToPng(sheetRef.current);
+        const url = await invoiceToPng(node);
         downloadPng(url, `${inv.number || "nota"}.png`);
       }
     } catch (e) {
       if (e?.name !== "AbortError") fail("Gagal: " + (e.message || e));
     } finally {
+      node.style.transform = prevTransform;
       setBusy("");
     }
   };
