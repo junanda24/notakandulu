@@ -3,6 +3,7 @@
 // stempel LUNAS, logo kecil di atas, signature tempat & tanggal.
 import { Money, ShopLogo, ShopTagline, dpInfo } from "./shared.jsx";
 import { terbilang, fmtDate } from "../../lib/format.js";
+import { paymentStatus } from "../../lib/calc.js";
 
 export default function Kwitansi({ inv, profile, totals, bodyFont, displayFont, accent, showSignature }) {
   const a = accent || "#0d9488";
@@ -10,6 +11,13 @@ export default function Kwitansi({ inv, profile, totals, bodyFont, displayFont, 
   const dpi = dpInfo(inv, totals);
   const nominal = dpi ? dpi.sisa : totals.total;
   const needsMaterai = cur === "IDR" && totals.total >= 5000000;
+  // Stempel mengikuti status pembayaran aktual (bukan hardcoded LUNAS).
+  const st = paymentStatus(inv) || "belum";
+  const stamp = {
+    lunas: { text: "LUNAS", color: a },
+    belum: { text: "BELUM LUNAS", color: "#d97706" },
+    lewat: { text: "LEWAT TEMPO", color: "#dc2626" },
+  }[st];
     return (
     <div style={{ fontFamily: bodyFont, width: "100%", padding: "28px 32px", color: "#1c1917", background: "#fff", fontSize: 12, lineHeight: 1.7 }}>
       {/* Kop */}
@@ -73,8 +81,8 @@ export default function Kwitansi({ inv, profile, totals, bodyFont, displayFont, 
           <div
             style={{
               display: "inline-block",
-              border: `2.5px solid ${a}`,
-              color: a,
+              border: `2.5px solid ${stamp.color}`,
+              color: stamp.color,
               borderRadius: 8,
               padding: "6px 18px",
               fontWeight: 800,
@@ -84,7 +92,7 @@ export default function Kwitansi({ inv, profile, totals, bodyFont, displayFont, 
               opacity: 0.92,
             }}
           >
-            LUNAS
+            {stamp.text}
           </div>
         </div>
         {showSignature && (
